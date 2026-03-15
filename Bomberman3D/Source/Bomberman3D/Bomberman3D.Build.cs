@@ -10,7 +10,7 @@ public class Bomberman3D : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
 
-        // PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PrivateDependencyModuleNames.AddRange(new string[] { "DiscordPartnerSDK" });
 
         PublicIncludePaths.AddRange(new string[] {
             "Bomberman3D",

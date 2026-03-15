@@ -1,10 +1,4 @@
-# Discord SDK
-!Plugins/DiscordPartnerSDK/**
-!Plugins/DiscordPartnerSDK/**/*.dll
-!Plugins/DiscordPartnerSDK/**/*.lib
-!Plugins/DiscordPartnerSDK/**/*.so
-!Plugins/DiscordPartnerSDK/**/*.dylib
-!Plugins/DiscordPartnerSDK/**/*.a
+# scroll to bottom for custom stuff
 
 # Created by https://www.toptal.com/developers/gitignore/api/unrealengine
 # Edit at https://www.toptal.com/developers/gitignore?templates=unrealengine
@@ -110,3 +104,7 @@ Plugins/**/Intermediate/*
 !Plugins/DiscordPartnerSDK/**/*.so
 !Plugins/DiscordPartnerSDK/**/*.dylib
 !Plugins/DiscordPartnerSDK/**/*.a
+Plugins/DiscordPartnerSDK/Intermediate/*
+Plugins/DiscordPartnerSDK/Binaries/Win64/UnrealEditor-DiscordPartnerSDK.dll
+Plugins/DiscordPartnerSDK/Binaries/Win64/UnrealEditor-DiscordPartnerSDK.pdb
+Plugins/DiscordPartnerSDK/Binaries/Win64/UnrealEditor.modules
