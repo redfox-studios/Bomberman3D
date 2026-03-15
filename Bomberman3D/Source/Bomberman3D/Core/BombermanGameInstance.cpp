@@ -49,14 +49,3 @@ void UBombermanGameInstance::Init()
 	LoadGame();
 #endif
 }
-
-void UBombermanGameInstance::OnStart()
-{
-	Super::OnStart();
-
-	if (ULocalPlayer* LP = GetFirstGamePlayer())
-	{
-		DiscordManager = NewObject<UBombermanDiscordManager>(this);
-		DiscordManager->Init(LP);
-	}
-}

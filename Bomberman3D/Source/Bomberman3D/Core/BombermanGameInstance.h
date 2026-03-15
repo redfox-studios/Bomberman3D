@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Player/BombermanPlayerUpgrades.h"
-#include "Core/BombermanDiscordManager.h"
 #include "BombermanGameInstance.generated.h"
 
 UCLASS()
@@ -39,14 +38,10 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	UFUNCTION(BlueprintCallable)
 	void LoadGame();
 
-	UPROPERTY()
-	UBombermanDiscordManager* DiscordManager = nullptr;
-
 	UFUNCTION(BlueprintCallable, Exec)
 	void SetStage(int32 Stage) { CurrentStage = Stage; }
 	// type in console 'SetStage 5' (where 5 is the desired stage number)
 	// and then type 'RestartLevel' to make changes
 
 	virtual void Init() override;
-	virtual void OnStart() override;
 };
