@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Player/BombermanPlayerUpgrades.h"
 #include "BombermanGrid.generated.h"
 
 UENUM(BlueprintType)
@@ -98,7 +99,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	bool IsTileOccupiedByEnemy(int32 X, int32 Y) const;
 
 	UFUNCTION(BlueprintCallable)
-	void GenerateGrid();
+	void GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades);
 
 	// --- actor spawning ---
 
@@ -170,7 +171,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	void PlaceHardWalls();
 	void GenerateSoftBlocks();
 	void PlaceDoor();
-	void PlaceUpgrades();
+	void PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades);
 
 	// Flood-fill from player spawn, returns all reachable empty tiles
 	TArray<FVector2D> FloodFill(int32 StartX, int32 StartY) const;
