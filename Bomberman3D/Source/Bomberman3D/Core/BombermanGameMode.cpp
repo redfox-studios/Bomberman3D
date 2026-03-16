@@ -118,7 +118,7 @@ void ABombermanGameMode::StartStage()
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 			{
 				ABombermanPlayerState* PS = GetLocalPlayerState();
-				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, false);
+				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
 			}
 		}, 0.2f, false);
 

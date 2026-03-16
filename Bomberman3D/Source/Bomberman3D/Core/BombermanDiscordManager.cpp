@@ -21,7 +21,7 @@ void FBombermanDiscordManager::Shutdown()
 	bInitialized = false;
 }
 
-void FBombermanDiscordManager::UpdatePresence(int32 Stage, int32 Lives, bool bInMainMenu)
+void FBombermanDiscordManager::UpdatePresence(int32 Stage, int32 Lives, int32 Score, bool bInMainMenu)
 {
 	if (!bInitialized) return;
 
@@ -39,8 +39,8 @@ void FBombermanDiscordManager::UpdatePresence(int32 Stage, int32 Lives, bool bIn
 	}
 	else
 	{
-		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Stage %d / 50", Stage);
-		FCStringAnsi::Snprintf(StateBuffer, sizeof(StateBuffer), "%d lives remaining - Singleplayer", Lives);
+		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Stage %d / 50 - Score: %d", Stage, Score);
+		FCStringAnsi::Snprintf(StateBuffer, sizeof(StateBuffer), "%d Lives Remaining", Lives);
 	}
 
 	Presence.details = DetailsBuffer;

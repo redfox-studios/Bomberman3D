@@ -9,8 +9,8 @@ class BOMBERMAN3D_API FBombermanDiscordManager
   public:
 	void Init(int64 AppId);
 	void Shutdown();
-	void UpdatePresence(int32 Stage, int32 Lives, bool bInMainMenu);
 	void RunCallbacks();
+	void UpdatePresence(int32 Stage, int32 Lives, int32 Score, bool bInMainMenu);
 
   private:
 	bool bInitialized = false;

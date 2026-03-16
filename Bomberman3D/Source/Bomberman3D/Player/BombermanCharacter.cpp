@@ -171,7 +171,7 @@ void ABombermanCharacter::OnDeath()
 	{
 		if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
 		{
-			GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, false);
+			GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
 		}
 	}
 
