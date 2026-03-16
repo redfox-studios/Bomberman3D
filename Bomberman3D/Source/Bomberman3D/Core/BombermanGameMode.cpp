@@ -76,6 +76,11 @@ void ABombermanGameMode::Tick(float DeltaTime)
 			)
 		);
 	}
+
+	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+	{
+		GI->DiscordManager.RunCallbacks();
+	}
 }
 
 void ABombermanGameMode::BeginPlay()
