@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using System.IO; // for dihcord
 
 public class Bomberman3D : ModuleRules
 {
@@ -22,6 +23,13 @@ public class Bomberman3D : ModuleRules
             "Bomberman3D/Door",
             "Bomberman3D/Upgrades"
         });
+
+        // dihcord
+        string DiscordRPCPath = Path.Combine(ModuleDirectory, "../../ThirdParty/DiscordRPC");
+        PublicIncludePaths.Add(Path.Combine(DiscordRPCPath, "include"));
+        PublicAdditionalLibraries.Add(Path.Combine(DiscordRPCPath, "lib", "discord-rpc.lib"));
+        RuntimeDependencies.Add("$(BinaryOutputDir)/discord-rpc.dll", Path.Combine(DiscordRPCPath, "bin", "discord-rpc.dll"));
+        // end dihcord
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

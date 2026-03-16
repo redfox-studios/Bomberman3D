@@ -98,3 +98,6 @@ Plugins/**/Intermediate/*
 # End of https://www.toptal.com/developers/gitignore/api/unrealengine
 
 # Discord SDK
+!ThirdParty/**/*.dll
+!ThirdParty/**/*.lib
+!ThirdParty/**/*.exe
