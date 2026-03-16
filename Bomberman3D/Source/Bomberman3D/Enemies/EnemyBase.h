@@ -46,7 +46,7 @@ class BOMBERMAN3D_API AEnemyBase : public ACharacter
 	UBombermanHealthComponent* HealthComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float MoveSpeed = 150.f;
+	float MoveSpeed = 100.f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Debug")
 	UArrowComponent* DirectionArrow;

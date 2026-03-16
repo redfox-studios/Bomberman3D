@@ -99,6 +99,9 @@ void ABombermanBomb::Explode()
 			ETileContent Tile = Grid->GetTileContent(X, Y);
 			UE_LOG(LogTemp, Warning, TEXT("Checking tile [%d, %d] = %d"), X, Y, (int32)Tile);
 
+			// FVector Center = FVector(Dir.X, Dir.Y, 50.f);
+			DrawDebugBox(GetWorld(), Grid->GetTileWorldPosition(X, Y), FVector(Grid->GetTileSize() * 0.25f), FColor::Purple, false, 2.f, 0, 2.f);
+
 			if (Tile == ETileContent::HardBlock)
 			{
 				break;

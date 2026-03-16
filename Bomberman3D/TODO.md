@@ -111,7 +111,7 @@
 - [x] Load next stage on clear
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
-- [ ] 50 total stages in data table
+- [x] 50 total stages in data table
 
 ---
 
@@ -169,11 +169,12 @@
 - Special items with complex conditions (248 chain reaction, outer ring walk) -> design carefully, may need dedicated tracking components
 
 ## Known Bugs
-- enemy can walk through my bomb when i have BombPass upgrade
-- grid not expanding (or at least not noticeable)
+- enemy can walk through my bomb when i place the bomb on the enemy
 - invincibility upgrade in debug still shown as 0
 - game spawns upgrades player already earned
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
+- player can get stuck in corners
+  - player can be invincible after stucking themselves in the corner and can also noclip to the enemy... idk how but my teacher managed to discover this bug somehow...
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)

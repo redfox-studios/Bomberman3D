@@ -161,6 +161,14 @@ void ABombermanGameMode::StartStage()
 		}
 	}
 
+	FBombermanPlayerUpgrades CurrentUpgrades;
+	if (ABombermanPlayerState* PS = GetLocalPlayerState())
+	{
+		CurrentUpgrades = PS->Upgrades;
+	}
+
+	Grid->GenerateGrid(CurrentUpgrades);
+
 	BombermanGameState->StageState = EStageState::InProgress;
 	BombermanGameState->StageTimeRemaining = StageTimerDuration;
 	BombermanGameState->EnemiesRemaining = 0;
@@ -357,6 +365,11 @@ void ABombermanGameMode::AddScore(int32 Points)
 	if (ABombermanPlayerState* PS = GetLocalPlayerState())
 	{
 		PS->AddScore(Points);
+
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+		{
+			GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
+		}
 	}
 }
 
