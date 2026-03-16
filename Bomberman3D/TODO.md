@@ -111,7 +111,7 @@
 - [x] Load next stage on clear
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
-- [ ] 50 total stages in data table
+- [x] 50 total stages in data table
 
 ---
 
@@ -174,6 +174,7 @@
 - invincibility upgrade in debug still shown as 0
 - game spawns upgrades player already earned
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
+- 'Soft Block Density' and 'Upgrade Density' options not working in Data Table
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
