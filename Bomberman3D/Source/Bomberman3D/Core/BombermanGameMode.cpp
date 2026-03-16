@@ -108,6 +108,8 @@ void ABombermanGameMode::StartStage()
 		BombermanGameState->CurrentStage = GI->CurrentStage;
 		// GI->CurrentStage++;
 
+		GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, 3, false);
+
 		/*
 		// now managed in characters beginplay
 		for (TActorIterator<ABombermanCharacter> It(GetWorld()); It; ++It)
