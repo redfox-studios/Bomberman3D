@@ -156,6 +156,7 @@
 
 ### Final
 - [ ] Full bugfix pass
+- [ ] Discord SDK
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 

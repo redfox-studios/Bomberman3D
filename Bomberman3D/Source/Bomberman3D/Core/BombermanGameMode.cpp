@@ -34,6 +34,13 @@ void ABombermanGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+	{
+		GI->DiscordManager.RunCallbacks();
+	}
+
+	// --- DEBUG ---
+
 	if (!bShowDebugInfo) return;
 
 	// ABombermanPlayerState* PS = nullptr;
@@ -103,7 +110,19 @@ void ABombermanGameMode::StartStage()
 		BombermanGameState->CurrentStage = GI->CurrentStage;
 		// GI->CurrentStage++;
 
-		/*
+		// ABombermanPlayerState* PS = GetLocalPlayerState();
+
+		FTimerHandle DiscordUpdateHandle;
+		GetWorld()->GetTimerManager().SetTimer(DiscordUpdateHandle, [this]()
+		{
+			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+			{
+				ABombermanPlayerState* PS = GetLocalPlayerState();
+				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
+			}
+		}, 0.2f, false);
+
+		/*	
 		// now managed in characters beginplay
 		for (TActorIterator<ABombermanCharacter> It(GetWorld()); It; ++It)
 		{
