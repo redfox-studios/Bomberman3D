@@ -12,6 +12,7 @@
 #include "Player/BombermanPlayerState.h"
 #include "Core/BombermanGameMode.h"
 #include "Core/BombermanGameInstance.h"
+#include "Core/BombermanGameState.h"
 
 #include "Bomberman3D.h"
 
@@ -165,6 +166,14 @@ void ABombermanCharacter::OnDeath()
 
 	// decrement lives
 	PS->Lives--;
+
+	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+	{
+		if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
+		{
+			GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, false);
+		}
+	}
 
 	// reset upgrades except bombup & fireup
 	// PS->Upgrades.BombUp = 0;

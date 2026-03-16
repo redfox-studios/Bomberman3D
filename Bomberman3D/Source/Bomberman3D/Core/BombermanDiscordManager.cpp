@@ -28,23 +28,24 @@ void FBombermanDiscordManager::UpdatePresence(int32 Stage, int32 Lives, bool bIn
 	DiscordRichPresence Presence;
 	FMemory::Memzero(&Presence, sizeof(Presence));
 
-	FString Details;
-	FString State;
+	// static buffers so the pointers stay valid
+	static char DetailsBuffer[128];
+	static char StateBuffer[128];
 
 	if (bInMainMenu)
 	{
-		Details = TEXT("In Main Menu");
-		State = TEXT("Singleplayer");
+		FCStringAnsi::Strcpy(DetailsBuffer, "In Main Menu");
+		FCStringAnsi::Strcpy(StateBuffer, "Singleplayer");
 	}
 	else
 	{
-		Details = FString::Printf(TEXT("Stage %d / 50"), Stage);
-		State = FString::Printf(TEXT("%d lives remaining - Singleplayer"), Lives);
+		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Stage %d / 50", Stage);
+		FCStringAnsi::Snprintf(StateBuffer, sizeof(StateBuffer), "%d lives remaining - Singleplayer", Lives);
 	}
 
-	Presence.details = TCHAR_TO_ANSI(*Details);
-	Presence.state = TCHAR_TO_ANSI(*State);
-	Presence.largeImageKey = "game_logo"; // set this up in Discord dev portal later
+	Presence.details = DetailsBuffer;
+	Presence.state = StateBuffer;
+	Presence.largeImageKey = "game_logo";
 	Presence.largeImageText = "Bomberman3D";
 
 	Discord_UpdatePresence(&Presence);
