@@ -357,6 +357,11 @@ void ABombermanGameMode::AddScore(int32 Points)
 	if (ABombermanPlayerState* PS = GetLocalPlayerState())
 	{
 		PS->AddScore(Points);
+
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+		{
+			GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
+		}
 	}
 }
 
