@@ -161,6 +161,8 @@ void ABombermanGameMode::StartStage()
 		}
 	}
 
+	Grid->GenerateGrid();
+
 	BombermanGameState->StageState = EStageState::InProgress;
 	BombermanGameState->StageTimeRemaining = StageTimerDuration;
 	BombermanGameState->EnemiesRemaining = 0;

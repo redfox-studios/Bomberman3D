@@ -24,6 +24,11 @@ void ABombermanGrid::BeginPlay()
 
 	InitGrid();
 	PlaceHardWalls();
+	// moved: GenerateSoftBlocks, PlaceDoor, PlaceUpgrades
+}
+
+void ABombermanGrid::GenerateGrid()
+{
 	GenerateSoftBlocks();
 	PlaceDoor();
 	PlaceUpgrades();

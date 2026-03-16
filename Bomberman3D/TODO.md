@@ -170,11 +170,9 @@
 
 ## Known Bugs
 - enemy can walk through my bomb when i place the bomb on the enemy
-- grid not expanding (or at least not noticeable)
 - invincibility upgrade in debug still shown as 0
 - game spawns upgrades player already earned
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
-- 'Soft Block Density' and 'Upgrade Density' options not working in Data Table
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip to the enemy... idk how but my teacher managed to discover this bug somehow...
 
