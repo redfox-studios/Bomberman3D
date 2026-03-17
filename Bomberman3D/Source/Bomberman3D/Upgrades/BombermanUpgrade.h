@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
 #include "BombermanUpgrade.generated.h"
 
 // clang-format off
@@ -38,7 +39,7 @@ class BOMBERMAN3D_API ABombermanUpgrade : public AActor
 	EUpgradeType UpgradeType = EUpgradeType::BombUp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	UParticleSystem* PickupVFX;
+	UNiagaraSystem* PickupVFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* PickupSound;

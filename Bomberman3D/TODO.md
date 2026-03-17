@@ -171,12 +171,9 @@
 ## Known Bugs
 - enemy can walk through my bomb when i place the bomb on the enemy
 - invincibility upgrade in debug still shown as 0
-- game spawns upgrades player already earned
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip to the enemy... idk how but my teacher managed to discover this bug somehow...
-- vfx support is for cascade particle system instead of niagara
-- bomb explosion sound is played on each tile instead of the bomb tile... (or atleast i heard that)
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
