@@ -361,7 +361,7 @@ AActor* ABombermanGrid::GetActorOnTile(int32 X, int32 Y) const
 void ABombermanGrid::PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage)
 {
 	// calculated automatically, no need to set in DT
-	UpgradeDensity = FMath::Clamp(CurrentStage * 0.01f, 0.01f, 0.5f);
+	UpgradeDensity = FMath::Clamp(CurrentStage * 0.01f, 0.01f, 0.5f); // '0.5 divided by 50 = 0.01' where 0.5 is the max upgrade density, 50 is the number of stages and 0.01 is upgrade density increasing by each stage
 
 	for (int32 X = 1; X < BaseGridHeight - 1; X++)
 	{

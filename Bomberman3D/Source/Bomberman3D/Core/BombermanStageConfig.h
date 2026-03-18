@@ -35,6 +35,7 @@ struct FBombermanStageConfig : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SoftBlockDensity = 0.65f;
 
+	// calculated automatically, no need to set in DT
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float UpgradeDensity = 0.2f;
+	float UpgradeDensity = 0.f;
 };
