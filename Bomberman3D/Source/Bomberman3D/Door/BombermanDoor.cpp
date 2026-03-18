@@ -5,7 +5,8 @@
 #include "Player/BombermanCharacter.h"
 #include "Core/BombermanGameMode.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 ABombermanDoor::ABombermanDoor()
 {
@@ -27,7 +28,7 @@ void ABombermanDoor::BeginPlay()
 
 	if (PortalVFX)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), PortalVFX, GetActorLocation());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PortalVFX, GetActorLocation());
 	}
 }
 
@@ -38,7 +39,7 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 
 	if (EnterVFX)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EnterVFX, GetActorLocation());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnterVFX, GetActorLocation());
 	}
 
 	if (EnterSound)

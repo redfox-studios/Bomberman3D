@@ -1,73 +1,50 @@
-# UI Button System Notes
+# UI Component System Notes
 
 ## Overview
 
-All buttons in the UI use a reusable widget:
+UI use a reusable widgets:
 
-WBP_Button
+- WBP_Button
+- WBP_BlurryBackground
+- WBP_GameTip
+- WBP_RandomImage
+- WBP_TransparentBackground
 
 This keeps styling consistent across the whole game.
 
-Instead of editing 50 buttons individually, styles are controlled from a single theme asset.
+Instead of editing 50 buttons or other stuff individually, styles are controlled from a single theme asset.
 
 ---
 
 # Button Variants
 
-Each button has a Variant property.
-
-Available variants:
-
-* Primary
-* Secondary
-* Destructive
-
-Designer can set this per button in the Details panel.
-
-Example:
-
-Play → Primary
-Settings → Secondary
-Delete Save → Destructive
+Each Component has a Variant property.
 
 ---
 
 # Where Styles Are Stored
 
-All button styles are stored in the UI theme data asset:
+All component styles are stored in the UI theme data asset:
 
-DA_UIColors
+- DA_UIColors
 
-This asset contains:
-
-PrimaryButtonStyle
-SecondaryButtonStyle
-DestructiveButtonStyle
-
-Each style controls:
-
-* Normal appearance
-* Hover appearance
-* Pressed appearance
-* Disabled appearance
-* Outline
-* Sounds
-* Padding
-* Background brushes
+There is a plenty of options for each component, if components dont have properties like colors, etc. These are handled in the component BP.
 
 Editing these styles will update every button that uses them.
 
 ---
 
-# How Buttons Apply Styles
+# How to Apply Styles
+
+Example with WBP_Button
 
 Inside WBP_Button the following logic happens:
 
-Variant → Switch → Apply Style
+Variant (Switch) -> Apply Style
 
-Primary → PrimaryButtonStyle
-Secondary → SecondaryButtonStyle
-Destructive → DestructiveButtonStyle
+Primary -> PrimaryButtonStyle
+Secondary -> SecondaryButtonStyle
+Destructive -> DestructiveButtonStyle
 
 The button reads the style from the UI theme asset and applies it automatically.
 
@@ -75,45 +52,14 @@ The button reads the style from the UI theme asset and applies it automatically.
 
 # How To Create A Button
 
-1. Drag **WBP_Button** into the UI
-2. Set the following properties:
-
-ButtonText → text shown on button
-Variant → Primary / Secondary / Destructive
-UIColors → DA_UIColors
-
-Example setup:
-
-Play Button
-ButtonText = "Play"
-Variant = Primary
-
-Settings Button
-ButtonText = "Settings"
-Variant = Secondary
-
-Delete Button
-ButtonText = "Delete Save"
-Variant = Destructive
-
----
-
-# When To Use Each Variant
-
-Primary
-Main actions the player should notice.
-
-Secondary
-Regular actions.
-
-Destructive
-Dangerous actions like deleting saves or resetting progress.
+1. Add WBP_Button into the UI
+2. Set the properties
 
 ---
 
 # Important
 
-Do NOT change button colors directly in widgets.
+Do NOT change colors directly in widgets or in BP_UIColors
 
 Always edit styles in:
 

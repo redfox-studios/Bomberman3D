@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Character.h"
+#include "NiagaraSystem.h"
 #include "BombermanBomb.generated.h"
 
 // Placed -> Armed -> Detonating -> Explosion -> Cleanup
@@ -61,7 +62,7 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	ABombermanGrid* Grid;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	UParticleSystem* ExplosionVFX;
+	UNiagaraSystem* ExplosionVFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* ExplosionSound;

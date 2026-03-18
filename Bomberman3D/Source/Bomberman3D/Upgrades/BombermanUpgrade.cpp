@@ -5,7 +5,8 @@
 #include "Player/BombermanCharacter.h"
 #include "Player/BombermanPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Particles/ParticleSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 ABombermanUpgrade::ABombermanUpgrade()
@@ -89,7 +90,7 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 
 	if (PickupVFX)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), PickupVFX, GetActorLocation());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PickupVFX, GetActorLocation());
 	}
 
 	if (PickupSound)

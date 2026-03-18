@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
 #include "BombermanDoor.generated.h"
 
 UCLASS()
@@ -16,10 +17,10 @@ class BOMBERMAN3D_API ABombermanDoor : public AActor
 	ABombermanDoor();
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	UParticleSystem* PortalVFX;
+	UNiagaraSystem* PortalVFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	UParticleSystem* EnterVFX;
+	UNiagaraSystem* EnterVFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* EnterSound;
