@@ -168,8 +168,6 @@ struct FPlayerUpgrades
 
 ## 7. Enemy AI
 
-## 7. Enemy AI
-
 Each enemy type is a separate C++ class inheriting from `AEnemyBase`. Behavior complexity increases with enemy tier.
 
 | Enemy   | AI Approach                             | Complexity           | Status  |
@@ -290,6 +288,41 @@ Screens:
 - Credits Screen
 - Settings (keybind remapping via Enhanced Input)
 
+<br>
+
+## 11a. UI Component System
+
+UI is built from reusable widgets to keep styling consistent across the whole game. Instead of editing individual widgets one by one, styles come from a single theme data asset.
+
+**Reusable widgets:**
+- `WBP_Button`
+- `WBP_BlurryBackground`
+- `WBP_GameTip`
+- `WBP_RandomImage`
+- `WBP_TransparentBackground`
+
+**Where styles live:**
+
+All styles are stored in `DA_UIColors`. Editing it updates every widget that uses it automatically. Do NOT change colors directly inside widgets or BPs.
+
+**Button variants:**
+
+Each component has a `Variant` property. Inside `WBP_Button` the logic is:
+
+```
+Variant (Switch) -> Apply Style
+
+Primary    -> PrimaryButtonStyle
+Secondary  -> SecondaryButtonStyle
+Destructive -> DestructiveButtonStyle
+```
+
+The button reads the style from `DA_UIColors` and applies it automatically.
+
+**Adding a button:**
+1. Drop `WBP_Button` into your widget
+2. Set the `Variant` and any other properties
+
 <br><br>
 
 ## 12. Multiplayer (Future)
@@ -365,6 +398,6 @@ Source/
 ## 15. Known Risks
 
 - Doria AI complexity - bomb avoidance via Behavior Tree is the hardest part. Don't leave to May. NavMesh with dynamic obstacles (soft blocks destroyed mid-game) needs performance testing early.
-- Art bottleneck - 3D artists are behind schedule. Code is waiting on models for enemies and environment. Risk: assets arrive late and there's not enough time to integrate and polish properly.- - 
+- Art bottleneck - 3D artists are behind schedule. Code is waiting on models for enemies and environment. Risk: assets arrive late and there's not enough time to integrate and polish properly.
 - Dynamic NavMesh - when soft blocks get destroyed, NavMesh needs to update. UE5 supports dynamic rebuilding but it has a performance cost. Test early.
 - Multiplayer refactor cost - no global player singletons in the codebase, always routing through PlayerState/GameState, so the door is open. But adding online multiplayer late would still be significant work.
