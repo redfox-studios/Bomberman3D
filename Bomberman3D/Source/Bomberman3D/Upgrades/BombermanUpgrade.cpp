@@ -71,13 +71,15 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	case EUpgradeType::Invincible:
 		if (UBombermanHealthComponent* Health = Player->FindComponentByClass<UBombermanHealthComponent>())
 		{
+			PS->Upgrades.bInvincible = true;
 			Health->bInvincible = true;
 			FTimerHandle InvincibleTimer;
 			Player->GetWorldTimerManager().SetTimer(
 				InvincibleTimer,
-				[Health]()
+				[Health, PS]() // capture PS too
 				{
 					if (Health) Health->bInvincible = false;
+					if (PS) PS->Upgrades.bInvincible = false;
 				},
 				30.f,
 				false
