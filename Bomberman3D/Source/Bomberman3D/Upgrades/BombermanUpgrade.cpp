@@ -23,6 +23,7 @@ ABombermanUpgrade::ABombermanUpgrade()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Mesh->SetRelativeScale3D(FVector(0.5f));
 
 #if WITH_EDITOR
 	OverlapBox->bHiddenInGame = false;
