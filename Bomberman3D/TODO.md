@@ -176,8 +176,6 @@
   - player can be invincible after stucking themselves in the corner and can also noclip to the enemy... idk how but my teacher managed to discover this bug somehow...
 - each bomb has a explosion sound, which is good but when there is 10 bombs detonated at once, the audio can be pretty loud (all 10 sounds playing at once)
 - background music will reset when transferring between stages (level reloading)
-- when pausing the game and unpausing it with UI resume button (not by pressing pause key again), the ui still exists, it just hides and you have to press pause button two times to show the menu again
-
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
