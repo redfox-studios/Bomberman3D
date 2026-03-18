@@ -115,7 +115,7 @@
 
 ---
 
-## Phase 3 - Full AI
+## Phase 3 - AI
 
 - [x] Onil (random + pursue if player nearby)
 - [ ] Dahl (alternates axis)
@@ -159,6 +159,7 @@
 - [x] Discord SDK
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
+- [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 
 ---
 
@@ -170,12 +171,10 @@
 
 ## Known Bugs
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- invincibility upgrade in debug still shown as 0 (i probably didnt get it or im an idiot and cant code)
-- game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
+
+### Probably Fixed
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
-- each bomb has a explosion sound, which is good but when there is 10 bombs detonated at once, the audio can be pretty loud (all 10 sounds playing at once)
-- background music will reset when transferring between stages (level reloading). (there isnt any bg music feat yet, but i wrote this in case there will be)
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
+#include "Components/BoxComponent.h" // because i set box collision as root
 #include "BombermanUpgrade.generated.h"
 
 // clang-format off
@@ -33,6 +34,7 @@ class BOMBERMAN3D_API ABombermanUpgrade : public AActor
 
   protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
   public:
 	UPROPERTY(EditDefaultsOnly, Category = "Upgrade")
@@ -44,12 +46,23 @@ class BOMBERMAN3D_API ABombermanUpgrade : public AActor
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* PickupSound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float FloatAmplitude = 15.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float FloatSpeed = 2.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float RotateSpeed = 90.f; // degrees per second
+
   private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* OverlapBox;
+
+	float FloatTime = 0.f;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

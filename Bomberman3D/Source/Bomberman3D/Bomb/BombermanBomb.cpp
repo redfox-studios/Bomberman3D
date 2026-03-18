@@ -10,6 +10,8 @@
 #include "NiagaraComponent.h"
 #include "Player/BombermanPlayerState.h"
 
+float ABombermanBomb::LastExplosionSoundTime = -999.f;
+
 ABombermanBomb::ABombermanBomb()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -23,6 +25,7 @@ ABombermanBomb::ABombermanBomb()
 void ABombermanBomb::BeginPlay()
 {
 	Super::BeginPlay();
+	LastExplosionSoundTime = -999.f; // reset on every new bomb
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
 
@@ -35,7 +38,6 @@ void ABombermanBomb::Tick(float DeltaTime)
 
 	if (bCollisionEnabled || !Grid) return;
 
-	// ff owner has BombPass -> never enable collision
 	if (OwnerCharacter)
 	{
 		if (ABombermanPlayerState* PS = OwnerCharacter->GetPlayerState<ABombermanPlayerState>())
@@ -46,10 +48,17 @@ void ABombermanBomb::Tick(float DeltaTime)
 
 	if (!OwnerCharacter) return;
 
-	FVector2D PlayerTile = Grid->GetGridPositionFromWorld(OwnerCharacter->GetActorLocation());
-	FVector2D BombTile = Grid->GetGridPositionFromWorld(GetActorLocation());
+	FVector PlayerPos = OwnerCharacter->GetActorLocation();
+	FVector BombPos = GetActorLocation();
 
-	if (FMath::RoundToInt(PlayerTile.X) != FMath::RoundToInt(BombTile.X) || FMath::RoundToInt(PlayerTile.Y) != FMath::RoundToInt(BombTile.Y))
+	// Use actual distance instead of tile rounding - player must be
+	// at least 60% of a tile away before we enable collision
+	float Dist2D = FVector2D::Distance(
+		FVector2D(PlayerPos.X, PlayerPos.Y),
+		FVector2D(BombPos.X, BombPos.Y)
+	);
+
+	if (Dist2D > Grid->GetTileSize() * 0.65f) // num is the percentage
 	{
 		bCollisionEnabled = true;
 		BombMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
@@ -90,11 +99,14 @@ void ABombermanBomb::Explode()
 
 	const TArray<FVector2D> Directions = { FVector2D(1, 0), FVector2D(-1, 0), FVector2D(0, 1), FVector2D(0, -1) };
 
-	if (ExplosionSound)
+	// only play sound if no other explosion played in the last 0.1s
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	if (ExplosionSound && CurrentTime - LastExplosionSoundTime > 0.1f)
 	{
+		LastExplosionSoundTime = CurrentTime;
 		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
 	}
-
+	
 	for (const FVector2D& Dir : Directions)
 	{
 		for (int32 i = 1; i <= BlastRadius; i++)

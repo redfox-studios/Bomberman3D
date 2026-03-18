@@ -99,7 +99,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	bool IsTileOccupiedByEnemy(int32 X, int32 Y) const;
 
 	UFUNCTION(BlueprintCallable)
-	void GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades);
+	void GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage);
 
 	// --- actor spawning ---
 
@@ -171,7 +171,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	void PlaceHardWalls();
 	void GenerateSoftBlocks();
 	void PlaceDoor();
-	void PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades);
+	void PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage);
 
 	// Flood-fill from player spawn, returns all reachable empty tiles
 	TArray<FVector2D> FloodFill(int32 StartX, int32 StartY) const;

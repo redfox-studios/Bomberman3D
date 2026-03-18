@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Enemies/EnemyBase.h"
 #include "Core/BombermanStageConfig.h"
+#include "Core/BombermanGameState.h"
 
 #include "BombermanGameMode.generated.h"
 
@@ -74,6 +75,14 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> LoadingScreenWidgetClass;
+
+	bool IsStageCompletable() const
+	{
+		return BombermanGameState && BombermanGameState->EnemiesRemaining <= 0;
+	}
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	USoundBase* BackgroundMusic;
 
   private:
 	void StartStage();

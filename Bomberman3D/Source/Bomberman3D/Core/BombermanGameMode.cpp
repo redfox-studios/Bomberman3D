@@ -119,6 +119,7 @@ void ABombermanGameMode::StartStage()
 			{
 				ABombermanPlayerState* PS = GetLocalPlayerState();
 				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
+				GI->PlayMusic(BackgroundMusic, 0.5f);
 			}
 		}, 0.2f, false);
 
@@ -142,15 +143,11 @@ void ABombermanGameMode::StartStage()
 
 	if (StageConfigTable)
 	{
-		FString RowName = FString::Printf(TEXT("%d"), BombermanGameState->CurrentStage);
-		FBombermanStageConfig* Config = StageConfigTable->FindRow<FBombermanStageConfig>(FName(*RowName), TEXT(""));
+		TArray<FBombermanStageConfig*> AllRows;
+		StageConfigTable->GetAllRows<FBombermanStageConfig>(TEXT(""), AllRows);
 
-		if (!Config)
-		{
-			TArray<FBombermanStageConfig*> AllRows;
-			StageConfigTable->GetAllRows<FBombermanStageConfig>(TEXT(""), AllRows);
-			if (AllRows.Num() > 0) Config = AllRows.Last();
-		}
+		int32 StageIndex = FMath::Clamp(BombermanGameState->CurrentStage - 1, 0, AllRows.Num() - 1);
+		FBombermanStageConfig* Config = AllRows[StageIndex];
 
 		if (Config)
 		{
@@ -167,7 +164,7 @@ void ABombermanGameMode::StartStage()
 		CurrentUpgrades = PS->Upgrades;
 	}
 
-	Grid->GenerateGrid(CurrentUpgrades);
+	Grid->GenerateGrid(CurrentUpgrades, BombermanGameState->CurrentStage);
 
 	BombermanGameState->StageState = EStageState::InProgress;
 	BombermanGameState->StageTimeRemaining = StageTimerDuration;
