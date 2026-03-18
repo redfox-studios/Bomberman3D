@@ -10,6 +10,8 @@
 #include "NiagaraComponent.h"
 #include "Player/BombermanPlayerState.h"
 
+float ABombermanBomb::LastExplosionSoundTime = -999.f;
+
 ABombermanBomb::ABombermanBomb()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -97,15 +99,13 @@ void ABombermanBomb::Explode()
 	const TArray<FVector2D> Directions = { FVector2D(1, 0), FVector2D(-1, 0), FVector2D(0, 1), FVector2D(0, -1) };
 
 	// only play sound if no other explosion played in the last 0.1s
-	static float LastExplosionSoundTime = -1.f;
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-
 	if (ExplosionSound && CurrentTime - LastExplosionSoundTime > 0.1f)
 	{
 		LastExplosionSoundTime = CurrentTime;
 		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
 	}
-
+	
 	for (const FVector2D& Dir : Directions)
 	{
 		for (int32 i = 1; i <= BlastRadius; i++)

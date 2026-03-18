@@ -78,6 +78,6 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	void Explode();
 	void TriggerChainReaction(int32 X, int32 Y);
 	void DamageActorsOnTile(int32 X, int32 Y);
-
 	bool bCollisionEnabled = false;
+	static float LastExplosionSoundTime;
 };
