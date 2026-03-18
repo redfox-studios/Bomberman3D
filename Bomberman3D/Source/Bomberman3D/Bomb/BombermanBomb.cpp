@@ -35,7 +35,6 @@ void ABombermanBomb::Tick(float DeltaTime)
 
 	if (bCollisionEnabled || !Grid) return;
 
-	// ff owner has BombPass -> never enable collision
 	if (OwnerCharacter)
 	{
 		if (ABombermanPlayerState* PS = OwnerCharacter->GetPlayerState<ABombermanPlayerState>())
@@ -46,10 +45,17 @@ void ABombermanBomb::Tick(float DeltaTime)
 
 	if (!OwnerCharacter) return;
 
-	FVector2D PlayerTile = Grid->GetGridPositionFromWorld(OwnerCharacter->GetActorLocation());
-	FVector2D BombTile = Grid->GetGridPositionFromWorld(GetActorLocation());
+	FVector PlayerPos = OwnerCharacter->GetActorLocation();
+	FVector BombPos = GetActorLocation();
 
-	if (FMath::RoundToInt(PlayerTile.X) != FMath::RoundToInt(BombTile.X) || FMath::RoundToInt(PlayerTile.Y) != FMath::RoundToInt(BombTile.Y))
+	// Use actual distance instead of tile rounding - player must be
+	// at least 60% of a tile away before we enable collision
+	float Dist2D = FVector2D::Distance(
+		FVector2D(PlayerPos.X, PlayerPos.Y),
+		FVector2D(BombPos.X, BombPos.Y)
+	);
+
+	if (Dist2D > Grid->GetTileSize() * 0.65f) // num is the percentage
 	{
 		bCollisionEnabled = true;
 		BombMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
