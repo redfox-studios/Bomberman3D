@@ -186,6 +186,12 @@ void ABombermanGameMode::StartStage()
 	// Full stage timer
 	GetWorld()->GetTimerManager().SetTimer(StageTimerHandle, this, &ABombermanGameMode::OnStageTimerExpired, StageTimerDuration, false);
 
+	if (BackgroundMusic)
+	{
+		if (MusicComponent) MusicComponent->Stop();
+		MusicComponent = UGameplayStatics::SpawnSound2D(this, BackgroundMusic, MusicVolume, 1.f, 0.f, nullptr, false, false);
+	}
+
 	UE_LOG(LogTemp, Log, TEXT("Stage %d started. Enemies: %d"), BombermanGameState->CurrentStage, BombermanGameState->EnemiesRemaining);
 }
 
