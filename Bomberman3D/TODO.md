@@ -129,11 +129,11 @@
 
 ### VFX & Sound
 - [x] Explosion VFX support
-- [ ] Soft block destroy VFX
+- [ ] Soft block destroy VFX (probably not gonna do this)
 - [x] Upgrade pickup VFX support
 - [ ] Background music
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
-- [ ] Actual VFX/SFX assets (designer work)
+- [ ] Actual VFX/SFX assets
 
 ---
 
@@ -156,7 +156,7 @@
 
 ### Final
 - [ ] Full bugfix pass
-- [ ] Discord SDK
+- [x] Discord SDK
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 
@@ -174,6 +174,10 @@
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip to the enemy... idk how but my teacher managed to discover this bug somehow...
+- each bomb has a explosion sound, which is good but when there is 10 bombs detonated at once, the audio can be pretty loud (all 10 sounds playing at once)
+- background music will reset when transferring between stages (level reloading)
+- when pausing the game and unpausing it with UI resume button (not by pressing pause key again), the ui still exists, it just hides and you have to press pause button two times to show the menu again
+
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
