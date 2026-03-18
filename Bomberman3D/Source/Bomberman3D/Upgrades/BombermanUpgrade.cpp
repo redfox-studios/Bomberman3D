@@ -11,21 +11,34 @@
 
 ABombermanUpgrade::ABombermanUpgrade()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = Mesh;
-
+	// collision box is now root
 	OverlapBox = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapBox"));
-	OverlapBox->SetupAttachment(RootComponent);
+	RootComponent = OverlapBox;
 	OverlapBox->SetBoxExtent(FVector(40.f));
 	OverlapBox->SetCollisionProfileName(TEXT("Trigger"));
+
+	// mesh attaches to root but moves independently
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 #if WITH_EDITOR
 	OverlapBox->bHiddenInGame = false;
 #else
 	OverlapBox->bHiddenInGame = true;
 #endif
+}
+
+void ABombermanUpgrade::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	FloatTime += DeltaTime;
+	float ZOffset = FMath::Sin(FloatTime * FloatSpeed) * FloatAmplitude;
+	Mesh->SetRelativeLocation(FVector(0.f, 0.f, ZOffset));
+	Mesh->AddRelativeRotation(FRotator(0.f, RotateSpeed * DeltaTime, 0.f));
 }
 
 void ABombermanUpgrade::BeginPlay()
