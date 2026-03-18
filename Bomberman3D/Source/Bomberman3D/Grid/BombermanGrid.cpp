@@ -27,11 +27,11 @@ void ABombermanGrid::BeginPlay()
 	// moved: GenerateSoftBlocks, PlaceDoor, PlaceUpgrades
 }
 
-void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades)
+void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage)
 {
 	GenerateSoftBlocks();
 	PlaceDoor();
-	PlaceUpgrades(PlayerUpgrades);
+	PlaceUpgrades(PlayerUpgrades, CurrentStage);
 }
 
 void ABombermanGrid::Tick(float DeltaTime)
@@ -358,31 +358,42 @@ AActor* ABombermanGrid::GetActorOnTile(int32 X, int32 Y) const
 	return ActorMap[X][Y];
 }
 
-void ABombermanGrid::PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades)
+void ABombermanGrid::PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage)
 {
+	// calculated automatically, no need to set in DT
+	UpgradeDensity = FMath::Clamp(CurrentStage * 0.01f, 0.01f, 0.5f);
+
 	for (int32 X = 1; X < BaseGridHeight - 1; X++)
 	{
 		for (int32 Y = 1; Y < BaseGridWidth - 1; Y++)
 		{
 			if (Data[X][Y] != ETileContent::SoftBlock) continue;
 			if (X == DoorTileX && Y == DoorTileY) continue;
-
 			if (FMath::FRand() > UpgradeDensity) continue;
 
-			// build pool of valid upgrades
 			TArray<TSubclassOf<AActor>> Pool;
 
+			// always available
 			if (PlayerUpgrades.BombUp < 10 && BombUpClass) Pool.Add(BombUpClass);
 			if (PlayerUpgrades.FireUp < 10 && FireUpClass) Pool.Add(FireUpClass);
 			if (PlayerUpgrades.SpeedUp < 3 && SpeedUpClass) Pool.Add(SpeedUpClass);
-			if (!PlayerUpgrades.bInvincible && InvincibleClass) Pool.Add(InvincibleClass);
-			if (!PlayerUpgrades.bWallPass && WallPassClass) Pool.Add(WallPassClass);
-			if (!PlayerUpgrades.bBombPass && BombPassClass) Pool.Add(BombPassClass);
-			if (!PlayerUpgrades.bFlamePass && FlamePassClass) Pool.Add(FlamePassClass);
-			if (!PlayerUpgrades.bRemoteControl && RemoteControlClass) Pool.Add(RemoteControlClass);
+
+			// mid game
+			if (CurrentStage >= 6)
+			{
+				if (!PlayerUpgrades.bRemoteControl && RemoteControlClass) Pool.Add(RemoteControlClass);
+				if (!PlayerUpgrades.bBombPass && BombPassClass) Pool.Add(BombPassClass);
+			}
+
+			// late game
+			if (CurrentStage >= 16)
+			{
+				if (!PlayerUpgrades.bWallPass && WallPassClass) Pool.Add(WallPassClass);
+				if (!PlayerUpgrades.bFlamePass && FlamePassClass) Pool.Add(FlamePassClass);
+				if (!PlayerUpgrades.bInvincible && InvincibleClass) Pool.Add(InvincibleClass);
+			}
 
 			if (Pool.IsEmpty()) continue;
-
 			UpgradeMap[X][Y] = Pool[FMath::RandRange(0, Pool.Num() - 1)];
 		}
 	}

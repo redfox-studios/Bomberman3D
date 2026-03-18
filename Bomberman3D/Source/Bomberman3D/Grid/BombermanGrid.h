@@ -99,7 +99,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	bool IsTileOccupiedByEnemy(int32 X, int32 Y) const;
 
 	UFUNCTION(BlueprintCallable)
-	void GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades);
+	void GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage);
 
 	// --- actor spawning ---
 

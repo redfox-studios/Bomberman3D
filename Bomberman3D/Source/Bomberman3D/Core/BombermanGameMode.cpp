@@ -163,7 +163,7 @@ void ABombermanGameMode::StartStage()
 		CurrentUpgrades = PS->Upgrades;
 	}
 
-	Grid->GenerateGrid(CurrentUpgrades);
+	Grid->GenerateGrid(CurrentUpgrades, BombermanGameState->CurrentStage);
 
 	BombermanGameState->StageState = EStageState::InProgress;
 	BombermanGameState->StageTimeRemaining = StageTimerDuration;
