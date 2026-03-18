@@ -171,7 +171,6 @@
 
 ## Known Bugs
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- background music will reset when transferring between stages (level reloading). (there isnt any bg music feat yet, but i wrote this in case there will be)
 
 ### Probably Fixed
 - player can get stuck in corners

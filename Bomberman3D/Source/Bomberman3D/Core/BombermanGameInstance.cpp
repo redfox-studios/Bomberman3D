@@ -70,3 +70,23 @@ void UBombermanGameInstance::SetStage(int32 Stage)
 	// GEngine->Exec(GetWorld(), TEXT("RestartLevel"));
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()));
 }
+
+void UBombermanGameInstance::PlayMusic(USoundBase* Music, float Volume)
+{
+	if (!Music) return;
+
+	if (MusicComponent && MusicComponent->Sound == Music && MusicComponent->IsPlaying())
+		return;
+
+	if (MusicComponent)
+		MusicComponent->Stop();
+
+	MusicComponent = UGameplayStatics::SpawnSound2D(
+		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true // bPersistAcrossLevelTransition = true
+	);
+}
+
+void UBombermanGameInstance::StopMusic()
+{
+	if (MusicComponent) MusicComponent->Stop();
+}

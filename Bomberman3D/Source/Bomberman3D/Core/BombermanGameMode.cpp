@@ -119,6 +119,7 @@ void ABombermanGameMode::StartStage()
 			{
 				ABombermanPlayerState* PS = GetLocalPlayerState();
 				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
+				GI->PlayMusic(BackgroundMusic, 0.5f);
 			}
 		}, 0.2f, false);
 
@@ -185,12 +186,6 @@ void ABombermanGameMode::StartStage()
 
 	// Full stage timer
 	GetWorld()->GetTimerManager().SetTimer(StageTimerHandle, this, &ABombermanGameMode::OnStageTimerExpired, StageTimerDuration, false);
-
-	if (BackgroundMusic)
-	{
-		if (MusicComponent) MusicComponent->Stop();
-		MusicComponent = UGameplayStatics::SpawnSound2D(this, BackgroundMusic, MusicVolume, 1.f, 0.f, nullptr, false, false);
-	}
 
 	UE_LOG(LogTemp, Log, TEXT("Stage %d started. Enemies: %d"), BombermanGameState->CurrentStage, BombermanGameState->EnemiesRemaining);
 }

@@ -7,7 +7,6 @@
 #include "Enemies/EnemyBase.h"
 #include "Core/BombermanStageConfig.h"
 #include "Core/BombermanGameState.h"
-#include "Components/AudioComponent.h"
 
 #include "BombermanGameMode.generated.h"
 
@@ -85,9 +84,6 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* BackgroundMusic;
 
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	float MusicVolume = 0.5f;
-
   private:
 	void StartStage();
 	void OnStageTimerTick();
@@ -95,8 +91,6 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	void StageClear();
 	void SpawnEnemies();
 	void LoadNextStage();
-
-	UAudioComponent* MusicComponent = nullptr;
 
 	FTimerHandle StageTimerHandle;
 	FTimerHandle StageTickHandle;

@@ -6,6 +6,8 @@
 #include "Engine/GameInstance.h"
 #include "Player/BombermanPlayerUpgrades.h"
 #include "Core/BombermanDiscordManager.h"
+#include "Components/AudioComponent.h"
+
 #include "BombermanGameInstance.generated.h"
 
 UCLASS()
@@ -48,4 +50,10 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	virtual void Init() override;
 	virtual void OnStart() override;
 	virtual void Shutdown() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	UAudioComponent* MusicComponent = nullptr;
+
+	void PlayMusic(USoundBase* Music, float Volume = 0.5f);
+	void StopMusic();
 };
