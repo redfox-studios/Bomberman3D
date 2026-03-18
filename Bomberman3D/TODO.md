@@ -175,7 +175,6 @@
 - game feels too easy, OP upgrades appearing too early (WallPass/FlamePass on stage 1)
 - each bomb has a explosion sound, which is good but when there is 10 bombs detonated at once, the audio can be pretty loud (all 10 sounds playing at once)
 - background music will reset when transferring between stages (level reloading). (there isnt any bg music feat yet, but i wrote this in case there will be)
-- portal sound plays on player collision when there are still enemies (found this when i killed all enemies and then timer ran out and pontants spawned)
 
 ### Probably Fixed
 - player can get stuck in corners
