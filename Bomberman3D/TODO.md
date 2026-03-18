@@ -115,7 +115,7 @@
 
 ---
 
-## Phase 3 - Full AI
+## Phase 3 - AI
 
 - [x] Onil (random + pursue if player nearby)
 - [ ] Dahl (alternates axis)
@@ -159,7 +159,7 @@
 - [x] Discord SDK
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
-- [ ] Optimization - currently the game build has ~300mb which is small for UE games but im pretty sure we can lower this
+- [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 
 ---
 

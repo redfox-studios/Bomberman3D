@@ -371,33 +371,4 @@ Source/
 
 ## 14. Development Schedule
 
-### Done (Mike's Month 1 Speedrun)
-- Full grid system with procedural generation, flood-fill door placement, grid growth
-- Player movement, bomb system, chain reactions, all explosion logic
-- Full stage flow (win/lose conditions, stage timer, enemy rush)
-- Score system, save system, GameInstance persistence
-- Ballom, Onil, Pontant enemies
-- BombUp, FireUp, SpeedUp upgrades
-- Main Menu, Pause Menu, HUD, Game Over screen, Stage Clear screen
-- Data Table driven stage config
-- VFX and SFX support hooks
-- Corner rounding, tile occupancy
-
-### Remaining
-- Dahl, Minvo, Ovape, Pass enemies (simple, waiting on models)
-- Doria AI with Behavior Tree (start early, don't leave to May)
-- NavMesh setup for chasing enemies
-- Remaining upgrades (RemoteControl, WallPass, BombPass, FlamePass, Invincible)
-- VFX and SFX assets (designer work)
-- Loading Screen, Credits Screen, Settings
-- Final bugfix pass
-- Local co-op/versus (if time allows)
-
-<br><br>
-
-## 15. Known Risks
-
-- Doria AI complexity - bomb avoidance via Behavior Tree is the hardest part. Don't leave to May. NavMesh with dynamic obstacles (soft blocks destroyed mid-game) needs performance testing early.
-- Art bottleneck - 3D artists are behind schedule. Code is waiting on models for enemies and environment. Risk: assets arrive late and there's not enough time to integrate and polish properly.
-- Dynamic NavMesh - when soft blocks get destroyed, NavMesh needs to update. UE5 supports dynamic rebuilding but it has a performance cost. Test early.
-- Multiplayer refactor cost - no global player singletons in the codebase, always routing through PlayerState/GameState, so the door is open. But adding online multiplayer late would still be significant work.
+check TODO
