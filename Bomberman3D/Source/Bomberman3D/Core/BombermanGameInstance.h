@@ -40,11 +40,7 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	void LoadGame();
 
 	UFUNCTION(BlueprintCallable, Exec)
-	void SetStage(int32 Stage)
-	{
-		CurrentStage = Stage;
-		GEngine->Exec(GetWorld(), TEXT("RestartLevel"));
-	}
+	void SetStage(int32 Stage);
 	// type in console 'SetStage 5' (where 5 is the desired stage number)
 
 	FBombermanDiscordManager DiscordManager;

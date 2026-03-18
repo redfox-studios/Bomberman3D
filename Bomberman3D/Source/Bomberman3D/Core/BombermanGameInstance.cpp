@@ -63,3 +63,10 @@ void UBombermanGameInstance::Shutdown()
 	DiscordManager.Shutdown();
 	Super::Shutdown();
 }
+
+void UBombermanGameInstance::SetStage(int32 Stage)
+{
+	CurrentStage = Stage;
+	// GEngine->Exec(GetWorld(), TEXT("RestartLevel"));
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()));
+}
