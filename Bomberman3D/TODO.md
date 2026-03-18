@@ -154,6 +154,15 @@
 - [ ] Settings (keybind remapping via Enhanced Input)
 - [x] Random game tips in main menu and pause menu
 
+### Music (code, not assets)
+- [x] Background music persistent trough levels
+- [ ] Background music config in Data Table
+
+### Stages
+- [ ] Bonus stages
+  - [ ] FROM GDD: every 5 levels a bonus stage appears, on said bonus stage only Balloms spawn and no soft blocks, this stage is only 30 seconds long and there are no doors in this stage, after the timer runs out the player goes to the next stage, the music changes in this level to be more fast paced
+  - [ ] They are gonna be appearing as normal stages in the Data Table, they will just have BONUS as row name, nothing in the code, the enemy spawn, music, etc will be configured by the game designer in data table
+
 ### Final
 - [ ] Full bugfix pass
 - [x] Discord SDK
