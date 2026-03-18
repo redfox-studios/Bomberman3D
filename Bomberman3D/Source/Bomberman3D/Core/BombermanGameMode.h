@@ -81,9 +81,6 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 		return BombermanGameState && BombermanGameState->EnemiesRemaining <= 0;
 	}
 
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	USoundBase* BackgroundMusic;
-
   private:
 	void StartStage();
 	void OnStageTimerTick();
@@ -91,6 +88,8 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	void StageClear();
 	void SpawnEnemies();
 	void LoadNextStage();
+
+	bool bCurrentStageIsBonus = false;
 
 	FTimerHandle StageTimerHandle;
 	FTimerHandle StageTickHandle;
