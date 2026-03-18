@@ -142,15 +142,11 @@ void ABombermanGameMode::StartStage()
 
 	if (StageConfigTable)
 	{
-		FString RowName = FString::Printf(TEXT("%d"), BombermanGameState->CurrentStage);
-		FBombermanStageConfig* Config = StageConfigTable->FindRow<FBombermanStageConfig>(FName(*RowName), TEXT(""));
+		TArray<FBombermanStageConfig*> AllRows;
+		StageConfigTable->GetAllRows<FBombermanStageConfig>(TEXT(""), AllRows);
 
-		if (!Config)
-		{
-			TArray<FBombermanStageConfig*> AllRows;
-			StageConfigTable->GetAllRows<FBombermanStageConfig>(TEXT(""), AllRows);
-			if (AllRows.Num() > 0) Config = AllRows.Last();
-		}
+		int32 StageIndex = FMath::Clamp(BombermanGameState->CurrentStage - 1, 0, AllRows.Num() - 1);
+		FBombermanStageConfig* Config = AllRows[StageIndex];
 
 		if (Config)
 		{
