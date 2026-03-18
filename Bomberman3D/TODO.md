@@ -176,6 +176,7 @@
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 - each bomb has a explosion sound, which is good but when there is 10 bombs detonated at once, the audio can be pretty loud (all 10 sounds playing at once)
 - background music will reset when transferring between stages (level reloading). (there isnt any bg music feat yet, but i wrote this in case there will be)
+- portal sound plays on player collision when there are still enemies (found this when i killed all enemies and then timer ran out and pontants spawned)
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
