@@ -187,6 +187,8 @@
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music keeps playing even when stage doesnt have music set in datatable
 - annoying music cut when proceeding to next stage that has different music
+- if a music is too short (30 sec music and 200sec stage) then it should loop
+- player should earn 1 life from each completed stage (unlimited)
 
 ### Probably Fixed
 - player can get stuck in corners
@@ -200,7 +202,7 @@
   - [ ] skCrypt for strings
   - [ ] save file encryption/decryption - XOR first, AES maybe later
 
-now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i can laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
+now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i want to laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)
