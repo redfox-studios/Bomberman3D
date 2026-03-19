@@ -120,7 +120,7 @@
 
 - [x] Onil (random + pursue if player nearby)
 - [x] Dahl (alternates axis)
-- [ ] Minvo (random + pursue, can get stuck)
+- [x] Minvo (random + pursue, can get stuck)
 - [x] Ovape (mostly ignores player)
 - [x] Pass (aggressive chase)
 - [x] Pontant (always chase, fastest)
