@@ -55,6 +55,9 @@ class BOMBERMAN3D_API ABombermanUpgrade : public AActor
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	float RotateSpeed = 90.f; // degrees per second
 
+	UPROPERTY(EditDefaultsOnly, Category = "Upgrade")
+	float InvincibleDuration = 30.f;
+
   private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;

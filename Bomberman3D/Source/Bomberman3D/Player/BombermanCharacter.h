@@ -98,6 +98,9 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, Category = "Debug")
 	UArrowComponent* DirectionArrow;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float RespawnInvincibilityDuration = 2.f;
+
   private:
 	void Move(const FInputActionValue& Value);
 	void PlaceBomb(const FInputActionValue& Value);

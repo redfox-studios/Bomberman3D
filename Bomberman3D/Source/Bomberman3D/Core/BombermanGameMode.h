@@ -81,6 +81,9 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 		return BombermanGameState && BombermanGameState->EnemiesRemaining <= 0;
 	}
 
+	UPROPERTY(EditDefaultsOnly, Category = "Debug")
+	float DiscordUpdateDelay = 0.2f;
+
   private:
 	void StartStage();
 	void OnStageTimerTick();

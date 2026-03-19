@@ -211,7 +211,7 @@ void ABombermanCharacter::OnDeath()
 
 	GetWorld()->GetTimerManager().SetTimer(InvincibilityTimerHandle, [this]()
 										   { HealthComponent->bInvincible = false; },
-										   2.f,
+										   RespawnInvincibilityDuration,
 										   false);
 }
 

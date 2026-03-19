@@ -124,7 +124,7 @@ void ABombermanGameMode::StartStage()
 				ABombermanPlayerState* PS = GetLocalPlayerState();
 				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
 			}
-		}, 0.2f, false);
+		}, DiscordUpdateDelay, false);
 
 		/*	
 		// now managed in characters beginplay
