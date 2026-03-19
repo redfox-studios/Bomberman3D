@@ -9,6 +9,7 @@ AOvape::AOvape()
 {
 	MoveSpeed = 125.f;
 	PointValue = 2000;
+	bCanPassThroughSoftBlocks = true;
 }
 
 void AOvape::OnTileReached()

@@ -26,27 +26,17 @@ void APass::OnTileReached()
 	FVector2D PlayerTile = Grid->GetGridPositionFromWorld(Player->GetActorLocation());
 	FVector2D Diff = PlayerTile - MyTile;
 
-	TArray<FVector2D> Preferred;
-	if (FMath::Abs(Diff.X) >= FMath::Abs(Diff.Y))
+	// always try to chase, no distance limit
+	FVector2D Preferred = FMath::Abs(Diff.X) >= FMath::Abs(Diff.Y)
+		? FVector2D(FMath::Sign(Diff.X), 0)
+		: FVector2D(0, FMath::Sign(Diff.Y));
+
+	if (!Preferred.IsZero() && !IsDirectionBlocked(Preferred))
 	{
-		Preferred.Add(FVector2D(FMath::Sign(Diff.X), 0));
-		Preferred.Add(FVector2D(0, FMath::Sign(Diff.Y)));
-	}
-	else
-	{
-		Preferred.Add(FVector2D(0, FMath::Sign(Diff.Y)));
-		Preferred.Add(FVector2D(FMath::Sign(Diff.X), 0));
+		CurrentDirection = Preferred;
+		return;
 	}
 
-	for (const FVector2D& Dir : Preferred)
-	{
-		if (!Dir.IsZero() && !IsDirectionBlocked(Dir))
-		{
-			CurrentDirection = Dir;
-			return;
-		}
-	}
-
-	// both preferred blocked, go random unlike Pontant
+	// preferred blocked, go random like Minvo instead of trying reverse like Pontant
 	CurrentDirection = PickRandomUnblockedDirection();
 }

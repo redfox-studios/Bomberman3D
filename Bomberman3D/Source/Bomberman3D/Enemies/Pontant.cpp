@@ -9,6 +9,7 @@ APontant::APontant()
 {
 	MoveSpeed = 200.f;
 	PointValue = 8000;
+	bCanPassThroughSoftBlocks = true;
 }
 
 void APontant::OnTileReached() { ChasePlayer(); }

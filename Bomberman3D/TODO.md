@@ -182,7 +182,7 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music keeps playing even when stage doesnt have music set in datatable
-- Ovape and Pontant cant move through soft blocks
+- annoying music cut when proceeding to next stage that has different music
 
 ### Probably Fixed
 - player can get stuck in corners
