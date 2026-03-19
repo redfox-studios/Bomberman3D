@@ -56,4 +56,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	void PlayMusic(USoundBase* Music, float Volume = 0.5f);
 	void StopMusic();
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	float MusicFadeDuration = 1.f;
+
+	void FadeToMusic(USoundBase* Music, float Volume = 0.5f);
 };

@@ -185,10 +185,6 @@
 
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- music keeps playing even when stage doesnt have music set in datatable
-- annoying music cut when proceeding to next stage that has different music
-- if a music is too short (30 sec music and 200sec stage) then it should loop
-- player should earn 1 life from each completed stage (unlimited)
 
 ### Probably Fixed
 - player can get stuck in corners
