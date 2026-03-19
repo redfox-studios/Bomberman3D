@@ -332,6 +332,7 @@ void ABombermanGameMode::StageClear()
 		if (ABombermanPlayerState* PS = It->GetPlayerState<ABombermanPlayerState>())
 		{
 			PS->AddScore(FMath::RoundToInt(BombermanGameState->StageTimeRemaining) * 10);
+			PS->Lives++;
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 			{
