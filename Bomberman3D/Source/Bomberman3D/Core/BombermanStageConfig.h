@@ -38,4 +38,10 @@ struct FBombermanStageConfig : public FTableRowBase
 	// calculated automatically, no need to set in DT
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float UpgradeDensity = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* BackgroundMusic = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bBonusStage = false;
 };

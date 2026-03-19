@@ -76,12 +76,12 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 			FTimerHandle InvincibleTimer;
 			Player->GetWorldTimerManager().SetTimer(
 				InvincibleTimer,
-				[Health, PS]() // capture PS too
+				[Health, PS]()
 				{
 					if (Health) Health->bInvincible = false;
 					if (PS) PS->Upgrades.bInvincible = false;
 				},
-				30.f,
+				InvincibleDuration,
 				false
 			);
 		}

@@ -27,10 +27,10 @@ void ABombermanGrid::BeginPlay()
 	// moved: GenerateSoftBlocks, PlaceDoor, PlaceUpgrades
 }
 
-void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage)
+void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage, bool bBonusStage)
 {
 	GenerateSoftBlocks();
-	PlaceDoor();
+	if (!bBonusStage) PlaceDoor();
 	PlaceUpgrades(PlayerUpgrades, CurrentStage);
 }
 

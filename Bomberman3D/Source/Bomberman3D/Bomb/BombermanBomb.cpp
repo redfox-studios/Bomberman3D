@@ -25,7 +25,6 @@ ABombermanBomb::ABombermanBomb()
 void ABombermanBomb::BeginPlay()
 {
 	Super::BeginPlay();
-	LastExplosionSoundTime = -999.f; // reset on every new bomb
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
 
@@ -58,7 +57,7 @@ void ABombermanBomb::Tick(float DeltaTime)
 		FVector2D(BombPos.X, BombPos.Y)
 	);
 
-	if (Dist2D > Grid->GetTileSize() * 0.65f) // num is the percentage
+	if (Dist2D > Grid->GetTileSize() * CollisionEnableDistance)
 	{
 		bCollisionEnabled = true;
 		BombMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
@@ -101,7 +100,7 @@ void ABombermanBomb::Explode()
 
 	// only play sound if no other explosion played in the last 0.1s
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-	if (ExplosionSound && CurrentTime - LastExplosionSoundTime > 0.1f)
+	if (ExplosionSound && CurrentTime - LastExplosionSoundTime > ExplosionSoundCooldown)
 	{
 		LastExplosionSoundTime = CurrentTime;
 		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());

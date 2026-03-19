@@ -112,16 +112,17 @@
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
 - [x] 50 total stages in data table
+  - [ ] Win after 50 stages
 
 ---
 
 ## Phase 3 - AI
 
 - [x] Onil (random + pursue if player nearby)
-- [ ] Dahl (alternates axis)
-- [ ] Minvo (random + pursue, can get stuck)
-- [ ] Ovape (mostly ignores player)
-- [ ] Pass (aggressive chase)
+- [x] Dahl (alternates axis)
+- [x] Minvo (random + pursue, can get stuck)
+- [x] Ovape (mostly ignores player)
+- [x] Pass (aggressive chase)
 - [x] Pontant (always chase, fastest)
 - [ ] Doria (chase + bomb avoidance) <- signed off for now, revisit if time allows
 - [x] Tile occupancy (max one enemy per tile)
@@ -154,6 +155,15 @@
 - [ ] Settings (keybind remapping via Enhanced Input)
 - [x] Random game tips in main menu and pause menu
 
+### Music (code, not assets)
+- [x] Background music persistent trough levels
+- [x] Background music config in Data Table
+
+### Stages
+- [x] Bonus stages
+  - [x] FROM GDD: every 5 levels a bonus stage appears, on said bonus stage only Balloms spawn and no soft blocks, this stage is only 30 seconds long and there are no doors in this stage, after the timer runs out the player goes to the next stage, the music changes in this level to be more fast paced
+  - [x] They are gonna be appearing as normal stages in the Data Table, they will just have BONUS as row name, nothing in the code, the enemy spawn, music, etc will be configured by the game designer in data table
+
 ### Final
 - [ ] Full bugfix pass
 - [x] Discord SDK
@@ -169,12 +179,26 @@
 - Multiplayer refactor cost -> no global player singletons, always use PlayerState/GameState
 - Special items with complex conditions (248 chain reaction, outer ring walk) -> design carefully, may need dedicated tracking components
 
-## Known Bugs
+## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
+- music keeps playing even when stage doesnt have music set in datatable
+- points from enemy kills are hardcoded to 100
+- Ovape and Pontant cant move through soft blocks
+- enemy speed is hardcoded meaning that game designer cant set it directly
 
 ### Probably Fixed
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
+
+## Security
+- [ ] my cheat for the game
+- [ ] Anticheat
+  - [ ] XOR encrypt important values (health, score...)
+  - [ ] anti debug
+  - [ ] skCrypt for strings
+  - [ ] save file encryption/decryption - XOR first, AES maybe later
+
+now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i can laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)

@@ -15,6 +15,8 @@
 
 #include "Components/CapsuleComponent.h"
 
+#include "Bomb/BombermanBomb.h"
+
 // --- engine ---
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -105,6 +107,8 @@ void ABombermanGameMode::StartStage()
 {
 	if (!BombermanGameState) return;
 
+	ABombermanBomb::ResetExplosionSoundTimer();
+
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
 		BombermanGameState->CurrentStage = GI->CurrentStage;
@@ -119,9 +123,8 @@ void ABombermanGameMode::StartStage()
 			{
 				ABombermanPlayerState* PS = GetLocalPlayerState();
 				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
-				GI->PlayMusic(BackgroundMusic, 0.5f);
 			}
-		}, 0.2f, false);
+		}, DiscordUpdateDelay, false);
 
 		/*	
 		// now managed in characters beginplay
@@ -155,6 +158,11 @@ void ABombermanGameMode::StartStage()
 			StageTimerDuration = Config->StageTimer;
 			Grid->SoftBlockDensity = Config->SoftBlockDensity;
 			Grid->UpgradeDensity = Config->UpgradeDensity;
+
+			bCurrentStageIsBonus = Config->bBonusStage;
+
+			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+				GI->PlayMusic(Config->BackgroundMusic);
 		}
 	}
 
@@ -164,7 +172,7 @@ void ABombermanGameMode::StartStage()
 		CurrentUpgrades = PS->Upgrades;
 	}
 
-	Grid->GenerateGrid(CurrentUpgrades, BombermanGameState->CurrentStage);
+	Grid->GenerateGrid(CurrentUpgrades, BombermanGameState->CurrentStage, bCurrentStageIsBonus);
 
 	BombermanGameState->StageState = EStageState::InProgress;
 	BombermanGameState->StageTimeRemaining = StageTimerDuration;
@@ -250,6 +258,12 @@ void ABombermanGameMode::OnStageTimerTick()
 
 void ABombermanGameMode::OnStageTimerExpired()
 {
+	if (bCurrentStageIsBonus)
+	{
+		StageClear();
+		return;
+	}
+
 	if (!Grid || !PontantClass || !BombermanGameState) return;
 
 	for (int32 i = 0; i < EnemyRushCount; i++)

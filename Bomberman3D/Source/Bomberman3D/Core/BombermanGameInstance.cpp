@@ -45,9 +45,7 @@ void UBombermanGameInstance::ResetToDefaults()
 void UBombermanGameInstance::Init()
 {
 	Super::Init();
-#if WITH_EDITOR
 	LoadGame();
-#endif
 }
 
 void UBombermanGameInstance::OnStart()

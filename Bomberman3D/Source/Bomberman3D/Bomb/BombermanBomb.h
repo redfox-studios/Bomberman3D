@@ -74,6 +74,14 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	UFUNCTION()
 	void Detonate();
 
+	static void ResetExplosionSoundTimer() { LastExplosionSoundTime = -999.f; }
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+	float ExplosionSoundCooldown = 0.1f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+	float CollisionEnableDistance = 0.65f;
+
   private:
 	void Explode();
 	void TriggerChainReaction(int32 X, int32 Y);
