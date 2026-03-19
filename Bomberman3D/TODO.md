@@ -118,9 +118,9 @@
 ## Phase 3 - AI
 
 - [x] Onil (random + pursue if player nearby)
-- [ ] Dahl (alternates axis)
+- [x] Dahl (alternates axis)
 - [ ] Minvo (random + pursue, can get stuck)
-- [ ] Ovape (mostly ignores player)
+- [x] Ovape (mostly ignores player)
 - [ ] Pass (aggressive chase)
 - [x] Pontant (always chase, fastest)
 - [ ] Doria (chase + bomb avoidance) <- signed off for now, revisit if time allows
