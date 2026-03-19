@@ -162,7 +162,7 @@ void ABombermanGameMode::StartStage()
 			bCurrentStageIsBonus = Config->bBonusStage;
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
-				GI->PlayMusic(Config->BackgroundMusic);
+				GI->FadeToMusic(Config->BackgroundMusic);
 		}
 	}
 

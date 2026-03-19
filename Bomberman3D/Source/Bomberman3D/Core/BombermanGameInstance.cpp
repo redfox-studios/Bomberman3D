@@ -95,3 +95,29 @@ void UBombermanGameInstance::StopMusic()
 {
 	if (MusicComponent) MusicComponent->Stop();
 }
+
+void UBombermanGameInstance::FadeToMusic(USoundBase* Music, float Volume)
+{
+	if (!Music)
+	{
+		if (MusicComponent)
+			MusicComponent->FadeOut(MusicFadeDuration, 0.f);
+		return;
+	}
+
+	if (MusicComponent && MusicComponent->Sound == Music && MusicComponent->IsPlaying())
+		return;
+
+	if (MusicComponent)
+		MusicComponent->FadeOut(MusicFadeDuration, 0.f);
+
+	MusicComponent = UGameplayStatics::SpawnSound2D(
+		GetWorld(), Music, 0.f, 1.f, 0.f, nullptr, true, true
+	);
+
+	if (MusicComponent)
+	{
+		MusicComponent->bLooping = true;
+		MusicComponent->FadeIn(MusicFadeDuration, Volume);
+	}
+}
