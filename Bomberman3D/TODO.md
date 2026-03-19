@@ -178,9 +178,17 @@
 - Multiplayer refactor cost -> no global player singletons, always use PlayerState/GameState
 - Special items with complex conditions (248 chain reaction, outer ring walk) -> design carefully, may need dedicated tracking components
 
-## Known Bugs
+## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music keeps playing even when stage doesnt have music set in datatable
+- BombermanGameInstance::Init() only loads save in WITH_EDITOR
+- LastExplosionSoundTime is a static on ABombermanBomb and gets reset in BeginPlay of every new bomb (defeats the purpose of it being static)
+- Should be UPROPERTY:
+  - 2.f invincibility duration after respawn in BombermanCharacter.cpp
+  - 30.f invincible upgrade duration in BombermanUpgrade.cpp
+  - 0.1f explosion sound cooldown in BombermanBomb.cpp
+  - 0.65f collision check in BombermanBomb.cpp
+  - 0.2f discord update delay in BombermanGameMode.cpp
 
 ### Probably Fixed
 - player can get stuck in corners
