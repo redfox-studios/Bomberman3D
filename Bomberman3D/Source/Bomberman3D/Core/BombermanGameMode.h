@@ -84,6 +84,12 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	float DiscordUpdateDelay = 0.2f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
+	int32 TotalStages = 50;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> GameClearWidgetClass;
+
   private:
 	void StartStage();
 	void OnStageTimerTick();

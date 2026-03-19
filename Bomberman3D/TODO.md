@@ -112,7 +112,7 @@
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
 - [x] 50 total stages in data table
-  - [ ] Win after 50 stages
+  - [x] Win after 50 stages
 
 ---
 

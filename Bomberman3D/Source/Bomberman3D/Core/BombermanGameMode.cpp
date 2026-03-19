@@ -354,6 +354,28 @@ void ABombermanGameMode::StageClear()
 		break;
 	}
 
+	if (BombermanGameState->CurrentStage >= TotalStages)
+	{
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+		{
+			GI->ResetToDefaults();
+			GI->SaveGame();
+		}
+
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		if (PC && GameClearWidgetClass)
+		{
+			UUserWidget* Widget = CreateWidget<UUserWidget>(PC, GameClearWidgetClass);
+			if (Widget)
+			{
+				Widget->AddToViewport();
+				PC->bShowMouseCursor = true;
+			}
+		}
+
+		return;
+	}
+
 	if (StageClearWidgetClass)
 	{
 		APlayerController* PC = GetWorld()->GetFirstPlayerController();
