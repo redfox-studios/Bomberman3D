@@ -181,7 +181,6 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music keeps playing even when stage doesnt have music set in datatable
-- bomb sound not playing after proceeding to next stage
 - Should be UPROPERTY:
   - 2.f invincibility duration after respawn in BombermanCharacter.cpp
   - 30.f invincible upgrade duration in BombermanUpgrade.cpp

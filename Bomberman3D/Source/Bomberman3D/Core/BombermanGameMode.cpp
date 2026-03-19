@@ -15,6 +15,8 @@
 
 #include "Components/CapsuleComponent.h"
 
+#include "Bomb/BombermanBomb.h"
+
 // --- engine ---
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -104,6 +106,8 @@ void ABombermanGameMode::BeginPlay()
 void ABombermanGameMode::StartStage()
 {
 	if (!BombermanGameState) return;
+
+	ABombermanBomb::ResetExplosionSoundTimer();
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
