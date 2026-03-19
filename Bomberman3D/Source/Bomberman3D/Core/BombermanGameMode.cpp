@@ -293,11 +293,11 @@ void ABombermanGameMode::OnStageTimerExpired()
 	}
 }
 
-void ABombermanGameMode::OnEnemyDied()
+void ABombermanGameMode::OnEnemyDied(int32 Points)
 {
 	if (!BombermanGameState) return;
 
-	AddScore(100);
+	AddScore(Points);
 	BombermanGameState->EnemiesRemaining = FMath::Max(0, BombermanGameState->EnemiesRemaining - 1);
 
 	UE_LOG(LogTemp, Log, TEXT("Enemy died. Remaining: %d"), BombermanGameState->EnemiesRemaining);

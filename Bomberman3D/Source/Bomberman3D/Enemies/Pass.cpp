@@ -5,7 +5,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
-APass::APass() { MoveSpeed = 175.f; }
+APass::APass()
+{
+	MoveSpeed = 175.f;
+	PointValue = 4000;
+}
 
 void APass::OnTileReached()
 {

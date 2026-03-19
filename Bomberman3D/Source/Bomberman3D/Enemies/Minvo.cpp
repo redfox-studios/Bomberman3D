@@ -5,7 +5,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
-AMinvo::AMinvo() { MoveSpeed = 115.f; }
+AMinvo::AMinvo()
+{
+	MoveSpeed = 115.f;
+	PointValue = 800;
+}
 
 void AMinvo::OnTileReached()
 {

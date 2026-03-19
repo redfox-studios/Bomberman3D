@@ -182,7 +182,7 @@ void AEnemyBase::OnDeath()
 
 	if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
 	{
-		GM->OnEnemyDied();
+		GM->OnEnemyDied(PointValue);
 	}
 
 	Destroy();
