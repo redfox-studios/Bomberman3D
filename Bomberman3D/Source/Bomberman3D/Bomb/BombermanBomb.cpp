@@ -25,7 +25,6 @@ ABombermanBomb::ABombermanBomb()
 void ABombermanBomb::BeginPlay()
 {
 	Super::BeginPlay();
-	LastExplosionSoundTime = -999.f; // reset on every new bomb
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
 
