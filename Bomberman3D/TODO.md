@@ -112,6 +112,7 @@
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
 - [x] 50 total stages in data table
+  - [ ] Win after 50 stages
 
 ---
 
@@ -121,7 +122,7 @@
 - [x] Dahl (alternates axis)
 - [ ] Minvo (random + pursue, can get stuck)
 - [x] Ovape (mostly ignores player)
-- [ ] Pass (aggressive chase)
+- [x] Pass (aggressive chase)
 - [x] Pontant (always chase, fastest)
 - [ ] Doria (chase + bomb avoidance) <- signed off for now, revisit if time allows
 - [x] Tile occupancy (max one enemy per tile)
@@ -181,6 +182,9 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music keeps playing even when stage doesnt have music set in datatable
+- points from enemy kills are hardcoded to 100
+- Ovape and Pontant cant move through soft blocks
+- enemy speed is hardcoded meaning that game designer cant set it directly
 
 ### Probably Fixed
 - player can get stuck in corners
