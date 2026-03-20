@@ -109,11 +109,6 @@ void UBombermanGameInstance::FadeToMusic(USoundBase* Music, float Volume)
 		MusicComponent->FadeOut(MusicFadeDuration, 0.f);
 
 	MusicComponent = UGameplayStatics::SpawnSound2D(
-		GetWorld(), Music, 0.f, 1.f, 0.f, nullptr, true, true
+		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true
 	);
-
-	if (MusicComponent)
-	{
-		MusicComponent->FadeIn(MusicFadeDuration, Volume);
-	}
 }

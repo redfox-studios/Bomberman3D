@@ -158,8 +158,21 @@ void ABombermanGameMode::StartStage()
 			StageTimerDuration = Config->StageTimer;
 			Grid->SoftBlockDensity = Config->SoftBlockDensity;
 			Grid->UpgradeDensity = Config->UpgradeDensity;
-
 			bCurrentStageIsBonus = Config->bBonusStage;
+
+			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+			{
+				if (Config->BackgroundMusic)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Playing music: %s"), *Config->BackgroundMusic->GetName());
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("No music set for this stage"));
+				}
+
+				GI->FadeToMusic(Config->BackgroundMusic);
+			}
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 				GI->FadeToMusic(Config->BackgroundMusic);
