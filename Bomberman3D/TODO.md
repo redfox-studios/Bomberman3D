@@ -135,7 +135,7 @@
 - [ ] Background music
   - [x] Background music in game
   - [ ] Background music in main menu
-  - [ ] Background music fade when switching between different ones
+  - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
 - [ ] Actual VFX/SFX assets
 - [ ] Entering portal in the final stage should have a different sound

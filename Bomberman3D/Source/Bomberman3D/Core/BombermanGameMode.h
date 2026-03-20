@@ -90,6 +90,8 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> GameClearWidgetClass;
 
+	USoundBase* CurrentDoorEnterSound = nullptr;
+
   private:
 	void StartStage();
 	void OnStageTimerTick();

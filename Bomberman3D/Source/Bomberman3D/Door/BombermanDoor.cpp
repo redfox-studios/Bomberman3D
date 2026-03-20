@@ -45,7 +45,10 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 		{
 			bEntered = true;
 			if (EnterVFX) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnterVFX, GetActorLocation());
-			if (EnterSound) UGameplayStatics::PlaySoundAtLocation(this, EnterSound, GetActorLocation());
+
+			// use stage-specific sound if set, otherwise fall back to default
+			USoundBase* SoundToPlay = GM->CurrentDoorEnterSound ? GM->CurrentDoorEnterSound : EnterSound;
+			if (SoundToPlay) UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, GetActorLocation());
 		}
 
 		GM->OnPlayerEnteredDoor();

@@ -159,6 +159,7 @@ void ABombermanGameMode::StartStage()
 			Grid->SoftBlockDensity = Config->SoftBlockDensity;
 			Grid->UpgradeDensity = Config->UpgradeDensity;
 			bCurrentStageIsBonus = Config->bBonusStage;
+			CurrentDoorEnterSound = Config->DoorEnterSound;
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 			{

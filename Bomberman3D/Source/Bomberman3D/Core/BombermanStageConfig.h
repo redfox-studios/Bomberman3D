@@ -43,5 +43,8 @@ struct FBombermanStageConfig : public FTableRowBase
 	USoundBase* BackgroundMusic = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* DoorEnterSound = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bBonusStage = false;
 };
