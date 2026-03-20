@@ -320,6 +320,8 @@ void ABombermanGameMode::StageClear()
 {
 	if (!BombermanGameState) return;
 
+	UE_LOG(LogTemp, Warning, TEXT("StageClear called"));
+
 	BombermanGameState->StageState = EStageState::StageClear;
 
 	GetWorld()->GetTimerManager().ClearTimer(StageTimerHandle);
