@@ -88,6 +88,7 @@
 - [x] BombUp (max bombs +1, persists between stages)
 - [x] FireUp (blast radius +1, persists between stages)
 - [x] SpeedUp (movement speed +1, persists between stages)
+  - [ ] Only Available at Stage 4
 - [x] RemoteControl (detonate with B button, persists between stages)
 - [x] WallPass (pass through soft blocks, persists between stages)
 - [x] BombPass (pass through bombs, persists between stages)
@@ -96,7 +97,7 @@
 - [ ] Special Items system (challenge-based, available on specific stages only)
   - [ ] B Panel (reach exit without killing any enemies,                                    stages 6 8 14 16 22 24 30 32 38 40 45 48)   - 10 000 pts
   - [ ] Goddess (defeat all enemies then walk outer ring,                                   stages 1 7 9 15 17 23 25 31 33 39 41 47 49) - 20 000 pts
-  - [ ] ??? (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,       stages 4 12 20 28 36 44)                    - 30 000 pts
+  - [ ] Cola (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,      stages 4 12 20 28 36 44)                    - 30 000 pts
   - [ ] Famicon (defeat all enemies, detonate 248 chain reaction,                           stages 3 11 19 27 35 43)                    - 500 000 pts
   - [ ] Programmer Nakamoto (defeat all enemies without destroying any soft block,          stages 2 10 18 26 34 42 50)                 - 10 000 000 pts
   - [ ] Dezeniman (destroy all soft blocks without killing enemies, then bomb exit 3 times, stages 5 13 21 29 37 45)                    - 20 000 000 pts
