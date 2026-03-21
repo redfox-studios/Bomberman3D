@@ -133,13 +133,14 @@
 - [x] Explosion VFX support
 - [ ] Soft block destroy VFX (probably not gonna do this)
 - [x] Upgrade pickup VFX support
-- [ ] Background music
+- [x] Background music
   - [x] Background music in game
-  - [ ] Background music in main menu
+  - [x] Background music in main menu
   - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
+  - [ ] Nearby door sound
 - [ ] Actual VFX/SFX assets
-- [ ] Entering portal in the final stage should have a different sound
+- [x] Entering portal in the final stage should have a different sound
 
 ---
 
