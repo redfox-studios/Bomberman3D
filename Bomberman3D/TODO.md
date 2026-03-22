@@ -158,7 +158,7 @@
 - [x] Stage Clear screen
 - [x] Loading Screen
 - [x] Credits Screen
-- [ ] Settings (keybind remapping via Enhanced Input)
+- [ ] Settings (keybind remapping via Enhanced Input) (if time allows)
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
