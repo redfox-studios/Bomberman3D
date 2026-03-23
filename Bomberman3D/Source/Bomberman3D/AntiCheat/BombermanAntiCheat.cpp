@@ -15,11 +15,22 @@ bool FBombermanAntiCheat::IsDebuggerAttached()
 #endif
 }
 
+bool FBombermanAntiCheat::IsRemoteDebuggerAttached()
+{
+#if PLATFORM_WINDOWS
+	BOOL bRemoteDebugger = 0;
+	CheckRemoteDebuggerPresent(GetCurrentProcess(), &bRemoteDebugger);
+	return bRemoteDebugger != 0;
+#else
+	return false;
+#endif
+}
+
 void FBombermanAntiCheat::RunChecks()
 {
-	if (IsDebuggerAttached())
+	if (IsDebuggerAttached() || IsRemoteDebuggerAttached())
 	{
-		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] Debugger detected. Terminating."));
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] Debugger detected"));
 		FPlatformMisc::RequestExit(true);
 	}
 }

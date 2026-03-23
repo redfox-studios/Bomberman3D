@@ -7,4 +7,5 @@ class BOMBERMAN3D_API FBombermanAntiCheat
   public:
 	static bool IsDebuggerAttached();
 	static void RunChecks();
+	static bool IsRemoteDebuggerAttached();
 };
