@@ -9,6 +9,11 @@
 #include "Windows/HideWindowsPlatformTypes.h"
 #endif
 
+double FBombermanAntiCheat::LastCheckTime = 0.0;
+double FBombermanAntiCheat::NextInterval = 3.0;
+
+// --- yes ---
+
 bool FBombermanAntiCheat::IsDebuggerAttached()
 {
 #if PLATFORM_WINDOWS
@@ -156,6 +161,14 @@ bool FBombermanAntiCheat::DetectAnalysis()
 
 void FBombermanAntiCheat::RunChecks()
 {
+	double Now = FPlatformTime::Seconds();
+
+	if (Now - LastCheckTime < NextInterval)
+		return;
+
+	LastCheckTime = Now;
+	NextInterval = FMath::FRandRange(3.0, 5.0);
+
 	if (
 		IsDebuggerAttached() ||
 		IsRemoteDebuggerAttached() ||
