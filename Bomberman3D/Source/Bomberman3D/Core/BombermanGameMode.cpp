@@ -17,6 +17,9 @@
 
 #include "Bomb/BombermanBomb.h"
 
+// --- ac ---
+#include "AntiCheat/BombermanAntiCheat.h"
+
 // --- engine ---
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,6 +38,9 @@ ABombermanGameMode::ABombermanGameMode()
 void ABombermanGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// ac checks
+	FBombermanAntiCheat::RunChecks();
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
