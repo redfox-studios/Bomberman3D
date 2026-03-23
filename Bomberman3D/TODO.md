@@ -193,12 +193,11 @@
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
 ## Security
-- [ ] my cheat for the game
-- [ ] Anticheat
+- [ ] AntiCheat
+  - [ ] Anti-debug (IsDebuggerPresent, CheckRemoteDebuggerPresent, NtQueryInformationProcess, timing)
   - [ ] XOR encrypt important values (health, score...)
-  - [ ] anti debug
   - [ ] skCrypt for strings
-  - [ ] save file encryption/decryption - XOR first, AES maybe later
+  - [ ] Save file encryption
 
 now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i want to laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
