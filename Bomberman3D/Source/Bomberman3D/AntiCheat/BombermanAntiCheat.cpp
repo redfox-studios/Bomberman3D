@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <winternl.h>
 #include <tlhelp32.h>
+#include <winsvc.h>
 #pragma comment(lib, "ntdll.lib")
 #include "Windows/HideWindowsPlatformTypes.h"
 #endif
@@ -68,92 +69,107 @@ bool FBombermanAntiCheat::DetectAnalysis()
 {
 #if PLATFORM_WINDOWS
 
-	// --- window title check ---
-	const char* SuspiciousWindows[] = {
-		"Cheat Engine",
-		"Cheat Engine 7",
-		"Cheat Engine 7.5",
-		"CE",
-		"x64dbg",
-		"IDA",
-		"Ghidra",
-		"OllyDbg"
-	};
-
-	for (const char* title : SuspiciousWindows)
+	// ---- window title scan ----
 	{
-		if (FindWindowA(NULL, title))
+		HWND hwnd = GetTopWindow(NULL);
+
+		while (hwnd)
 		{
-			return true;
+			char title[256];
+			GetWindowTextA(hwnd, title, sizeof(title));
+
+			FString t = UTF8_TO_TCHAR(title);
+			t = t.ToLower();
+
+			if (
+				t.Contains("cheat engine") ||
+				t.Contains("memory viewer") ||
+				t.Contains("scan") ||
+				t.Contains("value")
+			)
+			{
+				return true;
+			}
+
+			hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
 		}
 	}
 
-	// --- process name check ---
-	const char* SuspiciousProcesses[] = {
-		"cheatengine",
-		"cheat engine",
-		"ce.exe",
-		"cheatengine-x86_64",
-		"cheatengine-i386",
-		"x64dbg",
-		"ida",
-		"ida64",
-		"ghidra",
-		"ollydbg"
-	};
-
-	HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	if (snap != INVALID_HANDLE_VALUE)
+	// ---- class name scan ----
 	{
-		PROCESSENTRY32 pe;
-		pe.dwSize = sizeof(pe);
+		HWND hwnd = GetTopWindow(NULL);
 
-		if (Process32First(snap, &pe))
+		while (hwnd)
 		{
-			do
-			{
-				FString name = UTF8_TO_TCHAR(pe.szExeFile);
-				name = name.ToLower();
+			char className[256];
+			GetClassNameA(hwnd, className, sizeof(className));
 
-				for (const char* bad : SuspiciousProcesses)
+			FString c = UTF8_TO_TCHAR(className);
+			c = c.ToLower();
+
+			if (c.Contains("tmainform") || c.Contains("tapplication"))
+			{
+				return true;
+			}
+
+			hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
+		}
+	}
+
+	// ---- driver scan ----
+	{
+		SC_HANDLE sc = OpenSCManager(NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE);
+
+		if (sc)
+		{
+			DWORD bytesNeeded = 0, count = 0;
+
+			EnumServicesStatusEx(
+				sc,
+				SC_ENUM_PROCESS_INFO,
+				SERVICE_DRIVER,
+				SERVICE_STATE_ALL,
+				NULL,
+				0,
+				&bytesNeeded,
+				&count,
+				NULL,
+				NULL
+			);
+
+			TArray<BYTE> buffer;
+			buffer.SetNum(bytesNeeded);
+
+			if (EnumServicesStatusEx(
+					sc,
+					SC_ENUM_PROCESS_INFO,
+					SERVICE_DRIVER,
+					SERVICE_STATE_ALL,
+					buffer.GetData(),
+					bytesNeeded,
+					&bytesNeeded,
+					&count,
+					NULL,
+					NULL
+				))
+			{
+				auto services = (ENUM_SERVICE_STATUS_PROCESS*)buffer.GetData();
+
+				for (DWORD i = 0; i < count; i++)
 				{
-					if (name.Contains(UTF8_TO_TCHAR(bad)))
+					FString name = UTF8_TO_TCHAR(services[i].lpServiceName);
+					name = name.ToLower();
+
+					if (name.Contains("ce") || name.Contains("cheat"))
 					{
-						CloseHandle(snap);
+						CloseServiceHandle(sc);
 						return true;
 					}
 				}
+			}
 
-			} while (Process32Next(snap, &pe));
+			CloseServiceHandle(sc);
 		}
-
-		CloseHandle(snap);
-	}
-
-	// --- module scan (injected dlls etc) ---
-	HANDLE modSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
-	if (modSnap != INVALID_HANDLE_VALUE)
-	{
-		MODULEENTRY32 mod;
-		mod.dwSize = sizeof(mod);
-
-		if (Module32First(modSnap, &mod))
-		{
-			do
-			{
-				FString modName = UTF8_TO_TCHAR(mod.szModule);
-				modName = modName.ToLower();
-
-				if (modName.Contains("cheat") || modName.Contains("dbg"))
-				{
-					CloseHandle(modSnap);
-					return true;
-				}
-
-			} while (Module32Next(modSnap, &mod));
-		}
-
-		CloseHandle(modSnap);
 	}
 
 #endif
