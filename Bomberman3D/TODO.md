@@ -194,10 +194,15 @@
 
 ## Security
 - [ ] AntiCheat
-  - [ ] Anti-debug (IsDebuggerPresent, CheckRemoteDebuggerPresent, NtQueryInformationProcess, timing)
+  - [ ] Anti-debug
+	- [x] IsDebuggerPresent
+	- [x] CheckRemoteDebuggerPresent
+	- [x] NtQueryInformationProcess
+	- [ ] Timing
   - [ ] XOR encrypt important values (health, score...)
   - [ ] skCrypt for strings
   - [ ] Save file encryption
+  - [ ] CE detection
 
 now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i want to laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
