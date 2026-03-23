@@ -83,9 +83,11 @@ bool FBombermanAntiCheat::DetectAnalysis()
 
 			if (
 				t.Contains("cheat engine") ||
-				t.Contains("memory viewer") ||
-				t.Contains("scan") ||
-				t.Contains("value")
+				t.Contains("cheatengine") ||
+				t.Contains("x64dbg") ||
+				t.Contains("ida") ||
+				t.Contains("ghidra") ||
+				t.Contains("ollydbg")
 			)
 			{
 				return true;
@@ -107,7 +109,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 			FString c = UTF8_TO_TCHAR(className);
 			c = c.ToLower();
 
-			if (c.Contains("tmainform") || c.Contains("tapplication"))
+			if (c.Contains("tmainform") /* || c.Contains("tapplication") */)
 			{
 				return true;
 			}
@@ -160,7 +162,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 					FString name = services[i].lpServiceName;
 					name = name.ToLower();
 
-					if (name.Contains("ce") || name.Contains("cheat"))
+					if (name.Contains("cheat") || name.Contains("cedriver"))
 					{
 						CloseServiceHandle(sc);
 						return true;
