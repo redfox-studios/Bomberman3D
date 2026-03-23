@@ -157,7 +157,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 
 				for (DWORD i = 0; i < count; i++)
 				{
-					FString name = UTF8_TO_TCHAR(services[i].lpServiceName);
+					FString name = services[i].lpServiceName;
 					name = name.ToLower();
 
 					if (name.Contains("ce") || name.Contains("cheat"))
