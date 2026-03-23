@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
+#include "Components/AudioComponent.h"
 #include "BombermanDoor.generated.h"
 
 UCLASS()
@@ -24,6 +25,12 @@ class BOMBERMAN3D_API ABombermanDoor : public AActor
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* EnterSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	USoundBase* NearbySound;
+
+	UPROPERTY()
+	UAudioComponent* NearbySoundComponent;
 
   protected:
 	virtual void BeginPlay() override;
