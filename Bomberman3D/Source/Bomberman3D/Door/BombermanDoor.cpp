@@ -30,6 +30,13 @@ void ABombermanDoor::BeginPlay()
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PortalVFX, GetActorLocation());
 	}
+
+	if (NearbySound)
+	{
+		NearbySoundComponent = UGameplayStatics::SpawnSoundAtLocation(
+			this, NearbySound, GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.f, nullptr, nullptr, true
+		);
+	}
 }
 
 void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -38,6 +45,8 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 	if (bEntered) return;
 
 	if (!Cast<ABombermanCharacter>(OtherActor)) return;
+
+	if (NearbySoundComponent) NearbySoundComponent->Stop();
 
 	if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
 	{

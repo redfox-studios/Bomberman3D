@@ -25,3 +25,11 @@ void ABombermanPlayerController::BeginPlay()
 		PauseAction->bTriggerWhenPaused = true;
 	}
 }
+
+void ABombermanPlayerController::UpdateAudioListener()
+{
+	if (APawn* P = GetPawn())
+	{
+		SetAudioListenerOverride(nullptr, P->GetActorLocation(), FRotator::ZeroRotator);
+	}
+}

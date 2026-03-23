@@ -24,6 +24,7 @@ class BOMBERMAN3D_API ABombermanPlayerController : public APlayerController
 
   protected:
 	virtual void BeginPlay() override;
+	virtual void UpdateAudioListener();
 
   public:
 	UPROPERTY(EditAnywhere, Category = "Input")

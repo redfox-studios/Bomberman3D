@@ -21,7 +21,9 @@ public class Bomberman3D : ModuleRules
             "Bomberman3D/Core",
             "Bomberman3D/Enemies",
             "Bomberman3D/Door",
-            "Bomberman3D/Upgrades"
+            "Bomberman3D/Upgrades",
+            // "Bomberman3D/AntiCheat",
+            "Bomberman3D/Debug"
         });
 
         // dihcord
