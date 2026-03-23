@@ -162,7 +162,15 @@ bool AEnemyBase::IsDirectionBlocked(FVector2D Dir) const
 	int32 NX = FMath::RoundToInt(GridPos.X + Dir.X);
 	int32 NY = FMath::RoundToInt(GridPos.Y + Dir.Y);
 
-	return !Grid->IsTileWalkable(NX, NY) || IsNextTileOccupied(Dir);
+	if (!Grid->IsInBounds(NX, NY)) return true;
+
+	ETileContent Tile = Grid->GetTileContent(NX, NY);
+
+	if (Tile == ETileContent::HardBlock) return true;
+	if (Tile == ETileContent::Bomb) return true;
+	if (Tile == ETileContent::SoftBlock && !bCanPassThroughSoftBlocks) return true;
+
+	return IsNextTileOccupied(Dir);
 }
 
 bool AEnemyBase::IsNextTileOccupied(FVector2D Dir) const
@@ -182,7 +190,7 @@ void AEnemyBase::OnDeath()
 
 	if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
 	{
-		GM->OnEnemyDied();
+		GM->OnEnemyDied(PointValue);
 	}
 
 	Destroy();

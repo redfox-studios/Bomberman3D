@@ -88,6 +88,7 @@
 - [x] BombUp (max bombs +1, persists between stages)
 - [x] FireUp (blast radius +1, persists between stages)
 - [x] SpeedUp (movement speed +1, persists between stages)
+  - [ ] Only Available at Stage 4
 - [x] RemoteControl (detonate with B button, persists between stages)
 - [x] WallPass (pass through soft blocks, persists between stages)
 - [x] BombPass (pass through bombs, persists between stages)
@@ -96,7 +97,7 @@
 - [ ] Special Items system (challenge-based, available on specific stages only)
   - [ ] B Panel (reach exit without killing any enemies,                                    stages 6 8 14 16 22 24 30 32 38 40 45 48)   - 10 000 pts
   - [ ] Goddess (defeat all enemies then walk outer ring,                                   stages 1 7 9 15 17 23 25 31 33 39 41 47 49) - 20 000 pts
-  - [ ] ??? (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,       stages 4 12 20 28 36 44)                    - 30 000 pts
+  - [ ] Cola (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,      stages 4 12 20 28 36 44)                    - 30 000 pts
   - [ ] Famicon (defeat all enemies, detonate 248 chain reaction,                           stages 3 11 19 27 35 43)                    - 500 000 pts
   - [ ] Programmer Nakamoto (defeat all enemies without destroying any soft block,          stages 2 10 18 26 34 42 50)                 - 10 000 000 pts
   - [ ] Dezeniman (destroy all soft blocks without killing enemies, then bomb exit 3 times, stages 5 13 21 29 37 45)                    - 20 000 000 pts
@@ -112,7 +113,7 @@
 - [x] Enemy Rush (Pontants on timer expire, count configurable)
 - [x] All upgrades persist between stages
 - [x] 50 total stages in data table
-  - [ ] Win after 50 stages
+  - [x] Win after 50 stages
 
 ---
 
@@ -132,9 +133,14 @@
 - [x] Explosion VFX support
 - [ ] Soft block destroy VFX (probably not gonna do this)
 - [x] Upgrade pickup VFX support
-- [ ] Background music
+- [x] Background music
+  - [x] Background music in game
+  - [x] Background music in main menu
+  - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
+  - [ ] Nearby door sound
 - [ ] Actual VFX/SFX assets
+- [x] Entering portal in the final stage should have a different sound
 
 ---
 
@@ -152,7 +158,7 @@
 - [x] Stage Clear screen
 - [x] Loading Screen
 - [x] Credits Screen
-- [ ] Settings (keybind remapping via Enhanced Input)
+- [ ] Settings (keybind remapping via Enhanced Input) (if time allows)
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
@@ -181,24 +187,24 @@
 
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- music keeps playing even when stage doesnt have music set in datatable
-- points from enemy kills are hardcoded to 100
-- Ovape and Pontant cant move through soft blocks
-- enemy speed is hardcoded meaning that game designer cant set it directly
 
 ### Probably Fixed
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
 ## Security
-- [ ] my cheat for the game
-- [ ] Anticheat
+- [ ] AntiCheat
+  - [ ] Anti-debug
+	- [x] IsDebuggerPresent
+	- [x] CheckRemoteDebuggerPresent
+	- [x] NtQueryInformationProcess
+	- [ ] Timing
   - [ ] XOR encrypt important values (health, score...)
-  - [ ] anti debug
   - [ ] skCrypt for strings
-  - [ ] save file encryption/decryption - XOR first, AES maybe later
+  - [ ] Save file encryption
+  - [ ] CE detection
 
-now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i can laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
+now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i want to laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
 ### Multiplayer Bugs
 - walking through other players bombs needs all-bomb check (ignored until multiplayer)

@@ -53,6 +53,12 @@ class BOMBERMAN3D_API AEnemyBase : public ACharacter
 
 	ABombermanGrid* Grid = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	int32 PointValue = 100;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	bool bCanPassThroughSoftBlocks = false;
+
   private:
 	// Tile-to-tile movement state
 	FVector TargetWorldPos = FVector::ZeroVector;

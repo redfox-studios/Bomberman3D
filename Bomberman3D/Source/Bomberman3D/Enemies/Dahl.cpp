@@ -2,7 +2,11 @@
 
 #include "Enemies/Dahl.h"
 
-ADahl::ADahl() { MoveSpeed = 125.f; }
+ADahl::ADahl()
+{
+	MoveSpeed = 125.f;
+	PointValue = 400;
+}
 
 void ADahl::OnTileReached()
 {

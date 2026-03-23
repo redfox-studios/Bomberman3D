@@ -2,4 +2,8 @@
 
 #include "Enemies/Ballom.h"
 
-ABallom::ABallom() { MoveSpeed = 100.f; }
+ABallom::ABallom()
+{
+	MoveSpeed = 100.f;
+	PointValue = 100;
+}

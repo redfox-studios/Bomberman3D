@@ -5,7 +5,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
-AOnil::AOnil() { MoveSpeed = 150.f; }
+AOnil::AOnil()
+{
+	MoveSpeed = 150.f;
+	PointValue = 200;
+}
 
 void AOnil::OnTileReached()
 {

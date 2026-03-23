@@ -32,7 +32,7 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	void OnGameOver();
 
 	// Called by enemy when it dies
-	void OnEnemyDied();
+	void OnEnemyDied(int32 Points);
 
 	// Called when player enters the door
 	void OnPlayerEnteredDoor();
@@ -83,6 +83,14 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	float DiscordUpdateDelay = 0.2f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
+	int32 TotalStages = 50;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> GameClearWidgetClass;
+
+	USoundBase* CurrentDoorEnterSound = nullptr;
 
   private:
 	void StartStage();

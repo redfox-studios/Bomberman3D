@@ -71,7 +71,11 @@ void UBombermanGameInstance::SetStage(int32 Stage)
 
 void UBombermanGameInstance::PlayMusic(USoundBase* Music, float Volume)
 {
-	if (!Music) return;
+	if (!Music)
+	{
+		StopMusic();
+		return;
+	}
 
 	if (MusicComponent && MusicComponent->Sound == Music && MusicComponent->IsPlaying())
 		return;
@@ -80,11 +84,31 @@ void UBombermanGameInstance::PlayMusic(USoundBase* Music, float Volume)
 		MusicComponent->Stop();
 
 	MusicComponent = UGameplayStatics::SpawnSound2D(
-		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true // bPersistAcrossLevelTransition = true
+		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true
 	);
 }
 
 void UBombermanGameInstance::StopMusic()
 {
 	if (MusicComponent) MusicComponent->Stop();
+}
+
+void UBombermanGameInstance::FadeToMusic(USoundBase* Music, float Volume)
+{
+	if (!Music)
+	{
+		if (MusicComponent)
+			MusicComponent->FadeOut(MusicFadeDuration, 0.f);
+		return;
+	}
+
+	if (MusicComponent && MusicComponent->Sound == Music && MusicComponent->IsPlaying())
+		return;
+
+	if (MusicComponent)
+		MusicComponent->FadeOut(MusicFadeDuration, 0.f);
+
+	MusicComponent = UGameplayStatics::SpawnSound2D(
+		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true
+	);
 }

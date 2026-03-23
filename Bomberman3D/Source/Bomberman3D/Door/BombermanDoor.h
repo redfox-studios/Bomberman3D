@@ -29,6 +29,8 @@ class BOMBERMAN3D_API ABombermanDoor : public AActor
 	virtual void BeginPlay() override;
 
   private:
+	bool bEntered = false;
+
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* DoorMesh;
 

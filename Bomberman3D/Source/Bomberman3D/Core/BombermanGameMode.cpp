@@ -17,6 +17,9 @@
 
 #include "Bomb/BombermanBomb.h"
 
+// --- ac ---
+#include "AntiCheat/BombermanAntiCheat.h"
+
 // --- engine ---
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,6 +38,9 @@ ABombermanGameMode::ABombermanGameMode()
 void ABombermanGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// ac checks
+	FBombermanAntiCheat::RunChecks();
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
@@ -158,11 +164,25 @@ void ABombermanGameMode::StartStage()
 			StageTimerDuration = Config->StageTimer;
 			Grid->SoftBlockDensity = Config->SoftBlockDensity;
 			Grid->UpgradeDensity = Config->UpgradeDensity;
-
 			bCurrentStageIsBonus = Config->bBonusStage;
+			CurrentDoorEnterSound = Config->DoorEnterSound;
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
-				GI->PlayMusic(Config->BackgroundMusic);
+			{
+				if (Config->BackgroundMusic)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Playing music: %s"), *Config->BackgroundMusic->GetName());
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("No music set for this stage"));
+				}
+
+				GI->FadeToMusic(Config->BackgroundMusic);
+			}
+
+			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+				GI->FadeToMusic(Config->BackgroundMusic);
 		}
 	}
 
@@ -293,11 +313,11 @@ void ABombermanGameMode::OnStageTimerExpired()
 	}
 }
 
-void ABombermanGameMode::OnEnemyDied()
+void ABombermanGameMode::OnEnemyDied(int32 Points)
 {
 	if (!BombermanGameState) return;
 
-	AddScore(100);
+	AddScore(Points);
 	BombermanGameState->EnemiesRemaining = FMath::Max(0, BombermanGameState->EnemiesRemaining - 1);
 
 	UE_LOG(LogTemp, Log, TEXT("Enemy died. Remaining: %d"), BombermanGameState->EnemiesRemaining);
@@ -320,6 +340,8 @@ void ABombermanGameMode::StageClear()
 {
 	if (!BombermanGameState) return;
 
+	UE_LOG(LogTemp, Warning, TEXT("StageClear called"));
+
 	BombermanGameState->StageState = EStageState::StageClear;
 
 	GetWorld()->GetTimerManager().ClearTimer(StageTimerHandle);
@@ -332,6 +354,7 @@ void ABombermanGameMode::StageClear()
 		if (ABombermanPlayerState* PS = It->GetPlayerState<ABombermanPlayerState>())
 		{
 			PS->AddScore(FMath::RoundToInt(BombermanGameState->StageTimeRemaining) * 10);
+			PS->Lives++;
 
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 			{
@@ -352,6 +375,28 @@ void ABombermanGameMode::StageClear()
 			// It->GetCharacterMovement()->MaxWalkSpeed = It->BaseSpeed;
 		}
 		break;
+	}
+
+	if (BombermanGameState->CurrentStage >= TotalStages)
+	{
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+		{
+			GI->ResetToDefaults();
+			GI->SaveGame();
+		}
+
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		if (PC && GameClearWidgetClass)
+		{
+			UUserWidget* Widget = CreateWidget<UUserWidget>(PC, GameClearWidgetClass);
+			if (Widget)
+			{
+				Widget->AddToViewport();
+				PC->bShowMouseCursor = true;
+			}
+		}
+
+		return;
 	}
 
 	if (StageClearWidgetClass)

@@ -5,7 +5,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
-APontant::APontant() { MoveSpeed = 200.f; }
+APontant::APontant()
+{
+	MoveSpeed = 200.f;
+	PointValue = 8000;
+	bCanPassThroughSoftBlocks = true;
+}
 
 void APontant::OnTileReached() { ChasePlayer(); }
 
