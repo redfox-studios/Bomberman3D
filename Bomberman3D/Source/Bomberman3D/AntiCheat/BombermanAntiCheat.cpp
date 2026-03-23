@@ -59,19 +59,111 @@ bool FBombermanAntiCheat::IsKernelDebuggerAttached()
 #endif
 }
 
-// TODO: PROCESS NAME CHECK
-// 
-// process name checks are bypassable by just renaming the CE executable.
-// But for my braindead classmates who installed CE without knowing how computers work,
-// this is honestly more than enough.
+bool FBombermanAntiCheat::DetectAnalysis()
+{
+#if PLATFORM_WINDOWS
+
+	// --- window title check ---
+	const char* SuspiciousWindows[] = {
+		"Cheat Engine",
+		"x64dbg",
+		"IDA",
+		"Ghidra",
+		"OllyDbg"
+	};
+
+	for (const char* title : SuspiciousWindows)
+	{
+		if (FindWindowA(NULL, title))
+		{
+			return true;
+		}
+	}
+
+	// --- process name check ---
+	const char* SuspiciousProcesses[] = {
+		"cheatengine",
+		"x64dbg",
+		"ida",
+		"ghidra",
+		"ollydbg"
+	};
+
+	HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (snap != INVALID_HANDLE_VALUE)
+	{
+		PROCESSENTRY32 pe;
+		pe.dwSize = sizeof(pe);
+
+		if (Process32First(snap, &pe))
+		{
+			do
+			{
+				FString name = UTF8_TO_TCHAR(pe.szExeFile);
+				name = name.ToLower();
+
+				for (const char* bad : SuspiciousProcesses)
+				{
+					if (name.Contains(UTF8_TO_TCHAR(bad)))
+					{
+						CloseHandle(snap);
+						return true;
+					}
+				}
+
+			} while (Process32Next(snap, &pe));
+		}
+
+		CloseHandle(snap);
+	}
+
+	// --- module scan (injected dlls etc) ---
+	HANDLE modSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+	if (modSnap != INVALID_HANDLE_VALUE)
+	{
+		MODULEENTRY32 mod;
+		mod.dwSize = sizeof(mod);
+
+		if (Module32First(modSnap, &mod))
+		{
+			do
+			{
+				FString modName = UTF8_TO_TCHAR(mod.szModule);
+				modName = modName.ToLower();
+
+				if (modName.Contains("cheat") || modName.Contains("dbg"))
+				{
+					CloseHandle(modSnap);
+					return true;
+				}
+
+			} while (Module32Next(modSnap, &mod));
+		}
+
+		CloseHandle(modSnap);
+	}
+
+#endif
+
+	// process name checks are bypassable by just renaming the executable.
+	// But for my braindead classmates who installed CE without knowing how computers, nor game engines work,
+	// this is honestly more than enough.
+
+	return false;
+}
 
 // ------ checks ------
 
 void FBombermanAntiCheat::RunChecks()
 {
-	if (IsDebuggerAttached() || IsRemoteDebuggerAttached() || IsKernelDebuggerAttached())
+	if (
+		IsDebuggerAttached() ||
+		IsRemoteDebuggerAttached() ||
+		IsKernelDebuggerAttached() ||
+		DetectAnalysis()
+	)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] bad boy detected."));
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] caught ya fool"));
 		FPlatformMisc::RequestExit(true);
 	}
 }

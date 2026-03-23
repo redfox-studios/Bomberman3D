@@ -9,4 +9,5 @@ class BOMBERMAN3D_API FBombermanAntiCheat
 	static void RunChecks();
 	static bool IsRemoteDebuggerAttached();
 	static bool IsKernelDebuggerAttached();
+	static bool DetectAnalysis();
 };
