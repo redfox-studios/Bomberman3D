@@ -71,6 +71,9 @@ bool FBombermanAntiCheat::DetectAnalysis()
 	// --- window title check ---
 	const char* SuspiciousWindows[] = {
 		"Cheat Engine",
+		"Cheat Engine 7",
+		"Cheat Engine 7.5",
+		"CE",
 		"x64dbg",
 		"IDA",
 		"Ghidra",
@@ -88,8 +91,13 @@ bool FBombermanAntiCheat::DetectAnalysis()
 	// --- process name check ---
 	const char* SuspiciousProcesses[] = {
 		"cheatengine",
+		"cheat engine",
+		"ce.exe",
+		"cheatengine-x86_64",
+		"cheatengine-i386",
 		"x64dbg",
 		"ida",
+		"ida64",
 		"ghidra",
 		"ollydbg"
 	};
