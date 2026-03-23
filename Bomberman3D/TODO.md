@@ -88,7 +88,7 @@
 - [x] BombUp (max bombs +1, persists between stages)
 - [x] FireUp (blast radius +1, persists between stages)
 - [x] SpeedUp (movement speed +1, persists between stages)
-  - [ ] Only Available at Stage 4
+  - [x] Only Available at Stage 4
 - [x] RemoteControl (detonate with B button, persists between stages)
 - [x] WallPass (pass through soft blocks, persists between stages)
 - [x] BombPass (pass through bombs, persists between stages)
@@ -202,7 +202,7 @@
   - [ ] XOR encrypt important values (health, score...)
   - [ ] skCrypt for strings
   - [ ] Save file encryption
-  - [ ] CE detection
+  - [x] CE detection
 
 now yes, implementing anticheat is basically useless if the game doesnt have multiplayer yet and there isnt any leaderboard with score, or smth. But since im really into low level stuff, i will make the cheat and anticheat anyway (if there will be enough time). Also because i want to laugh at the noobies in my class that installed CE without even knowing how computers work and want to be like me lol
 
