@@ -173,9 +173,13 @@
 ### Final
 - [ ] Full bugfix pass
 - [x] Discord SDK
+- [x] Startup Movies
+  - [x] RF Logo
+  - [x] UE Logo
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
+- [ ] Open/Closed Material variations for Doors
 
 ---
 
@@ -187,6 +191,7 @@
 
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
+- on bonus stage, bonus door enter sound doesnt play because there are no doors
 
 ### Probably Fixed
 - player can get stuck in corners
