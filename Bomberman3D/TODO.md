@@ -173,6 +173,9 @@
 ### Final
 - [ ] Full bugfix pass
 - [x] Discord SDK
+- [x] Startup Movies
+  - [x] RF Logo
+  - [x] UE Logo
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
