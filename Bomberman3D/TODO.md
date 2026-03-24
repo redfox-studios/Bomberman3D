@@ -192,6 +192,8 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - on bonus stage, bonus door enter sound doesnt play because there are no doors
+- level music keeps playing when i pause the game and go back to main menu
+- music fade sometimes dont work or i'm actually deaf
 
 ### Probably Fixed
 - player can get stuck in corners
