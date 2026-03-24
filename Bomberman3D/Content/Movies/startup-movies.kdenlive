@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <mlt LC_NUMERIC="en_US.UTF-8" producer="main_bin" root="C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies" version="7.33.0">
- <profile colorspace="709" description="HD 1080i 30 fps" display_aspect_den="9" display_aspect_num="16" frame_rate_den="1" frame_rate_num="30" height="1080" progressive="0" sample_aspect_den="1" sample_aspect_num="1" width="1920"/>
+ <profile colorspace="709" description="4K UHD 2160p 30 fps" display_aspect_den="9" display_aspect_num="16" frame_rate_den="1" frame_rate_num="30" height="2160" progressive="1" sample_aspect_den="1" sample_aspect_num="1" width="3840"/>
  <producer id="producer0" in="00:00:00.000" out="00:05:07.967">
   <property name="length">2147483647</property>
   <property name="eof">continue</property>
@@ -206,10 +206,10 @@
     <property name="kdenlive_id">qtblend</property>
     <property name="compositing">0</property>
     <property name="distort">0</property>
-    <property name="rect">00:00:00.000=0 0 6382 3590 1.000000</property>
+    <property name="rect">00:00:00.000=0 0 12448 7002 1.000000</property>
     <property name="rotation">00:00:00.000=0</property>
     <property name="kdenlive:collapsed">0</property>
-    <property name="">0 0 6382 3590 1.000000</property>
+    <property name="">0 0 12448 7002 1.000000</property>
    </filter>
   </entry>
  </playlist>
@@ -273,15 +273,15 @@
   <property name="kdenlive:sequenceproperties.documentuuid">{c0e93fb4-1487-49a8-8c4b-5b7a5b1d80e5}</property>
   <property name="kdenlive:sequenceproperties.hasAudio">1</property>
   <property name="kdenlive:sequenceproperties.hasVideo">1</property>
-  <property name="kdenlive:sequenceproperties.position">615</property>
-  <property name="kdenlive:sequenceproperties.scrollPos">0</property>
+  <property name="kdenlive:sequenceproperties.position">192</property>
+  <property name="kdenlive:sequenceproperties.scrollPos">514</property>
   <property name="kdenlive:sequenceproperties.tracks">4</property>
   <property name="kdenlive:sequenceproperties.tracksCount">4</property>
   <property name="kdenlive:sequenceproperties.verticalzoom">1</property>
   <property name="kdenlive:sequenceproperties.videoTarget">2</property>
   <property name="kdenlive:sequenceproperties.zonein">0</property>
   <property name="kdenlive:sequenceproperties.zoneout">240</property>
-  <property name="kdenlive:sequenceproperties.zoom">6</property>
+  <property name="kdenlive:sequenceproperties.zoom">3</property>
   <property name="kdenlive:sequenceproperties.groups">[
 ]
 </property>
@@ -349,11 +349,6 @@
    <property name="internal_added">237</property>
    <property name="start">0.5</property>
    <property name="disable">1</property>
-  </filter>
-  <filter id="filter14">
-   <property name="mlt_service">avfilter.fieldorder</property>
-   <property name="internal_added">237</property>
-   <property name="av.order">tff</property>
   </filter>
  </tractor>
  <producer id="producer3" in="00:00:00.000" out="00:00:04.967">
@@ -505,7 +500,7 @@
   <property name="kdenlive:docproperties.opensequences">{c0e93fb4-1487-49a8-8c4b-5b7a5b1d80e5}</property>
   <property name="kdenlive:docproperties.previewextension"/>
   <property name="kdenlive:docproperties.previewparameters"/>
-  <property name="kdenlive:docproperties.profile">atsc_1080i_60</property>
+  <property name="kdenlive:docproperties.profile">uhd_2160p_30</property>
   <property name="kdenlive:docproperties.proxyextension"/>
   <property name="kdenlive:docproperties.proxyimageminsize">2000</property>
   <property name="kdenlive:docproperties.proxyimagesize">800</property>
@@ -532,7 +527,7 @@
   <property name="kdenlive:docproperties.rendertwopass">0</property>
   <property name="kdenlive:docproperties.renderurl">startup-movies.mp4</property>
   <property name="kdenlive:docproperties.seekOffset">7500</property>
-  <property name="kdenlive:docproperties.sessionid">{129a116e-74d0-4f1a-8d7e-20a5c830a52b}</property>
+  <property name="kdenlive:docproperties.sessionid">{b6cab9fd-bec1-4512-bc8f-12de488e22c3}</property>
   <property name="kdenlive:docproperties.uuid">{c0e93fb4-1487-49a8-8c4b-5b7a5b1d80e5}</property>
   <property name="kdenlive:docproperties.version">1.1</property>
   <property name="kdenlive:expandedFolders"/>
@@ -541,7 +536,7 @@
   <property name="kdenlive:documentnotes"/>
   <property name="kdenlive:documentnotesversion">2</property>
   <property name="xml_retain">1</property>
-  <entry in="00:00:00.000" out="00:00:08.000" producer="tractor4"/>
+  <entry in="00:00:00.000" out="00:00:07.933" producer="tractor4"/>
   <entry in="00:00:00.000" out="00:00:04.967" producer="producer3"/>
   <entry in="00:00:00.000" out="00:00:04.967" producer="producer4"/>
   <entry in="00:00:00.000" out="00:00:09.033" producer="producer2"/>
