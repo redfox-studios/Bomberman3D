@@ -16,6 +16,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Bomb/BombermanBomb.h"
+#include "Door/BombermanDoor.h"
 
 // --- ac ---
 #include "AntiCheat/BombermanAntiCheat.h"
@@ -325,6 +326,17 @@ void ABombermanGameMode::OnEnemyDied(int32 Points)
 	if (BombermanGameState->EnemiesRemaining <= 0)
 	{
 		UE_LOG(LogTemp, Log, TEXT("All enemies dead - find the door!"));
+
+		// info for door
+		AActor* BombermanDoor = UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass());
+		ABombermanDoor* BD = Cast<ABombermanDoor>(BombermanDoor);
+
+		// ABombermanDoor* BD = Cast<ABombermanDoor>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass())
+
+		if(BD)
+		{
+			BD->ChangeDoorColor();
+		}
 	}
 }
 
