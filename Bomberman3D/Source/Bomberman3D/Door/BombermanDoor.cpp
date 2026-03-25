@@ -43,6 +43,8 @@ void ABombermanDoor::BeginPlay()
 	}
 
 	if (ClosedMaterial) MaterialBillboard->SetMaterial(0, ClosedMaterial);
+
+	ChangeDoorColor();
 }
 
 void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

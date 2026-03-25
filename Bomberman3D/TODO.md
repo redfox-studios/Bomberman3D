@@ -197,7 +197,6 @@
 - i'll definitely find more later
 
 ### Probably Fixed
-- portal/door has closed material even when the stage is completable (happens when there are no enemies, and the material changing event sender is in the bombermangamemode onenemydied func - BD->ChangeDoorColor();)
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
