@@ -57,6 +57,13 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 		if (GM->IsStageCompletable())
 		{
 			bEntered = true;
+
+			if (ABombermanCharacter* Char = Cast<ABombermanCharacter>(OtherActor))
+			{
+				if (UBombermanHealthComponent* HC = Char->FindComponentByClass<UBombermanHealthComponent>())
+					HC->bInvincible = true;
+			}
+
 			if (NearbySoundComponent) NearbySoundComponent->Stop();
 			if (EnterVFX) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnterVFX, GetActorLocation());
 
