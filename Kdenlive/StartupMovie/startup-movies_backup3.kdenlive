@@ -867,7 +867,7 @@
     <property name="kdenlive_id">frei0r.glitch0r</property>
     <property name="0">00:00:00.000=0.6</property>
     <property name="1">00:00:00.000=0.106019</property>
-    <property name="2">00:00:00.000=0.0520833</property>
+    <property name="2">00:00:00.000=0.151302</property>
     <property name="3">00:00:00.000=1</property>
     <property name="kdenlive:collapsed">0</property>
    </filter>
@@ -960,7 +960,7 @@
   <property name="kdenlive:clip_type">0</property>
   <property name="kdenlive:file_hash">9f6f5aab9986af3abe4ff07cf490a83d</property>
   <property name="kdenlive:folderid">2</property>
-  <property name="kdenlive:sequenceproperties.activeTrack">2</property>
+  <property name="kdenlive:sequenceproperties.activeTrack">0</property>
   <property name="kdenlive:sequenceproperties.audioTarget">1</property>
   <property name="kdenlive:sequenceproperties.disablepreview">0</property>
   <property name="kdenlive:sequenceproperties.documentuuid">{223177bf-3f8e-46bd-b61a-a448c3b37815}</property>
@@ -969,7 +969,7 @@
 </property>
   <property name="kdenlive:sequenceproperties.hasAudio">1</property>
   <property name="kdenlive:sequenceproperties.hasVideo">1</property>
-  <property name="kdenlive:sequenceproperties.position">361</property>
+  <property name="kdenlive:sequenceproperties.position">642</property>
   <property name="kdenlive:sequenceproperties.scrollPos">0</property>
   <property name="kdenlive:sequenceproperties.subtitlesList">[
     {
@@ -985,7 +985,7 @@
   <property name="kdenlive:sequenceproperties.videoTarget">2</property>
   <property name="kdenlive:sequenceproperties.zonein">0</property>
   <property name="kdenlive:sequenceproperties.zoneout">720</property>
-  <property name="kdenlive:sequenceproperties.zoom">4</property>
+  <property name="kdenlive:sequenceproperties.zoom">5</property>
   <property name="kdenlive:sequenceproperties.groups">[
 ]
 </property>
@@ -1151,7 +1151,7 @@
   <property name="kdenlive:docproperties.rendertwopass">0</property>
   <property name="kdenlive:docproperties.renderurl">C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies/StartupMovie.mp4</property>
   <property name="kdenlive:docproperties.seekOffset">7500</property>
-  <property name="kdenlive:docproperties.sessionid">{473fc224-ce8e-4fa5-b589-1cc0c7ef7130}</property>
+  <property name="kdenlive:docproperties.sessionid">{c120dbd0-413a-4285-b923-96711d42338c}</property>
   <property name="kdenlive:docproperties.uuid">{223177bf-3f8e-46bd-b61a-a448c3b37815}</property>
   <property name="kdenlive:docproperties.version">1.1</property>
   <property name="kdenlive:docmetadata.meta.attr.author.markup">Michal Flaška</property>
