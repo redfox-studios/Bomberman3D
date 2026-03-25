@@ -72,23 +72,39 @@ bool FBombermanAntiCheat::DetectAnalysis()
 	// ---- window title scan ----
 	{
 		HWND hwnd = GetTopWindow(NULL);
-
 		while (hwnd)
 		{
+			// skip invisible and minimized windows
+			if (!IsWindowVisible(hwnd) || IsIconic(hwnd))
+			{
+				hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
+				continue;
+			}
+
+			char className[256];
+			GetClassNameA(hwnd, className, sizeof(className));
+			FString cls = UTF8_TO_TCHAR(className);
+
+			// skip explorer, taskbar, etc
+			if (cls.Equals(TEXT("CabinetWClass"), ESearchCase::IgnoreCase) ||
+				cls.Equals(TEXT("ExploreWClass"), ESearchCase::IgnoreCase) ||
+				cls.Equals(TEXT("Shell_TrayWnd"), ESearchCase::IgnoreCase))
+			{
+				hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
+				continue;
+			}
+
 			char title[256];
 			GetWindowTextA(hwnd, title, sizeof(title));
-
 			FString t = UTF8_TO_TCHAR(title);
 			t = t.ToLower();
 
-			if (
-				t.Contains("cheat engine") ||
+			if (t.Contains("cheat engine") ||
 				t.Contains("cheatengine") ||
 				t.Contains("x64dbg") ||
-				t.Contains("ida") ||
+				t.Contains("ida ") || // ida with space so the ac wont detect apps with words like 'ideas'
 				t.Contains("ghidra") ||
-				t.Contains("ollydbg")
-			)
+				t.Contains("ollydbg"))
 			{
 				return true;
 			}
