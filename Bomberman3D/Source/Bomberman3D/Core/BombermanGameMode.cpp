@@ -294,6 +294,7 @@ void ABombermanGameMode::OnStageTimerExpired()
 {
 	if (bCurrentStageIsBonus)
 	{
+		if (CurrentDoorEnterSound) UGameplayStatics::PlaySound2D(this, CurrentDoorEnterSound);
 		StageClear();
 		return;
 	}

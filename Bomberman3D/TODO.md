@@ -191,7 +191,6 @@
 
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- on bonus stage, bonus door enter sound doesnt play because there are no doors
 - music fade sometimes dont work or i'm actually deaf
 - door enter sound should be played every time when stage finishes. why? because bonus stages dont have doors and when i finish the stage its kinda quited when there is no finish sound. or atleast not door sound but smth else, idk
 - TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
