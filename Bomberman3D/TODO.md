@@ -195,10 +195,19 @@
 - level music keeps playing when i pause the game and go back to main menu
 - music fade sometimes dont work or i'm actually deaf
 - anticheat detects window names, meaning that if i open folder called 'dbg' (or any other ac blacklisted word) in file explorer, the anti cheat will detect that and exit the game
+- player can get killed by bomb/enemy even after he touched the portal (most of the cases this didnt happen to me, but it still does sometimes, and idk whats the problem)
+- door enter sound should be played every time when stage finishes. why? because bonus stages dont have doors and when i finish the stage its kinda quited when there is no finish sound. or atleast not door sound but smth else, idk
+- TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
+- portal/door has closed material even when the stage is completable (happens when there are no enemies, and the material changing event sender is in the bombermangamemode onenemydied func - BD->ChangeDoorColor();)
+- i'll definitely find more later
 
 ### Probably Fixed
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
+
+## Notes
+- we should do the settings already, atleast the sound settings. Because it will be a lot easier to add new features (like making the music more quiet when pausing the game, alttabbing, etc). I already created sound classes and assigned them to each sound cue, but i dont even know if sound classes are being used for sound settings
+- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcpded player index 0, etc)
 
 ## Security
 - [ ] AntiCheat
