@@ -198,10 +198,10 @@
 - player can get killed by bomb/enemy even after he touched the portal (most of the cases this didnt happen to me, but it still does sometimes, and idk whats the problem)
 - door enter sound should be played every time when stage finishes. why? because bonus stages dont have doors and when i finish the stage its kinda quited when there is no finish sound. or atleast not door sound but smth else, idk
 - TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- portal/door has closed material even when the stage is completable (happens when there are no enemies, and the material changing event sender is in the bombermangamemode onenemydied func - BD->ChangeDoorColor();)
 - i'll definitely find more later
 
 ### Probably Fixed
+- portal/door has closed material even when the stage is completable (happens when there are no enemies, and the material changing event sender is in the bombermangamemode onenemydied func - BD->ChangeDoorColor();)
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 

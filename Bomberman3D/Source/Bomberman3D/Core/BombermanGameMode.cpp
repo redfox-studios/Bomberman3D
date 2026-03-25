@@ -210,6 +210,19 @@ void ABombermanGameMode::StartStage()
 	FTimerHandle SpawnDelay;
 	GetWorld()->GetTimerManager().SetTimer(SpawnDelay, this, &ABombermanGameMode::SpawnEnemies, 0.1f, false);
 
+	// change door color
+	FTimerHandle DoorColorHandle;
+	GetWorld()->GetTimerManager().SetTimer(DoorColorHandle, [this]()
+	{ 
+		if (!BombermanGameState) return;
+		if (IsStageCompletable())
+		{
+			AActor* DoorActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass());
+			if (ABombermanDoor* BD = Cast<ABombermanDoor>(DoorActor))
+				BD->ChangeDoorColor();
+		}
+	}, 0.2f, false);
+
 	// Tick timer every second
 	GetWorld()->GetTimerManager().SetTimer(StageTickHandle, this, &ABombermanGameMode::OnStageTimerTick, 1.f, true);
 
