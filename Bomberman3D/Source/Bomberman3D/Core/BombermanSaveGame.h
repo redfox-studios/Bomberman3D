@@ -25,4 +25,13 @@ class BOMBERMAN3D_API UBombermanSaveGame : public USaveGame
 
 	UPROPERTY()
 	FBombermanPlayerUpgrades Upgrades;
+
+	UPROPERTY()
+	float MusicVolume = 1.f;
+
+	UPROPERTY()
+	float SFXVolume = 1.f;
+
+	UPROPERTY()
+	float AmbienceVolume = 1.f;
 };

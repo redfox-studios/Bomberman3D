@@ -3,6 +3,7 @@
 #include "Core/BombermanGameInstance.h"
 #include "Core/BombermanSaveGame.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundClass.h"
 
 static const FString SaveSlot = TEXT("BombermanSave");
 
@@ -14,6 +15,10 @@ void UBombermanGameInstance::SaveGame()
 	Save->Lives = Lives;
 	Save->Score = Score;
 	Save->Upgrades = Upgrades;
+
+	Save->MusicVolume = MusicVolume;
+	Save->SFXVolume = SFXVolume;
+	Save->AmbienceVolume = AmbienceVolume;
 
 	UGameplayStatics::SaveGameToSlot(Save, SaveSlot, 0);
 }
@@ -31,7 +36,13 @@ void UBombermanGameInstance::LoadGame()
 	Score = Save->Score;
 	Upgrades = Save->Upgrades;
 
-	UE_LOG(LogTemp, Warning, TEXT("Loaded: Stage=%d Lives=%d Score=%d SpeedUp=%d BombUp=%d FireUp=%d"), CurrentStage, Lives, Score, Upgrades.SpeedUp, Upgrades.BombUp, Upgrades.FireUp);
+	MusicVolume = Save->MusicVolume;
+	SFXVolume = Save->SFXVolume;
+	AmbienceVolume = Save->AmbienceVolume;
+
+	ApplySoundSettings();
+
+	// UE_LOG(LogTemp, Warning, TEXT("Loaded: Stage=%d Lives=%d Score=%d SpeedUp=%d BombUp=%d FireUp=%d"), CurrentStage, Lives, Score, Upgrades.SpeedUp, Upgrades.BombUp, Upgrades.FireUp);
 }
 
 void UBombermanGameInstance::ResetToDefaults()
@@ -46,6 +57,7 @@ void UBombermanGameInstance::Init()
 {
 	Super::Init();
 	LoadGame();
+	ApplySoundSettings();
 }
 
 void UBombermanGameInstance::OnStart()
@@ -120,4 +132,32 @@ void UBombermanGameInstance::StopMusicImmediate()
 		MusicComponent->Stop();
 		MusicComponent = nullptr;
 	}
+}
+
+void UBombermanGameInstance::SetMusicVolume(float Volume)
+{
+	MusicVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (MusicSoundClass)
+		MusicSoundClass->Properties.Volume = MusicVolume;
+}
+
+void UBombermanGameInstance::SetSFXVolume(float Volume)
+{
+	SFXVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (SFXSoundClass)
+		SFXSoundClass->Properties.Volume = SFXVolume;
+}
+
+void UBombermanGameInstance::SetAmbienceVolume(float Volume)
+{
+	AmbienceVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (AmbienceSoundClass)
+		AmbienceSoundClass->Properties.Volume = AmbienceVolume;
+}
+
+void UBombermanGameInstance::ApplySoundSettings()
+{
+	SetMusicVolume(MusicVolume);
+	SetSFXVolume(SFXVolume);
+	SetAmbienceVolume(AmbienceVolume);
 }
