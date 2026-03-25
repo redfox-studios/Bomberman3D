@@ -61,4 +61,7 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	float MusicFadeDuration = 1.f;
 
 	void FadeToMusic(USoundBase* Music, float Volume = 0.5f);
+
+	UFUNCTION(BlueprintCallable)
+	void StopMusicImmediate();
 };

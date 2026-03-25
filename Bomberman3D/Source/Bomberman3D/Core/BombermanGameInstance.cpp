@@ -112,3 +112,12 @@ void UBombermanGameInstance::FadeToMusic(USoundBase* Music, float Volume)
 		GetWorld(), Music, Volume, 1.f, 0.f, nullptr, true, true
 	);
 }
+
+void UBombermanGameInstance::StopMusicImmediate()
+{
+	if (MusicComponent)
+	{
+		MusicComponent->Stop();
+		MusicComponent = nullptr;
+	}
+}
