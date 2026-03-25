@@ -194,6 +194,8 @@
 - on bonus stage, bonus door enter sound doesnt play because there are no doors
 - level music keeps playing when i pause the game and go back to main menu
 - music fade sometimes dont work or i'm actually deaf
+- anticheat detects window names, meaning that if i open folder called 'dbg' (or any other ac blacklisted word) in file explorer, the anti cheat will detect that and exit the game
+- the whistle sound in startup movie is kinda meh
 
 ### Probably Fixed
 - player can get stuck in corners
