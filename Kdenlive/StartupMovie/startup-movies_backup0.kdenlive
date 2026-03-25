@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mlt LC_NUMERIC="en_US.UTF-8" producer="main_bin" root="C:/git-repos/Bomberman3D/Kdenlive" version="7.33.0">
+<mlt LC_NUMERIC="en_US.UTF-8" producer="main_bin" root="C:/git-repos/Bomberman3D/Kdenlive/StartupMovie" version="7.33.0">
  <profile colorspace="709" description="4K UHD 2160p 60 fps" display_aspect_den="9" display_aspect_num="16" frame_rate_den="1" frame_rate_num="60" height="2160" progressive="1" sample_aspect_den="1" sample_aspect_num="1" width="3840"/>
  <producer id="producer6" in="00:00:00.000" out="00:00:04.983">
   <property name="length">00:00:05.000</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/RedFox-Logo-2025.png</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/RedFox-Logo-2025.png</property>
   <property name="ttl">25</property>
   <property name="aspect_ratio">1</property>
   <property name="meta.media.progressive">1</property>
@@ -27,7 +27,7 @@
  <producer id="producer7" in="00:00:00.000" out="00:00:04.983">
   <property name="length">00:00:05.000</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/UE-logo-2023-primary-vertical-White.png</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/UE-logo-2023-primary-vertical-White.png</property>
   <property name="ttl">25</property>
   <property name="aspect_ratio">1</property>
   <property name="meta.media.progressive">1</property>
@@ -131,7 +131,7 @@
  <chain id="chain7" out="00:00:02.817">
   <property name="length">170</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/SFX_Sub_Sonic_Bass_04.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/SFX_Sub_Sonic_Bass_04.ogg</property>
   <property name="mlt_service">avformat</property>
   <property name="meta.media.nb_streams">2</property>
   <property name="meta.media.0.stream.type">audio</property>
@@ -198,7 +198,7 @@
  <chain id="chain8" out="00:00:07.367">
   <property name="length">443</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Glitch_Error_Malfunction_120.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Glitch_Error_Malfunction_120.ogg</property>
   <property name="mlt_service">avformat</property>
   <property name="meta.media.nb_streams">1</property>
   <property name="meta.media.0.stream.type">audio</property>
@@ -228,7 +228,7 @@
  <chain id="chain5" out="00:01:59.983">
   <property name="length">7200</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Dark_SciFi_Drone_Mixed_073.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Dark_SciFi_Drone_Mixed_073.ogg</property>
   <property name="mlt_service">avformat</property>
   <property name="meta.media.nb_streams">1</property>
   <property name="meta.media.0.stream.type">audio</property>
@@ -292,7 +292,7 @@
  <producer id="producer2" in="00:00:00.000" out="00:00:04.983">
   <property name="length">00:00:05.000</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Moonforge-Logo-Black-Text.png</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Moonforge-Logo-Black-Text.png</property>
   <property name="ttl">25</property>
   <property name="aspect_ratio">1</property>
   <property name="meta.media.progressive">1</property>
@@ -361,7 +361,7 @@
  <chain id="chain6" out="00:00:07.850">
   <property name="length">472</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/BL-FREE01 CinematicMetal Impacts.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/BL-FREE01 CinematicMetal Impacts.ogg</property>
   <property name="mlt_service">avformat</property>
   <property name="meta.media.nb_streams">1</property>
   <property name="meta.media.0.stream.type">audio</property>
@@ -394,7 +394,7 @@
  <chain id="chain9" out="00:00:23.683">
   <property name="length">1422</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
   <property name="mlt_service">avformat</property>
   <property name="meta.media.nb_streams">1</property>
   <property name="meta.media.0.stream.type">audio</property>
@@ -433,7 +433,7 @@
  <chain id="chain0" out="00:01:59.983">
   <property name="length">7200</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Dark_SciFi_Drone_Mixed_073.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Dark_SciFi_Drone_Mixed_073.ogg</property>
   <property name="mlt_service">avformat-novalidate</property>
   <property name="seekable">1</property>
   <property name="audio_index">0</property>
@@ -473,7 +473,7 @@
  <chain id="chain1" out="00:00:23.683">
   <property name="length">1422</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
   <property name="mlt_service">avformat-novalidate</property>
   <property name="seekable">1</property>
   <property name="audio_index">0</property>
@@ -580,7 +580,7 @@
  <chain id="chain2" out="00:00:02.817">
   <property name="length">170</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/SFX_Sub_Sonic_Bass_04.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/SFX_Sub_Sonic_Bass_04.ogg</property>
   <property name="mlt_service">avformat-novalidate</property>
   <property name="seekable">1</property>
   <property name="audio_index">0</property>
@@ -651,7 +651,7 @@
  <chain id="chain3" out="00:00:07.367">
   <property name="length">443</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/Glitch_Error_Malfunction_120.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Glitch_Error_Malfunction_120.ogg</property>
   <property name="mlt_service">avformat-novalidate</property>
   <property name="seekable">1</property>
   <property name="audio_index">0</property>
@@ -685,7 +685,7 @@
  <chain id="chain4" out="00:00:07.850">
   <property name="length">472</property>
   <property name="eof">pause</property>
-  <property name="resource">Assets/BL-FREE01 CinematicMetal Impacts.ogg</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/BL-FREE01 CinematicMetal Impacts.ogg</property>
   <property name="mlt_service">avformat-novalidate</property>
   <property name="seekable">1</property>
   <property name="audio_index">0</property>
@@ -936,8 +936,8 @@
 </property>
   <property name="kdenlive:sequenceproperties.hasAudio">1</property>
   <property name="kdenlive:sequenceproperties.hasVideo">1</property>
-  <property name="kdenlive:sequenceproperties.position">779</property>
-  <property name="kdenlive:sequenceproperties.scrollPos">0</property>
+  <property name="kdenlive:sequenceproperties.position">569</property>
+  <property name="kdenlive:sequenceproperties.scrollPos">255</property>
   <property name="kdenlive:sequenceproperties.subtitlesList">[
     {
         "file": "C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies/startup-movies.kdenlive.ass",
@@ -1118,10 +1118,10 @@
   <property name="kdenlive:docproperties.rendertwopass">0</property>
   <property name="kdenlive:docproperties.renderurl">startup-movies.mp4</property>
   <property name="kdenlive:docproperties.seekOffset">7500</property>
-  <property name="kdenlive:docproperties.sessionid">{34775d92-0593-41a8-aa45-c351cc23b01d}</property>
+  <property name="kdenlive:docproperties.sessionid">{cb8db1d4-100d-4b42-933f-37c5f09905c9}</property>
   <property name="kdenlive:docproperties.uuid">{223177bf-3f8e-46bd-b61a-a448c3b37815}</property>
   <property name="kdenlive:docproperties.version">1.1</property>
-  <property name="kdenlive:expandedFolders">15;17</property>
+  <property name="kdenlive:expandedFolders">17;15</property>
   <property name="kdenlive:binZoom">4</property>
   <property name="kdenlive:extraBins">project_bin:-1:0</property>
   <property name="kdenlive:documentnotes"/>
