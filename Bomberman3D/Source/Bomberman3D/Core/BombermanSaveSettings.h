@@ -29,7 +29,7 @@ class BOMBERMAN3D_API UBombermanSaveSettings : public USaveGame
 	int32 ResolutionHeight = 1080;
 
 	UPROPERTY()
-	int32 WindowMode = 0; // 0 = Fullscreen, 1 = Windowed, 2 = Borderless
+	int32 WindowMode = 0; // EWindowMode - Fullscreen, Borderless, Windowed - https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/ApplicationCore/EWindowMode__Type
 
 	UPROPERTY()
 	int32 QualityPreset = 3; // 0-3 (Low, Medium, High, Epic)
