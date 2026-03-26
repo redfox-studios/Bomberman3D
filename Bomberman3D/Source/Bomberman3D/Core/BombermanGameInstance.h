@@ -67,14 +67,11 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	// --- settings ---
 
-	UPROPERTY(BlueprintReadWrite, Category = "Settings")
-	float MusicVolume = 1.f;
+	UFUNCTION(BlueprintCallable)
+	void SaveSettings();
 
-	UPROPERTY(BlueprintReadWrite, Category = "Settings")
-	float SFXVolume = 1.f;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Settings")
-	float AmbienceVolume = 1.f;
+	UFUNCTION(BlueprintCallable)
+	void LoadSettings();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	USoundClass* MusicSoundClass;
@@ -96,4 +93,13 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void ApplySoundSettings();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float MusicVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float SFXVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float AmbienceVolume = 1.f;
 };

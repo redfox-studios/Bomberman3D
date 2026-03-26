@@ -193,7 +193,6 @@
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music fade sometimes dont work or i'm actually deaf
 - TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- CRITICAL: saving settings in main menu will do shitty stuff to score, etc. we should create SaveSettings function or create a completely new class
 - i'll definitely find more later
 
 ### Probably Fixed
@@ -202,7 +201,8 @@
 
 ## Notes
 - we should do the settings already, atleast the sound settings. Because it will be a lot easier to add new features (like making the music more quiet when pausing the game, alttabbing, etc). I already created sound classes and assigned them to each sound cue, but i dont even know if sound classes are being used for sound settings
-- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcpded player index 0, etc)
+- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcoded player index 0, etc)
+- get rid of hardcoded stuff, duplicates, etc. make the codebase clean before we are gonna do something bigger
 
 ## Security
 - [ ] AntiCheat

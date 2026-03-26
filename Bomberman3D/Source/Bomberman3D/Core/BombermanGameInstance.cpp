@@ -2,6 +2,7 @@
 
 #include "Core/BombermanGameInstance.h"
 #include "Core/BombermanSaveGame.h"
+#include "Core/BombermanSaveSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundClass.h"
 
@@ -15,10 +16,6 @@ void UBombermanGameInstance::SaveGame()
 	Save->Lives = Lives;
 	Save->Score = Score;
 	Save->Upgrades = Upgrades;
-
-	Save->MusicVolume = MusicVolume;
-	Save->SFXVolume = SFXVolume;
-	Save->AmbienceVolume = AmbienceVolume;
 
 	UGameplayStatics::SaveGameToSlot(Save, SaveSlot, 0);
 }
@@ -36,12 +33,6 @@ void UBombermanGameInstance::LoadGame()
 	Score = Save->Score;
 	Upgrades = Save->Upgrades;
 
-	MusicVolume = Save->MusicVolume;
-	SFXVolume = Save->SFXVolume;
-	AmbienceVolume = Save->AmbienceVolume;
-
-	ApplySoundSettings();
-
 	// UE_LOG(LogTemp, Warning, TEXT("Loaded: Stage=%d Lives=%d Score=%d SpeedUp=%d BombUp=%d FireUp=%d"), CurrentStage, Lives, Score, Upgrades.SpeedUp, Upgrades.BombUp, Upgrades.FireUp);
 }
 
@@ -57,6 +48,7 @@ void UBombermanGameInstance::Init()
 {
 	Super::Init();
 	LoadGame();
+	LoadSettings();
 	ApplySoundSettings();
 }
 
@@ -160,4 +152,31 @@ void UBombermanGameInstance::ApplySoundSettings()
 	SetMusicVolume(MusicVolume);
 	SetSFXVolume(SFXVolume);
 	SetAmbienceVolume(AmbienceVolume);
+}
+
+static const FString SettingsSlot = TEXT("BombermanSettings");
+
+void UBombermanGameInstance::SaveSettings()
+{
+	UBombermanSaveSettings* Save = Cast<UBombermanSaveSettings>(
+		UGameplayStatics::CreateSaveGameObject(UBombermanSaveSettings::StaticClass())
+	);
+	Save->MusicVolume = MusicVolume;
+	Save->SFXVolume = SFXVolume;
+	Save->AmbienceVolume = AmbienceVolume;
+	UGameplayStatics::SaveGameToSlot(Save, SettingsSlot, 0);
+}
+
+void UBombermanGameInstance::LoadSettings()
+{
+	if (!UGameplayStatics::DoesSaveGameExist(SettingsSlot, 0)) return;
+
+	UBombermanSaveSettings* Save = Cast<UBombermanSaveSettings>(
+		UGameplayStatics::LoadGameFromSlot(SettingsSlot, 0)
+	);
+	if (!Save) return;
+
+	MusicVolume = Save->MusicVolume;
+	SFXVolume = Save->SFXVolume;
+	AmbienceVolume = Save->AmbienceVolume;
 }
