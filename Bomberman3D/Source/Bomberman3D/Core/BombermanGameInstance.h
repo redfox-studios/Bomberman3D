@@ -102,4 +102,28 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UPROPERTY(BlueprintReadWrite, Category = "Settings")
 	float AmbienceVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 ResolutionWidth = 1920;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 ResolutionHeight = 1080;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 WindowMode = 0;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 QualityPreset = 3;
+
+	UFUNCTION(BlueprintCallable)
+	void SetResolution(int32 Width, int32 Height);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWindowMode(int32 Mode);
+
+	UFUNCTION(BlueprintCallable)
+	void SetQualityPreset(int32 Preset);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplyVideoSettings();
 };
