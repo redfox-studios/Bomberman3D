@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundClass.h"
 #include "GameFramework/GameUserSettings.h" // for video settings
+#include "UnrealClient.h" // FViewport
 
 static const FString SaveSlot = TEXT("BombermanSave");
 
@@ -219,6 +220,17 @@ void UBombermanGameInstance::ApplyVideoSettings()
 	Settings->SetFullscreenMode((EWindowMode::Type)WindowMode);
 	Settings->SetOverallScalabilityLevel(QualityPreset);
 	Settings->ApplySettings(false);
+
+	// force window size for windowed/borderless
+	if (WindowMode != 0)
+	{
+		if (GEngine && GEngine->GameViewport)
+		{
+			FViewport* Viewport = GEngine->GameViewport->Viewport;
+			if (Viewport)
+				Viewport->SetSize(FIntPoint(ResolutionWidth, ResolutionHeight));
+		}
+	}
 
 	UE_LOG(LogTemp, Log, TEXT("[Video] Applied: %dx%d Mode=%d Quality=%d"), ResolutionWidth, ResolutionHeight, WindowMode, QualityPreset);
 }
