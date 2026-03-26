@@ -2,6 +2,7 @@
 
 #include "Door/BombermanDoor.h"
 #include "Components/BoxComponent.h"
+#include "Components/MaterialBillboardComponent.h"
 #include "Player/BombermanCharacter.h"
 #include "Core/BombermanGameMode.h"
 #include "Kismet/GameplayStatics.h"
@@ -19,6 +20,9 @@ ABombermanDoor::ABombermanDoor()
 	OverlapBox->SetupAttachment(RootComponent);
 	OverlapBox->SetBoxExtent(FVector(40.f));
 	OverlapBox->SetCollisionProfileName(TEXT("Trigger"));
+
+	MaterialBillboard = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("MaterialBillboard"));
+	MaterialBillboard->SetupAttachment(RootComponent);
 }
 
 void ABombermanDoor::BeginPlay()
@@ -37,6 +41,10 @@ void ABombermanDoor::BeginPlay()
 			this, NearbySound, GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.f, nullptr, nullptr, true
 		);
 	}
+
+	if (ClosedMaterial) MaterialBillboard->SetMaterial(0, ClosedMaterial);
+
+	ChangeDoorColor();
 }
 
 void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -51,6 +59,13 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 		if (GM->IsStageCompletable())
 		{
 			bEntered = true;
+
+			if (ABombermanCharacter* Char = Cast<ABombermanCharacter>(OtherActor))
+			{
+				if (UBombermanHealthComponent* HC = Char->FindComponentByClass<UBombermanHealthComponent>())
+					HC->bInvincible = true;
+			}
+
 			if (NearbySoundComponent) NearbySoundComponent->Stop();
 			if (EnterVFX) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnterVFX, GetActorLocation());
 
@@ -60,5 +75,39 @@ void ABombermanDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 		}
 
 		GM->OnPlayerEnteredDoor();
+	}
+}
+
+void ABombermanDoor::ChangeDoorColor()
+{
+	// https://forums.unrealengine.com/t/creating-a-dynamic-material-instance-on-c/362062
+	// UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(Material, this);
+	// DynMaterial->SetScalarParameterValue("MyParameter", myFloatValue);
+	// MyComponent1->SetMaterial(0, DynMaterial);
+	// MyComponent2->SetMaterial(0, DynMaterial);
+
+	if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		if (GM->IsStageCompletable())
+		{
+			if (OpenMaterial && MaterialBillboard)
+			{
+				MaterialBillboard->SetMaterial(0, OpenMaterial);
+			}
+		}
+		else if (!GM->IsStageCompletable())
+		{
+			if (ClosedMaterial && MaterialBillboard)
+			{
+				MaterialBillboard->SetMaterial(0, ClosedMaterial);
+			}
+		}
+	}
+	else
+	{
+		if (DefaultMaterial && MaterialBillboard)
+		{
+			MaterialBillboard->SetMaterial(0, DefaultMaterial);
+		}
 	}
 }

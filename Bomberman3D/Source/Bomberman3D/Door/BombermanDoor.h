@@ -32,6 +32,19 @@ class BOMBERMAN3D_API ABombermanDoor : public AActor
 	UPROPERTY()
 	UAudioComponent* NearbySoundComponent;
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeDoorColor();
+
+	// materials
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
+	UMaterialInterface* DefaultMaterial;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UMaterialInterface* ClosedMaterial;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UMaterialInterface* OpenMaterial;
+
   protected:
 	virtual void BeginPlay() override;
 
@@ -43,6 +56,9 @@ class BOMBERMAN3D_API ABombermanDoor : public AActor
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* OverlapBox;
+
+	UPROPERTY(VisibleAnywhere)
+	class UMaterialBillboardComponent* MaterialBillboard;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

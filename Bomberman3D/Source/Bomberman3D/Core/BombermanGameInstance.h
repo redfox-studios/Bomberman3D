@@ -61,4 +61,75 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	float MusicFadeDuration = 1.f;
 
 	void FadeToMusic(USoundBase* Music, float Volume = 0.5f);
+
+	UFUNCTION(BlueprintCallable)
+	void StopMusicImmediate();
+
+	// --- settings ---
+
+	UFUNCTION(BlueprintCallable)
+	void SaveSettings();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadSettings();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* MusicSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* SFXSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* AmbienceSoundClass;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMusicVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void SetSFXVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void SetAmbienceVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplySoundSettings();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float MusicVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float SFXVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float AmbienceVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 ResolutionWidth = 1920;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 ResolutionHeight = 1080;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 WindowMode = 0;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	int32 QualityPreset = 3;
+
+	UFUNCTION(BlueprintCallable)
+	void SetResolution(int32 Width, int32 Height);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWindowMode(int32 Mode);
+
+	UFUNCTION(BlueprintCallable)
+	void SetQualityPreset(int32 Preset);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplyVideoSettings();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	bool bMuteOnFocusLost = false;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMuteOnFocusLost(bool bEnabled);
 };

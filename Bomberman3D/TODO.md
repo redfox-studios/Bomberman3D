@@ -138,7 +138,7 @@
   - [x] Background music in main menu
   - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
-  - [ ] Nearby door sound
+  - [x] Nearby door sound
 - [ ] Actual VFX/SFX assets
 - [x] Entering portal in the final stage should have a different sound
 
@@ -158,7 +158,10 @@
 - [x] Stage Clear screen
 - [x] Loading Screen
 - [x] Credits Screen
-- [ ] Settings (keybind remapping via Enhanced Input) (if time allows)
+- [ ] Settings (if time allows)
+  - [ ] keybind remapping via Enhanced Input
+  - [x] sound settings
+  - [ ] video settings
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
@@ -179,7 +182,7 @@
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
-- [ ] Open/Closed Material variations for Doors
+- [x] Open/Closed Material variations for Doors
 
 ---
 
@@ -191,11 +194,17 @@
 
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
-- on bonus stage, bonus door enter sound doesnt play because there are no doors
+- music fade sometimes dont work or i'm actually deaf
+- TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
+- i'll definitely find more later
 
 ### Probably Fixed
 - player can get stuck in corners
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
+
+## Notes
+- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcoded player index 0, etc)
+- get rid of hardcoded stuff, duplicates, etc. make the codebase clean before we are gonna do something bigger
 
 ## Security
 - [ ] AntiCheat

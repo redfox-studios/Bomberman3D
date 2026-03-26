@@ -16,6 +16,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Bomb/BombermanBomb.h"
+#include "Door/BombermanDoor.h"
 
 // --- ac ---
 #include "AntiCheat/BombermanAntiCheat.h"
@@ -180,9 +181,6 @@ void ABombermanGameMode::StartStage()
 
 				GI->FadeToMusic(Config->BackgroundMusic);
 			}
-
-			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
-				GI->FadeToMusic(Config->BackgroundMusic);
 		}
 	}
 
@@ -208,6 +206,19 @@ void ABombermanGameMode::StartStage()
 	// Instead of calling SpawnEnemies directly
 	FTimerHandle SpawnDelay;
 	GetWorld()->GetTimerManager().SetTimer(SpawnDelay, this, &ABombermanGameMode::SpawnEnemies, 0.1f, false);
+
+	// change door color
+	FTimerHandle DoorColorHandle;
+	GetWorld()->GetTimerManager().SetTimer(DoorColorHandle, [this]()
+	{ 
+		if (!BombermanGameState) return;
+		if (IsStageCompletable())
+		{
+			AActor* DoorActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass());
+			if (ABombermanDoor* BD = Cast<ABombermanDoor>(DoorActor))
+				BD->ChangeDoorColor();
+		}
+	}, 0.2f, false);
 
 	// Tick timer every second
 	GetWorld()->GetTimerManager().SetTimer(StageTickHandle, this, &ABombermanGameMode::OnStageTimerTick, 1.f, true);
@@ -280,6 +291,7 @@ void ABombermanGameMode::OnStageTimerExpired()
 {
 	if (bCurrentStageIsBonus)
 	{
+		if (CurrentDoorEnterSound) UGameplayStatics::PlaySound2D(this, CurrentDoorEnterSound);
 		StageClear();
 		return;
 	}
@@ -325,6 +337,17 @@ void ABombermanGameMode::OnEnemyDied(int32 Points)
 	if (BombermanGameState->EnemiesRemaining <= 0)
 	{
 		UE_LOG(LogTemp, Log, TEXT("All enemies dead - find the door!"));
+
+		// info for door
+		AActor* BombermanDoor = UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass());
+		ABombermanDoor* BD = Cast<ABombermanDoor>(BombermanDoor);
+
+		// ABombermanDoor* BD = Cast<ABombermanDoor>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanDoor::StaticClass())
+
+		if(BD)
+		{
+			BD->ChangeDoorColor();
+		}
 	}
 }
 
