@@ -220,6 +220,7 @@ void UBombermanGameInstance::ApplyVideoSettings()
 	Settings->SetFullscreenMode((EWindowMode::Type)WindowMode);
 	Settings->SetOverallScalabilityLevel(QualityPreset);
 	Settings->ApplySettings(false);
+	Settings->SaveSettings(); // writes to GameUserSettings.ini, applied next launch automatically
 
 	// force window size for windowed/borderless
 	if (WindowMode != 0)
