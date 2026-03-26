@@ -181,9 +181,6 @@ void ABombermanGameMode::StartStage()
 
 				GI->FadeToMusic(Config->BackgroundMusic);
 			}
-
-			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
-				GI->FadeToMusic(Config->BackgroundMusic);
 		}
 	}
 
