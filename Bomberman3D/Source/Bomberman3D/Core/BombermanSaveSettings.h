@@ -21,4 +21,16 @@ class BOMBERMAN3D_API UBombermanSaveSettings : public USaveGame
 
 	UPROPERTY()
 	float AmbienceVolume = 1.f;
+
+	UPROPERTY()
+	int32 ResolutionWidth = 1920;
+
+	UPROPERTY()
+	int32 ResolutionHeight = 1080;
+
+	UPROPERTY()
+	int32 WindowMode = 0; // 0 = Fullscreen, 1 = Windowed, 2 = Borderless
+
+	UPROPERTY()
+	int32 QualityPreset = 3; // 0-3 (Low, Medium, High, Epic)
 };

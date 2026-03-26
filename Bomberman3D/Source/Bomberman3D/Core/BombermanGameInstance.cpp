@@ -5,6 +5,7 @@
 #include "Core/BombermanSaveSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundClass.h"
+#include "GameFramework/GameUserSettings.h" // for video settings
 
 static const FString SaveSlot = TEXT("BombermanSave");
 
@@ -58,6 +59,7 @@ void UBombermanGameInstance::OnStart()
 	DiscordManager.UpdatePresence(1, 3, 0, true);
 	UE_LOG(LogTemp, Warning, TEXT("[Discord] OnStart called"));
 	ApplySoundSettings();
+	ApplyVideoSettings();
 }
 
 void UBombermanGameInstance::Shutdown()
@@ -164,6 +166,12 @@ void UBombermanGameInstance::SaveSettings()
 	Save->MusicVolume = MusicVolume;
 	Save->SFXVolume = SFXVolume;
 	Save->AmbienceVolume = AmbienceVolume;
+
+	Save->ResolutionWidth = ResolutionWidth;
+	Save->ResolutionHeight = ResolutionHeight;
+	Save->WindowMode = WindowMode;
+	Save->QualityPreset = QualityPreset;
+
 	UGameplayStatics::SaveGameToSlot(Save, SettingsSlot, 0);
 }
 
@@ -179,4 +187,38 @@ void UBombermanGameInstance::LoadSettings()
 	MusicVolume = Save->MusicVolume;
 	SFXVolume = Save->SFXVolume;
 	AmbienceVolume = Save->AmbienceVolume;
+
+	ResolutionWidth = Save->ResolutionWidth;
+	ResolutionHeight = Save->ResolutionHeight;
+	WindowMode = Save->WindowMode;
+	QualityPreset = Save->QualityPreset;
+}
+
+void UBombermanGameInstance::SetResolution(int32 Width, int32 Height)
+{
+	ResolutionWidth = Width;
+	ResolutionHeight = Height;
+}
+
+void UBombermanGameInstance::SetWindowMode(int32 Mode)
+{
+	WindowMode = FMath::Clamp(Mode, 0, 2);
+}
+
+void UBombermanGameInstance::SetQualityPreset(int32 Preset)
+{
+	QualityPreset = FMath::Clamp(Preset, 0, 3);
+}
+
+void UBombermanGameInstance::ApplyVideoSettings()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	if (!Settings) return;
+
+	Settings->SetScreenResolution(FIntPoint(ResolutionWidth, ResolutionHeight));
+	Settings->SetFullscreenMode((EWindowMode::Type)WindowMode);
+	Settings->SetOverallScalabilityLevel(QualityPreset);
+	Settings->ApplySettings(false);
+
+	UE_LOG(LogTemp, Log, TEXT("[Video] Applied: %dx%d Mode=%d Quality=%d"), ResolutionWidth, ResolutionHeight, WindowMode, QualityPreset);
 }
