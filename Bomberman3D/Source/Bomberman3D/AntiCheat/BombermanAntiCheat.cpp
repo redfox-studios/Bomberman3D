@@ -102,7 +102,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 			if (t.Contains("cheat engine") ||
 				t.Contains("cheatengine") ||
 				t.Contains("x64dbg") ||
-				t.Contains("ida ") || // ida with space so the ac wont detect apps with words like 'ideas'
+				t.Contains("ida ") || // ida with space to get rid of false positives
 				t.Contains("ghidra") ||
 				t.Contains("ollydbg"))
 			{
