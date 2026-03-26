@@ -7,6 +7,7 @@
 #include "Sound/SoundClass.h"
 #include "GameFramework/GameUserSettings.h" // for video settings
 #include "UnrealClient.h" // FViewport
+#include "Widgets/SWindow.h" // UE5 renders inside a Slate SWindow
 
 static const FString SaveSlot = TEXT("BombermanSave");
 
@@ -51,6 +52,7 @@ void UBombermanGameInstance::Init()
 	Super::Init();
 	LoadGame();
 	LoadSettings();
+	ApplyVideoSettings();
 }
 
 void UBombermanGameInstance::OnStart()
@@ -222,16 +224,13 @@ void UBombermanGameInstance::ApplyVideoSettings()
 	Settings->ApplySettings(false);
 	Settings->SaveSettings(); // writes to GameUserSettings.ini, applied next launch automatically
 
-	// force window size for windowed/borderless
-	if (WindowMode != 0)
+	// for windowed/borderless - resize the actual OS window
+	if (WindowMode != 0 && GEngine && GEngine->GameViewport)
 	{
-		if (GEngine && GEngine->GameViewport)
+		TSharedPtr<SWindow> Window = GEngine->GameViewport->GetWindow();
+		if (Window.IsValid())
 		{
-			FViewport* Viewport = GEngine->GameViewport->Viewport;
-			if (Viewport)
-				Viewport->SetSize(FIntPoint(ResolutionWidth, ResolutionHeight));
+			Window->Resize(FVector2D(ResolutionWidth, ResolutionHeight));
 		}
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("[Video] Applied: %dx%d Mode=%d Quality=%d"), ResolutionWidth, ResolutionHeight, WindowMode, QualityPreset);
 }
