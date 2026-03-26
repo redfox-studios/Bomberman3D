@@ -138,7 +138,7 @@
   - [x] Background music in main menu
   - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
-  - [ ] Nearby door sound
+  - [x] Nearby door sound
 - [ ] Actual VFX/SFX assets
 - [x] Entering portal in the final stage should have a different sound
 
@@ -182,7 +182,7 @@
 - [ ] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
-- [ ] Open/Closed Material variations for Doors
+- [x] Open/Closed Material variations for Doors
 
 ---
 

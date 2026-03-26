@@ -333,13 +333,13 @@
   &lt;position x="1136" y="1894">
    &lt;transform>1,0,0,0,1,0,0,0,1&lt;/transform>
   &lt;/position>
-  &lt;content alignment="1" box-height="49" box-width="1565" font="Montserrat" font-color="200,200,200,255" font-italic="0" font-pixel-size="40" font-underline="0" font-weight="400" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Copyright (c) 2026, Moonforge Studios. Asset Ripping and Missuse is strictly prohibited.&lt;/content>
+  &lt;content alignment="1" box-height="49" box-width="1565" font="Montserrat" font-color="200,200,200,255" font-italic="0" font-outline="0" font-outline-color="0,0,0,255" font-pixel-size="40" font-underline="0" font-weight="400" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Copyright (c) 2026, Moonforge Studios. Asset Ripping and Missuse is strictly prohibited.&lt;/content>
  &lt;/item>
  &lt;item type="QGraphicsTextItem" z-index="0">
-  &lt;position x="1190" y="1284">
+  &lt;position x="1189" y="1284">
    &lt;transform>1,0,0,0,1,0,0,0,1&lt;/transform>
   &lt;/position>
-  &lt;content alignment="1" box-height="279" box-width="1457" font="Segoe Print" font-color="255,255,255,255" font-italic="0" font-outline="0" font-outline-color="0,0,0,255" font-pixel-size="160" font-underline="0" font-weight="700" kdenlive-axis-x-inverted="1" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Moonforge Studios&lt;/content>
+  &lt;content alignment="1" box-height="183" box-width="1460" font="Montserrat" font-color="255,255,255,255" font-italic="0" font-pixel-size="150" font-underline="0" font-weight="700" kdenlive-axis-x-inverted="1" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Moonforge Studios&lt;/content>
  &lt;/item>
  &lt;startviewport rect="0,0,3840,2160"/>
  &lt;endviewport rect="0,0,3840,2160"/>
@@ -390,35 +390,6 @@
   <property name="kdenlive:kextractor">1</property>
   <property name="kdenlive:meta.extractor.Bitrate">91 kb/s</property>
   <property name="kdenlive:monitorPosition">0</property>
- </chain>
- <chain id="chain9" out="00:00:23.683">
-  <property name="length">1422</property>
-  <property name="eof">pause</property>
-  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
-  <property name="mlt_service">avformat</property>
-  <property name="meta.media.nb_streams">1</property>
-  <property name="meta.media.0.stream.type">audio</property>
-  <property name="meta.media.0.codec.sample_fmt">fltp</property>
-  <property name="meta.media.0.codec.sample_rate">44100</property>
-  <property name="meta.media.0.codec.channels">2</property>
-  <property name="meta.media.0.codec.layout">stereo</property>
-  <property name="meta.media.0.codec.name">vorbis</property>
-  <property name="meta.media.0.codec.long_name">Vorbis</property>
-  <property name="meta.media.0.codec.bit_rate">224000</property>
-  <property name="meta.attr.0.stream.Encoded By.markup">dBpoweramp Release 17.3</property>
-  <property name="seekable">1</property>
-  <property name="audio_index">0</property>
-  <property name="video_index">-1</property>
-  <property name="astream">0</property>
-  <property name="kdenlive:folderid">15</property>
-  <property name="kdenlive:id">18</property>
-  <property name="kdenlive:control_uuid">{912997b8-4d76-4a75-9931-afd06efadb80}</property>
-  <property name="kdenlive:clip_type">1</property>
-  <property name="kdenlive:file_size">503571</property>
-  <property name="kdenlive:file_hash">cf2400060fa1992e07eba8984be2b39d</property>
-  <property name="kdenlive:monitorPosition">0</property>
-  <property name="kdenlive:kextractor">1</property>
-  <property name="kdenlive:meta.extractor.Bitrate">169 kb/s</property>
  </chain>
  <producer id="producer8" in="00:00:00.000" out="00:00:12.483">
   <property name="length">750</property>
@@ -540,7 +511,7 @@
   <property name="kdenlive:audio_track">1</property>
   <entry in="00:00:00.000" out="00:00:03.667" producer="chain0">
    <property name="kdenlive:id">10</property>
-   <filter id="filter0" in="00:00:02.850" out="00:00:03.667">
+   <filter id="filter0" in="00:00:02.867" out="00:00:03.683">
     <property name="window">75</property>
     <property name="max_gain">20dB</property>
     <property name="channel_mask">-1</property>
@@ -591,9 +562,9 @@
  </playlist>
  <tractor id="tractor0" in="00:00:00.000" out="00:00:08.483">
   <property name="kdenlive:audio_track">1</property>
-  <property name="kdenlive:trackheight">29</property>
+  <property name="kdenlive:trackheight">116</property>
   <property name="kdenlive:timeline_active">1</property>
-  <property name="kdenlive:collapsed">28</property>
+  <property name="kdenlive:collapsed">0</property>
   <property name="kdenlive:thumbs_format"/>
   <property name="kdenlive:audio_rec"/>
   <track hide="video" producer="playlist0"/>
@@ -765,6 +736,7 @@
   <property name="kdenlive:audio_track">1</property>
   <entry in="00:00:00.217" out="00:00:02.817" producer="chain2">
    <property name="kdenlive:id">8</property>
+   <property name="kdenlive:activeeffect">0</property>
    <filter id="filter7" in="00:00:00.217" out="00:00:00.450">
     <property name="window">75</property>
     <property name="max_gain">20dB</property>
@@ -828,9 +800,9 @@
  </playlist>
  <tractor id="tractor1" in="00:00:00.000" out="00:00:08.133">
   <property name="kdenlive:audio_track">1</property>
-  <property name="kdenlive:trackheight">29</property>
+  <property name="kdenlive:trackheight">135</property>
   <property name="kdenlive:timeline_active">1</property>
-  <property name="kdenlive:collapsed">28</property>
+  <property name="kdenlive:collapsed">0</property>
   <property name="kdenlive:thumbs_format"/>
   <property name="kdenlive:audio_rec"/>
   <track hide="video" producer="playlist2"/>
@@ -894,7 +866,7 @@
     <property name="alpha">00:00:00.000=0;00:00:01.000=1</property>
     <property name="kdenlive:collapsed">0</property>
    </filter>
-   <filter id="filter17" in="00:00:02.633" out="00:00:03.633">
+   <filter id="filter17" in="00:00:02.650" out="00:00:03.650">
     <property name="start">1</property>
     <property name="level">1</property>
     <property name="mlt_service">brightness</property>
@@ -980,8 +952,8 @@
 </property>
   <property name="kdenlive:sequenceproperties.hasAudio">1</property>
   <property name="kdenlive:sequenceproperties.hasVideo">1</property>
-  <property name="kdenlive:sequenceproperties.position">566</property>
-  <property name="kdenlive:sequenceproperties.scrollPos">273</property>
+  <property name="kdenlive:sequenceproperties.position">749</property>
+  <property name="kdenlive:sequenceproperties.scrollPos">0</property>
   <property name="kdenlive:sequenceproperties.subtitlesList">[
     {
         "file": "C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies/startup-movies.kdenlive.ass",
@@ -1066,6 +1038,35 @@
    <property name="disable">1</property>
   </filter>
  </tractor>
+ <chain id="chain9" out="00:00:23.683">
+  <property name="length">1422</property>
+  <property name="eof">pause</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Cymatics - October 31st - 162 BPM F Min Flute.ogg</property>
+  <property name="mlt_service">avformat</property>
+  <property name="meta.media.nb_streams">1</property>
+  <property name="meta.media.0.stream.type">audio</property>
+  <property name="meta.media.0.codec.sample_fmt">fltp</property>
+  <property name="meta.media.0.codec.sample_rate">44100</property>
+  <property name="meta.media.0.codec.channels">2</property>
+  <property name="meta.media.0.codec.layout">stereo</property>
+  <property name="meta.media.0.codec.name">vorbis</property>
+  <property name="meta.media.0.codec.long_name">Vorbis</property>
+  <property name="meta.media.0.codec.bit_rate">224000</property>
+  <property name="meta.attr.0.stream.Encoded By.markup">dBpoweramp Release 17.3</property>
+  <property name="seekable">1</property>
+  <property name="audio_index">0</property>
+  <property name="video_index">-1</property>
+  <property name="astream">0</property>
+  <property name="kdenlive:folderid">15</property>
+  <property name="kdenlive:id">18</property>
+  <property name="kdenlive:control_uuid">{912997b8-4d76-4a75-9931-afd06efadb80}</property>
+  <property name="kdenlive:clip_type">1</property>
+  <property name="kdenlive:file_size">503571</property>
+  <property name="kdenlive:file_hash">cf2400060fa1992e07eba8984be2b39d</property>
+  <property name="kdenlive:monitorPosition">0</property>
+  <property name="kdenlive:kextractor">1</property>
+  <property name="kdenlive:meta.extractor.Bitrate">169 kb/s</property>
+ </chain>
  <playlist id="main_bin">
   <property name="kdenlive:folder.-1.2">Sequences</property>
   <property name="kdenlive:folder.-1.15">Audio</property>
@@ -1162,7 +1163,7 @@
   <property name="kdenlive:docproperties.rendertwopass">0</property>
   <property name="kdenlive:docproperties.renderurl">C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies/StartupMovie.mp4</property>
   <property name="kdenlive:docproperties.seekOffset">7500</property>
-  <property name="kdenlive:docproperties.sessionid">{6134a01b-d50d-4f59-85cf-223379682ecc}</property>
+  <property name="kdenlive:docproperties.sessionid">{473fc224-ce8e-4fa5-b589-1cc0c7ef7130}</property>
   <property name="kdenlive:docproperties.uuid">{223177bf-3f8e-46bd-b61a-a448c3b37815}</property>
   <property name="kdenlive:docproperties.version">1.1</property>
   <property name="kdenlive:docmetadata.meta.attr.author.markup">Michal Flaška</property>
@@ -1186,9 +1187,9 @@
   <entry in="00:00:00.000" out="00:00:04.983" producer="producer2"/>
   <entry in="00:00:00.000" out="00:00:04.983" producer="producer1"/>
   <entry in="00:00:00.000" out="00:00:07.850" producer="chain6"/>
+  <entry in="00:00:00.000" out="00:00:11.983" producer="producer8"/>
+  <entry in="00:00:00.000" out="00:00:11.983" producer="tractor4"/>
   <entry in="00:00:00.000" out="00:00:23.683" producer="chain9"/>
-  <entry in="00:00:00.000" out="00:00:12.483" producer="producer8"/>
-  <entry in="00:00:00.000" out="00:00:12.483" producer="tractor4"/>
  </playlist>
  <tractor id="tractor5" in="00:00:00.000" out="00:00:12.483">
   <property name="kdenlive:projectTractor">1</property>
