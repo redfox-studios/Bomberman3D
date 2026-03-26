@@ -49,7 +49,6 @@ void UBombermanGameInstance::Init()
 	Super::Init();
 	LoadGame();
 	LoadSettings();
-	ApplySoundSettings();
 }
 
 void UBombermanGameInstance::OnStart()
@@ -58,6 +57,7 @@ void UBombermanGameInstance::OnStart()
 	DiscordManager.Init(1482825420733808791LL); // appID. IMPORTANT - KEEP THE 'LL' AT THE END (LONG LONG)
 	DiscordManager.UpdatePresence(1, 3, 0, true);
 	UE_LOG(LogTemp, Warning, TEXT("[Discord] OnStart called"));
+	ApplySoundSettings();
 }
 
 void UBombermanGameInstance::Shutdown()
