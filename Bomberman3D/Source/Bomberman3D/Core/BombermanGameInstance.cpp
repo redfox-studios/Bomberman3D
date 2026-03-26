@@ -2,7 +2,9 @@
 
 #include "Core/BombermanGameInstance.h"
 #include "Core/BombermanSaveGame.h"
+#include "Core/BombermanSaveSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundClass.h"
 
 static const FString SaveSlot = TEXT("BombermanSave");
 
@@ -31,7 +33,7 @@ void UBombermanGameInstance::LoadGame()
 	Score = Save->Score;
 	Upgrades = Save->Upgrades;
 
-	UE_LOG(LogTemp, Warning, TEXT("Loaded: Stage=%d Lives=%d Score=%d SpeedUp=%d BombUp=%d FireUp=%d"), CurrentStage, Lives, Score, Upgrades.SpeedUp, Upgrades.BombUp, Upgrades.FireUp);
+	// UE_LOG(LogTemp, Warning, TEXT("Loaded: Stage=%d Lives=%d Score=%d SpeedUp=%d BombUp=%d FireUp=%d"), CurrentStage, Lives, Score, Upgrades.SpeedUp, Upgrades.BombUp, Upgrades.FireUp);
 }
 
 void UBombermanGameInstance::ResetToDefaults()
@@ -46,6 +48,7 @@ void UBombermanGameInstance::Init()
 {
 	Super::Init();
 	LoadGame();
+	LoadSettings();
 }
 
 void UBombermanGameInstance::OnStart()
@@ -54,6 +57,7 @@ void UBombermanGameInstance::OnStart()
 	DiscordManager.Init(1482825420733808791LL); // appID. IMPORTANT - KEEP THE 'LL' AT THE END (LONG LONG)
 	DiscordManager.UpdatePresence(1, 3, 0, true);
 	UE_LOG(LogTemp, Warning, TEXT("[Discord] OnStart called"));
+	ApplySoundSettings();
 }
 
 void UBombermanGameInstance::Shutdown()
@@ -120,4 +124,59 @@ void UBombermanGameInstance::StopMusicImmediate()
 		MusicComponent->Stop();
 		MusicComponent = nullptr;
 	}
+}
+
+void UBombermanGameInstance::SetMusicVolume(float Volume)
+{
+	MusicVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (MusicSoundClass)
+		MusicSoundClass->Properties.Volume = MusicVolume;
+}
+
+void UBombermanGameInstance::SetSFXVolume(float Volume)
+{
+	SFXVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (SFXSoundClass)
+		SFXSoundClass->Properties.Volume = SFXVolume;
+}
+
+void UBombermanGameInstance::SetAmbienceVolume(float Volume)
+{
+	AmbienceVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (AmbienceSoundClass)
+		AmbienceSoundClass->Properties.Volume = AmbienceVolume;
+}
+
+void UBombermanGameInstance::ApplySoundSettings()
+{
+	SetMusicVolume(MusicVolume);
+	SetSFXVolume(SFXVolume);
+	SetAmbienceVolume(AmbienceVolume);
+}
+
+static const FString SettingsSlot = TEXT("BombermanSettings");
+
+void UBombermanGameInstance::SaveSettings()
+{
+	UBombermanSaveSettings* Save = Cast<UBombermanSaveSettings>(
+		UGameplayStatics::CreateSaveGameObject(UBombermanSaveSettings::StaticClass())
+	);
+	Save->MusicVolume = MusicVolume;
+	Save->SFXVolume = SFXVolume;
+	Save->AmbienceVolume = AmbienceVolume;
+	UGameplayStatics::SaveGameToSlot(Save, SettingsSlot, 0);
+}
+
+void UBombermanGameInstance::LoadSettings()
+{
+	if (!UGameplayStatics::DoesSaveGameExist(SettingsSlot, 0)) return;
+
+	UBombermanSaveSettings* Save = Cast<UBombermanSaveSettings>(
+		UGameplayStatics::LoadGameFromSlot(SettingsSlot, 0)
+	);
+	if (!Save) return;
+
+	MusicVolume = Save->MusicVolume;
+	SFXVolume = Save->SFXVolume;
+	AmbienceVolume = Save->AmbienceVolume;
 }

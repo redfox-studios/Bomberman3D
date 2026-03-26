@@ -158,7 +158,10 @@
 - [x] Stage Clear screen
 - [x] Loading Screen
 - [x] Credits Screen
-- [ ] Settings (keybind remapping via Enhanced Input) (if time allows)
+- [ ] Settings (if time allows)
+  - [ ] keybind remapping via Enhanced Input
+  - [x] sound settings
+  - [ ] video settings
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
@@ -200,8 +203,8 @@
   - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
 ## Notes
-- we should do the settings already, atleast the sound settings. Because it will be a lot easier to add new features (like making the music more quiet when pausing the game, alttabbing, etc). I already created sound classes and assigned them to each sound cue, but i dont even know if sound classes are being used for sound settings
-- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcpded player index 0, etc)
+- if we want to do multiplayer, there are still some things we should get rid off/replace (hardcoded player index 0, etc)
+- get rid of hardcoded stuff, duplicates, etc. make the codebase clean before we are gonna do something bigger
 
 ## Security
 - [ ] AntiCheat

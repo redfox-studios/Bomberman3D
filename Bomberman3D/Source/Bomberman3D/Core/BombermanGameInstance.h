@@ -64,4 +64,42 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void StopMusicImmediate();
+
+	// --- settings ---
+
+	UFUNCTION(BlueprintCallable)
+	void SaveSettings();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadSettings();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* MusicSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* SFXSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* AmbienceSoundClass;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMusicVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void SetSFXVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void SetAmbienceVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplySoundSettings();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float MusicVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float SFXVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float AmbienceVolume = 1.f;
 };
