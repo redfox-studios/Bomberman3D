@@ -126,4 +126,10 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void ApplyVideoSettings();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	bool bMuteOnFocusLost = false;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMuteOnFocusLost(bool bEnabled);
 };

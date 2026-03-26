@@ -23,6 +23,9 @@ class BOMBERMAN3D_API UBombermanSaveSettings : public USaveGame
 	float AmbienceVolume = 1.f;
 
 	UPROPERTY()
+	bool bMuteOnFocusLost = false;
+
+	UPROPERTY()
 	int32 ResolutionWidth = 1920;
 
 	UPROPERTY()

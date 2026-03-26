@@ -157,6 +157,7 @@ void UBombermanGameInstance::ApplySoundSettings()
 	SetMusicVolume(MusicVolume);
 	SetSFXVolume(SFXVolume);
 	SetAmbienceVolume(AmbienceVolume);
+	SetMuteOnFocusLost(bMuteOnFocusLost);
 }
 
 static const FString SettingsSlot = TEXT("BombermanSettings");
@@ -169,6 +170,7 @@ void UBombermanGameInstance::SaveSettings()
 	Save->MusicVolume = MusicVolume;
 	Save->SFXVolume = SFXVolume;
 	Save->AmbienceVolume = AmbienceVolume;
+	Save->bMuteOnFocusLost = bMuteOnFocusLost;
 
 	Save->ResolutionWidth = ResolutionWidth;
 	Save->ResolutionHeight = ResolutionHeight;
@@ -190,6 +192,7 @@ void UBombermanGameInstance::LoadSettings()
 	MusicVolume = Save->MusicVolume;
 	SFXVolume = Save->SFXVolume;
 	AmbienceVolume = Save->AmbienceVolume;
+	bMuteOnFocusLost = Save->bMuteOnFocusLost;
 
 	ResolutionWidth = Save->ResolutionWidth;
 	ResolutionHeight = Save->ResolutionHeight;
@@ -233,4 +236,10 @@ void UBombermanGameInstance::ApplyVideoSettings()
 			Window->Resize(FVector2D(ResolutionWidth, ResolutionHeight));
 		}
 	}
+}
+
+void UBombermanGameInstance::SetMuteOnFocusLost(bool bEnabled)
+{
+	bMuteOnFocusLost = bEnabled;
+	FApp::SetUnfocusedVolumeMultiplier(bEnabled ? 0.f : 1.f);
 }
