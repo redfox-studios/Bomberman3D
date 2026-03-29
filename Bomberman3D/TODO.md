@@ -161,7 +161,7 @@
 - [ ] Settings (if time allows)
   - [ ] keybind remapping via Enhanced Input
   - [x] sound settings
-  - [ ] video settings
+  - [x] video settings
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
@@ -179,7 +179,7 @@
 - [x] Startup Movies
   - [x] RF Logo
   - [x] UE Logo
-- [ ] Local co-op/versus (if time allows)
+- [x] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 - [x] Open/Closed Material variations for Doors
