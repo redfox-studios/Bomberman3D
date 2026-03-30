@@ -1,3 +1,5 @@
+# scroll to bottom for custom stuff
+
 # Created by https://www.toptal.com/developers/gitignore/api/unrealengine
 # Edit at https://www.toptal.com/developers/gitignore?templates=unrealengine
 
@@ -94,3 +96,8 @@ Plugins/**/Binaries/*
 Plugins/**/Intermediate/*
 
 # End of https://www.toptal.com/developers/gitignore/api/unrealengine
+
+# Discord SDK
+!ThirdParty/**/*.dll
+!ThirdParty/**/*.lib
+!ThirdParty/**/*.exe

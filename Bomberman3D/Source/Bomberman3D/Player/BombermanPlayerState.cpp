@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright (c) 2026, Michal Flaška & RedFox Studios. All Rights Reserved.
 
 #include "Player/BombermanPlayerState.h"
-

@@ -4,62 +4,53 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "GameFramework/Character.h"
+#include "NiagaraSystem.h"
 #include "BombermanBomb.generated.h"
 
 // Placed -> Armed -> Detonating -> Explosion -> Cleanup
-// 
-// Note for myself so i wouldnt have to check TDD every single time:
-//      Placed (when bomb is placed after triggering the IA)
-//		-> Armed happens when player steps off the tile.
-//		-> Detonating is when the fuse timer expires OR chain reaction.
-//		-> Explosion is the actual explosion logic.
-//		-> Cleanup is cleanup (free timer, deletion of actor)
+//
+// Placed:     bomb is placed after triggering the IA
+// Armed:      player steps off the tile
+// Detonating: fuse timer expires OR chain reaction hit
+// Explosion:  actual explosion logic runs
+// Cleanup:    free timer, destroy actor
 
+// clang-format off
 UENUM(BlueprintType)
 enum class EBombState : uint8
 {
-	// None		UMETA(DisplayName = "None"),
-	Placed      UMETA(DisplayName = "Placed"),
+	Placed		UMETA(DisplayName = "Placed"),
 	Armed		UMETA(DisplayName = "Armed"),
 	Detonating	UMETA(DisplayName = "Detonating"),
-	Explosion   UMETA(DisplayName = "Explosion"),
-	Cleanup     UMETA(DisplayName = "Cleanup")
+	Explosion	UMETA(DisplayName = "Explosion"),
+	Cleanup		UMETA(DisplayName = "Cleanup")
 };
+// clang-format on
 
 class ABombermanGrid;
 
 UCLASS()
+
 class BOMBERMAN3D_API ABombermanBomb : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+  public:
 	ABombermanBomb();
 
-protected:
-	// Called when the game starts or when spawned
+  protected:
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-public:
-	// TODO (add vars): fuse time, blast radius, current state, and the static mesh component.
-
+  public:
 	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
 	float FuseTimer = 2.5f;
 
+	// Tile count. 1 = default bomberman blast range.
 	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
-	float BlastRadius = 100.f;
-	// TODO:
-	// one thing i would change is blast radius range from flaot to int
-	// since we can just get the tilesize var from grid
-	// and multiply it by blast radius.
-	// 
-	// that way we will get rid of bugs
-	// and make it work like it should work.
+	int32 BlastRadius = 1;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Bomb")
 	EBombState CurrentState = EBombState::Placed;
@@ -67,15 +58,34 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Bomb")
 	UStaticMeshComponent* BombMesh;
 
-public:
+	UPROPERTY(EditAnywhere, Category = "Grid")
+	ABombermanGrid* Grid;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UNiagaraSystem* ExplosionVFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	USoundBase* ExplosionSound;
+
+	ACharacter* OwnerCharacter = nullptr;
+
 	FTimerHandle FuseTimerHandle;
 
 	UFUNCTION()
 	void Detonate();
 
-	UPROPERTY(EditAnywhere, Category = "Grid")
-	ABombermanGrid* Grid;
+	static void ResetExplosionSoundTimer() { LastExplosionSoundTime = -999.f; }
 
-	UFUNCTION()
+	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+	float ExplosionSoundCooldown = 0.1f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+	float CollisionEnableDistance = 0.65f;
+
+  private:
 	void Explode();
+	void TriggerChainReaction(int32 X, int32 Y);
+	void DamageActorsOnTile(int32 X, int32 Y);
+	bool bCollisionEnabled = false;
+	static float LastExplosionSoundTime;
 };
