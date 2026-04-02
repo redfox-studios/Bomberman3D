@@ -88,6 +88,9 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	FVector GetTileWorldPosition(int32 X, int32 Y) const;
 
 	UFUNCTION(BlueprintCallable)
+	FVector GetTileCenterWorldPosition(int32 X, int32 Y) const;
+
+	UFUNCTION(BlueprintCallable)
 	FVector2D GetGridPositionFromWorld(FVector WorldLocation) const;
 
 	int32 GetGridWidth() const { return BaseGridWidth; }

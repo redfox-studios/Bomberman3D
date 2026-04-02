@@ -264,7 +264,15 @@ bool ABombermanGrid::IsTileWalkable(int32 X, int32 Y) const
 	return Tile != ETileContent::SoftBlock && Tile != ETileContent::HardBlock && Tile != ETileContent::Bomb;
 }
 
-FVector ABombermanGrid::GetTileWorldPosition(int32 X, int32 Y) const { return GetActorLocation() + FVector(X * TileSize, Y * TileSize, TileSize * 0.5f); }
+FVector ABombermanGrid::GetTileWorldPosition(int32 X, int32 Y) const
+{
+	return GetActorLocation() + FVector(X * TileSize, Y * TileSize, 0.f);
+}
+
+FVector ABombermanGrid::GetTileCenterWorldPosition(int32 X, int32 Y) const
+{
+	return GetActorLocation() + FVector(X * TileSize, Y * TileSize, TileSize * 0.5f);
+}
 
 ETileContent ABombermanGrid::GetTileContent(int32 X, int32 Y) const
 {
@@ -347,8 +355,15 @@ void ABombermanGrid::DestroyActorOnTile(int32 X, int32 Y)
 	// spawn upgrade if hidden here
 	if (UpgradeMap[X][Y])
 	{
-		SpawnActorOnTile(X, Y, UpgradeMap[X][Y]);
+		TSubclassOf<AActor> UpgradeClass = UpgradeMap[X][Y];
 		UpgradeMap[X][Y] = nullptr;
+
+		FVector WorldPos = GetTileCenterWorldPosition(X, Y);
+		AActor* Upgrade = GetWorld()->SpawnActor<AActor>(UpgradeClass, WorldPos, FRotator::ZeroRotator);
+		if (Upgrade)
+		{
+			ActorMap[X][Y] = Upgrade;
+		}
 	}
 }
 
