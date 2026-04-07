@@ -441,43 +441,42 @@ bool ABombermanGrid::IsTileReserved(int32 X, int32 Y) const { return ReservedTil
 
 void ABombermanGrid::PlaceTopBlocks()
 {
-	if (!TopBlockClass) return;
-
-	const int32 BandWidth = 10;
-
-	const FVector2D SpawnTile = GetPlayerSpawnTile();
-	const int32 SpawnX = FMath::RoundToInt(SpawnTile.X);
-	const int32 SpawnY = FMath::RoundToInt(SpawnTile.Y);
-
-	for (int32 X = 1; X < BaseGridHeight - 1; X++)
+	if (!TopBlockClass)
 	{
-		for (int32 Y = 1; Y < BaseGridWidth - 1; Y++)
+		UE_LOG(LogTemp, Warning, TEXT("TopBlockClass is not assigned!"));
+		return;
+	}
+
+	const int32 OuterLayers = 5;
+
+	// full clean rectangle border around the playable grid
+	const int32 MinX = -OuterLayers;
+	const int32 MaxX = BaseGridHeight - 1 + OuterLayers;
+	const int32 MinY = -OuterLayers;
+	const int32 MaxY = BaseGridWidth - 1 + OuterLayers;
+
+	for (int32 X = MinX; X <= MaxX; ++X)
+	{
+		for (int32 Y = MinY; Y <= MaxY; ++Y)
 		{
-			if (Data[X][Y] == ETileContent::HardBlock) continue;
-			if (Data[X][Y] == ETileContent::TopBlock) continue;
+			// skip the inner playable area (including hard walls)
+			if (X >= 0 && X < BaseGridHeight && Y >= 0 && Y < BaseGridWidth)
+				continue;
 
-			// skip player safe zone
-			if (FMath::Abs(X - SpawnX) <= PlayerSafeZone && FMath::Abs(Y - SpawnY) <= PlayerSafeZone) continue;
-
-			// distance to nearest wall
-			const int32 DistLeft = Y;
-			const int32 DistRight = BaseGridWidth - 1 - Y;
-			const int32 DistTop = X;
-			const int32 DistBottom = BaseGridHeight - 1 - X;
-
-			int32 MinDistToWall = FMath::Min(DistLeft, DistRight);
-			MinDistToWall = FMath::Min(MinDistToWall, DistTop);
-			MinDistToWall = FMath::Min(MinDistToWall, DistBottom);
-
-			if (MinDistToWall > BandWidth || MinDistToWall == 0) continue;
-
-			// spawn with same density as soft blocks
-			if (FMath::FRand() <= SoftBlockDensity)
-			{
-				Data[X][Y] = ETileContent::TopBlock;
-				UE_LOG(LogTemp, Log, TEXT("TopBlock spawned at [%d,%d]"), X, Y);
-				SpawnActorOnTile(X, Y, TopBlockClass);
-			}
+			SpawnTopBlock(X, Y);
 		}
+	}
+}
+
+void ABombermanGrid::SpawnTopBlock(int32 GridX, int32 GridY)
+{
+	FVector WorldPos = GetTileWorldPosition(GridX, GridY);
+
+	// WorldPos.Z += ...;
+
+	AActor* Spawned = GetWorld()->SpawnActor<AActor>(TopBlockClass, WorldPos, FRotator::ZeroRotator);
+	if (Spawned)
+	{
+		UE_LOG(LogTemp, Log, TEXT("TopBlock at grid [%d, %d]"), GridX, GridY);
 	}
 }
