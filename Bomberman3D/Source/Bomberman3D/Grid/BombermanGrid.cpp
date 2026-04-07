@@ -44,14 +44,14 @@ void ABombermanGrid::Tick(float DeltaTime)
 	{
 		for (int32 Y = 0; Y < BaseGridWidth; Y++)
 		{
-			FVector Center = GetTileWorldPosition(X, Y) /* + FVector(0, 0, 50.f) */
+			FVector Center = GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, TileSize * 0.5f);
 				;
 			FColor Color = Data[X][Y] == ETileContent::HardBlock ? FColor::Red
 				: Data[X][Y] == ETileContent::SoftBlock			 ? FColor::Green
 				: Data[X][Y] == ETileContent::Bomb				 ? FColor::Yellow
 				: Data[X][Y] == ETileContent::Door				 ? FColor::Blue
 																 : FColor::White;
-			DrawDebugBox(GetWorld(), Center, FVector(TileSize * 0.45f), Color, false, -1.f, 0, 2.f);
+				DrawDebugBox(GetWorld(), Center, FVector(TileSize * 0.45f), Color, false, -1.f, 0, 2.f);
 		}
 	}
 }
