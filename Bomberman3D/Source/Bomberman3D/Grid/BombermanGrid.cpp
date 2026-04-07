@@ -30,6 +30,8 @@ void ABombermanGrid::BeginPlay()
 void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage, bool bBonusStage)
 {
 	GenerateSoftBlocks();
+	PlaceTopBlocks();
+
 	if (!bBonusStage) PlaceDoor();
 	PlaceUpgrades(PlayerUpgrades, CurrentStage);
 }
@@ -126,8 +128,9 @@ void ABombermanGrid::GenerateSoftBlocks()
 	{
 		for (int32 Y = 1; Y < BaseGridWidth - 1; Y++)
 		{
-			// Skip hard blocks
+			// Skip hard blocks + top blocks
 			if (Data[X][Y] == ETileContent::HardBlock) continue;
+			if (Data[X][Y] == ETileContent::TopBlock) continue;
 
 			// Skip player safe zone
 			if (FMath::Abs(X - SpawnX) <= PlayerSafeZone && FMath::Abs(Y - SpawnY) <= PlayerSafeZone) continue;
@@ -241,6 +244,7 @@ TArray<FVector2D> ABombermanGrid::FloodFill(int32 StartX, int32 StartY) const
 			if (!IsInBounds(NX, NY)) continue;
 			if (Data[NX][NY] == ETileContent::HardBlock) continue;
 			if (Data[NX][NY] == ETileContent::SoftBlock) continue;
+			if (Data[NX][NY] == ETileContent::TopBlock) continue;
 
 			FVector2D Next(NX, NY);
 			if (VisitedSet.Contains(Next)) continue;
@@ -434,3 +438,46 @@ void ABombermanGrid::ReserveTile(int32 X, int32 Y) { ReservedTiles.Add(FIntPoint
 void ABombermanGrid::ReleaseTile(int32 X, int32 Y) { ReservedTiles.Remove(FIntPoint(X, Y)); }
 
 bool ABombermanGrid::IsTileReserved(int32 X, int32 Y) const { return ReservedTiles.Contains(FIntPoint(X, Y)); }
+
+void ABombermanGrid::PlaceTopBlocks()
+{
+	if (!TopBlockClass) return;
+
+	const int32 BandWidth = 10;
+
+	const FVector2D SpawnTile = GetPlayerSpawnTile();
+	const int32 SpawnX = FMath::RoundToInt(SpawnTile.X);
+	const int32 SpawnY = FMath::RoundToInt(SpawnTile.Y);
+
+	for (int32 X = 1; X < BaseGridHeight - 1; X++)
+	{
+		for (int32 Y = 1; Y < BaseGridWidth - 1; Y++)
+		{
+			if (Data[X][Y] == ETileContent::HardBlock) continue;
+			if (Data[X][Y] == ETileContent::TopBlock) continue;
+
+			// skip player safe zone
+			if (FMath::Abs(X - SpawnX) <= PlayerSafeZone && FMath::Abs(Y - SpawnY) <= PlayerSafeZone) continue;
+
+			// distance to nearest wall
+			const int32 DistLeft = Y;
+			const int32 DistRight = BaseGridWidth - 1 - Y;
+			const int32 DistTop = X;
+			const int32 DistBottom = BaseGridHeight - 1 - X;
+
+			int32 MinDistToWall = FMath::Min(DistLeft, DistRight);
+			MinDistToWall = FMath::Min(MinDistToWall, DistTop);
+			MinDistToWall = FMath::Min(MinDistToWall, DistBottom);
+
+			if (MinDistToWall > BandWidth || MinDistToWall == 0) continue;
+
+			// spawn with same density as soft blocks
+			if (FMath::FRand() <= SoftBlockDensity)
+			{
+				Data[X][Y] = ETileContent::TopBlock;
+				UE_LOG(LogTemp, Log, TEXT("TopBlock spawned at [%d,%d]"), X, Y);
+				SpawnActorOnTile(X, Y, TopBlockClass);
+			}
+		}
+	}
+}

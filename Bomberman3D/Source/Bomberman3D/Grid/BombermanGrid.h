@@ -15,7 +15,8 @@ enum class ETileContent : uint8
 	HardBlock UMETA(DisplayName = "Hard Block"),
 	Bomb UMETA(DisplayName = "Bomb"),
 	Upgrade UMETA(DisplayName = "Upgrade"),
-	Door UMETA(DisplayName = "Door")
+	Door UMETA(DisplayName = "Door"),
+	TopBlock UMETA(DisplayName = "Top Block")
 };
 
 UCLASS()
@@ -60,6 +61,9 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 
 	UPROPERTY(EditAnywhere, Category = "Grid Config")
 	TSubclassOf<AActor> SoftBlockClass;
+
+	UPROPERTY(EditAnywhere, Category = "Grid Config")
+	TSubclassOf<AActor> TopBlockClass;
 
 	UPROPERTY(EditAnywhere, Category = "Grid Config")
 	TSubclassOf<AActor> DoorClass;
@@ -175,6 +179,7 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	void GenerateSoftBlocks();
 	void PlaceDoor();
 	void PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage);
+	void PlaceTopBlocks();
 
 	// Flood-fill from player spawn, returns all reachable empty tiles
 	TArray<FVector2D> FloodFill(int32 StartX, int32 StartY) const;
