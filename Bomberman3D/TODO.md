@@ -161,7 +161,7 @@
 - [ ] Settings (if time allows)
   - [ ] keybind remapping via Enhanced Input
   - [x] sound settings
-  - [ ] video settings
+  - [x] video settings
 - [x] Random game tips in main menu and pause menu
 
 ### Music (code, not assets)
@@ -179,7 +179,7 @@
 - [x] Startup Movies
   - [x] RF Logo
   - [x] UE Logo
-- [ ] Local co-op/versus (if time allows)
+- [x] Local co-op/versus (if time allows)
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 - [x] Open/Closed Material variations for Doors
@@ -196,6 +196,12 @@
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - music fade sometimes dont work or i'm actually deaf
 - TDD is still missing some pats (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
+- bonus stages should be additional and not replacing stages
+  - add last stage check, not hardcoding 50 (get this shit from DT)
+  - show bonus stage as BONUS in discord RPC
+- when i go to main menu, the game music still plays
+- when player dies, the whole stage/level is supposed to restart, not just respawning the player
+  - bonus stage will just throw player to next stage
 - i'll definitely find more later
 
 ### Probably Fixed
