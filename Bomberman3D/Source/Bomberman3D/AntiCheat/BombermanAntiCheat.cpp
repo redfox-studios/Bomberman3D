@@ -219,6 +219,6 @@ void FBombermanAntiCheat::RunChecks()
 	)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] caught ya fool"));
-		FPlatformMisc::RequestExit(true);
+		// FPlatformMisc::RequestExit(true);
 	}
 }
