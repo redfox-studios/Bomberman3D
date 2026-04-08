@@ -30,6 +30,8 @@ void ABombermanGrid::BeginPlay()
 void ABombermanGrid::GenerateGrid(const FBombermanPlayerUpgrades& PlayerUpgrades, int32 CurrentStage, bool bBonusStage)
 {
 	GenerateSoftBlocks();
+	PlaceTopBlocks();
+
 	if (!bBonusStage) PlaceDoor();
 	PlaceUpgrades(PlayerUpgrades, CurrentStage);
 }
@@ -44,14 +46,14 @@ void ABombermanGrid::Tick(float DeltaTime)
 	{
 		for (int32 Y = 0; Y < BaseGridWidth; Y++)
 		{
-			FVector Center = GetTileWorldPosition(X, Y) /* + FVector(0, 0, 50.f) */
+			FVector Center = GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, TileSize * 0.5f);
 				;
 			FColor Color = Data[X][Y] == ETileContent::HardBlock ? FColor::Red
 				: Data[X][Y] == ETileContent::SoftBlock			 ? FColor::Green
 				: Data[X][Y] == ETileContent::Bomb				 ? FColor::Yellow
 				: Data[X][Y] == ETileContent::Door				 ? FColor::Blue
 																 : FColor::White;
-			DrawDebugBox(GetWorld(), Center, FVector(TileSize * 0.45f), Color, false, -1.f, 0, 2.f);
+				DrawDebugBox(GetWorld(), Center, FVector(TileSize * 0.45f), Color, false, -1.f, 0, 2.f);
 		}
 	}
 }
@@ -126,8 +128,9 @@ void ABombermanGrid::GenerateSoftBlocks()
 	{
 		for (int32 Y = 1; Y < BaseGridWidth - 1; Y++)
 		{
-			// Skip hard blocks
+			// Skip hard blocks + top blocks
 			if (Data[X][Y] == ETileContent::HardBlock) continue;
+			if (Data[X][Y] == ETileContent::TopBlock) continue;
 
 			// Skip player safe zone
 			if (FMath::Abs(X - SpawnX) <= PlayerSafeZone && FMath::Abs(Y - SpawnY) <= PlayerSafeZone) continue;
@@ -241,6 +244,7 @@ TArray<FVector2D> ABombermanGrid::FloodFill(int32 StartX, int32 StartY) const
 			if (!IsInBounds(NX, NY)) continue;
 			if (Data[NX][NY] == ETileContent::HardBlock) continue;
 			if (Data[NX][NY] == ETileContent::SoftBlock) continue;
+			if (Data[NX][NY] == ETileContent::TopBlock) continue;
 
 			FVector2D Next(NX, NY);
 			if (VisitedSet.Contains(Next)) continue;
@@ -264,7 +268,15 @@ bool ABombermanGrid::IsTileWalkable(int32 X, int32 Y) const
 	return Tile != ETileContent::SoftBlock && Tile != ETileContent::HardBlock && Tile != ETileContent::Bomb;
 }
 
-FVector ABombermanGrid::GetTileWorldPosition(int32 X, int32 Y) const { return GetActorLocation() + FVector(X * TileSize, Y * TileSize, TileSize * 0.5f); }
+FVector ABombermanGrid::GetTileWorldPosition(int32 X, int32 Y) const
+{
+	return GetActorLocation() + FVector(X * TileSize, Y * TileSize, 0.f);
+}
+
+FVector ABombermanGrid::GetTileCenterWorldPosition(int32 X, int32 Y) const
+{
+	return GetActorLocation() + FVector(X * TileSize, Y * TileSize, TileSize * 0.5f);
+}
 
 ETileContent ABombermanGrid::GetTileContent(int32 X, int32 Y) const
 {
@@ -347,8 +359,15 @@ void ABombermanGrid::DestroyActorOnTile(int32 X, int32 Y)
 	// spawn upgrade if hidden here
 	if (UpgradeMap[X][Y])
 	{
-		SpawnActorOnTile(X, Y, UpgradeMap[X][Y]);
+		TSubclassOf<AActor> UpgradeClass = UpgradeMap[X][Y];
 		UpgradeMap[X][Y] = nullptr;
+
+		FVector WorldPos = GetTileCenterWorldPosition(X, Y);
+		AActor* Upgrade = GetWorld()->SpawnActor<AActor>(UpgradeClass, WorldPos, FRotator::ZeroRotator);
+		if (Upgrade)
+		{
+			ActorMap[X][Y] = Upgrade;
+		}
 	}
 }
 
@@ -376,7 +395,7 @@ void ABombermanGrid::PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrade
 			// always available
 			if (PlayerUpgrades.BombUp < 10 && BombUpClass) Pool.Add(BombUpClass);
 			if (PlayerUpgrades.FireUp < 10 && FireUpClass) Pool.Add(FireUpClass);
-			if (PlayerUpgrades.SpeedUp < 3 && SpeedUpClass && CurrentStage >= 4) Pool.Add(SpeedUpClass);
+			if (PlayerUpgrades.SpeedUp < 3 && SpeedUpClass && CurrentStage == 4) Pool.Add(SpeedUpClass);
 
 			// mid game
 			if (CurrentStage >= 6)
@@ -419,3 +438,45 @@ void ABombermanGrid::ReserveTile(int32 X, int32 Y) { ReservedTiles.Add(FIntPoint
 void ABombermanGrid::ReleaseTile(int32 X, int32 Y) { ReservedTiles.Remove(FIntPoint(X, Y)); }
 
 bool ABombermanGrid::IsTileReserved(int32 X, int32 Y) const { return ReservedTiles.Contains(FIntPoint(X, Y)); }
+
+void ABombermanGrid::PlaceTopBlocks()
+{
+	if (!TopBlockClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TopBlockClass is not assigned!"));
+		return;
+	}
+
+	const int32 OuterLayers = 5;
+
+	// full clean rectangle border around the playable grid
+	const int32 MinX = -OuterLayers;
+	const int32 MaxX = BaseGridHeight - 1 + OuterLayers;
+	const int32 MinY = -OuterLayers;
+	const int32 MaxY = BaseGridWidth - 1 + OuterLayers;
+
+	for (int32 X = MinX; X <= MaxX; ++X)
+	{
+		for (int32 Y = MinY; Y <= MaxY; ++Y)
+		{
+			// skip the inner playable area (including hard walls)
+			if (X >= 0 && X < BaseGridHeight && Y >= 0 && Y < BaseGridWidth)
+				continue;
+
+			SpawnTopBlock(X, Y);
+		}
+	}
+}
+
+void ABombermanGrid::SpawnTopBlock(int32 GridX, int32 GridY)
+{
+	FVector WorldPos = GetTileWorldPosition(GridX, GridY);
+
+	// WorldPos.Z += ...;
+
+	AActor* Spawned = GetWorld()->SpawnActor<AActor>(TopBlockClass, WorldPos, FRotator::ZeroRotator);
+	if (Spawned)
+	{
+		UE_LOG(LogTemp, Log, TEXT("TopBlock at grid [%d, %d]"), GridX, GridY);
+	}
+}
