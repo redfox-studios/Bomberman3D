@@ -219,6 +219,11 @@ void FBombermanAntiCheat::RunChecks()
 	)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] caught ya fool"));
+
+#if PLATFORM_WINDOWS
+		MessageBoxA(NULL, "Cheater Detected", "Bomberman Anti-Cheat", MB_OK | MB_ICONERROR | MB_TOPMOST | MB_SYSTEMMODAL);
+#endif
+
 		// FPlatformMisc::RequestExit(true);
 	}
 }
