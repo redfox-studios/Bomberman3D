@@ -20,7 +20,7 @@
 
 ABombermanCharacter::ABombermanCharacter()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	GetCapsuleComponent()->SetCapsuleSize(30.f,
 										  60.f); // UE defaults -> 36 , 80
@@ -61,6 +61,9 @@ void ABombermanCharacter::BeginPlay()
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
 	HealthComponent->OnDeath.AddDynamic(this, &ABombermanCharacter::OnDeath);
 
+	TargetFOV = BaseFOV;
+	if (Camera) Camera->FieldOfView = BaseFOV;
+
 	GetWorld()->GetTimerManager().SetTimerForNextTick(
 		[this]()
 		{
@@ -76,6 +79,8 @@ void ABombermanCharacter::BeginPlay()
 				}
 				GetCharacterMovement()->MaxWalkSpeed = BaseSpeed + (PS->Upgrades.SpeedUp * SpeedUpIncrement);
 				SetWallPass(PS->Upgrades.bWallPass);
+
+				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * 10.f); // restore stacked FOV
 			}
 			else
 			{
@@ -83,6 +88,21 @@ void ABombermanCharacter::BeginPlay()
 			}
 		}
 	);
+}
+
+void ABombermanCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (Camera && !FMath::IsNearlyEqual(Camera->FieldOfView, TargetFOV, 0.1f))
+	{
+		Camera->FieldOfView = FMath::FInterpTo(Camera->FieldOfView, TargetFOV, DeltaTime, FOVInterpSpeed);
+	}
+}
+
+void ABombermanCharacter::AddFovUp(float Amount)
+{
+	TargetFOV += Amount;
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -184,8 +204,10 @@ void ABombermanCharacter::OnDeath()
 	PS->Upgrades.bBombPass = false;
 	PS->Upgrades.bFlamePass = false;
 	PS->Upgrades.bInvincible = false;
+	PS->Upgrades.FovUp = 0;
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	SetWallPass(false);
+	TargetFOV = BaseFOV;
 
 	UE_LOG(LogTemp, Warning, TEXT("Player died. Lives remaining: %d"), PS->Lives);
 

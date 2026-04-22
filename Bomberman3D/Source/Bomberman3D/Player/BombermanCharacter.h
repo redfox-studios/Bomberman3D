@@ -34,9 +34,11 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 
   public:
 	// virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void SetWallPass(bool bEnabled);
+	void AddFovUp(float Amount);
 
 	// --- input actions ---
 
@@ -56,6 +58,12 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* Camera;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+	float BaseFOV = 90.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+	float FOVInterpSpeed = 4.f;
 
 	// --- bomb ---
 
@@ -105,6 +113,8 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	void Move(const FInputActionValue& Value);
 	void PlaceBomb(const FInputActionValue& Value);
 	void DetonateBomb(const FInputActionValue& Value);
+
+	float TargetFOV = 90.f;
 
 	// Tracks how many bombs are currently live in the world
 	int32 ActiveBombCount = 0;

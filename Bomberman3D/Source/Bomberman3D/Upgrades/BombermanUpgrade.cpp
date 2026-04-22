@@ -102,6 +102,11 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	case EUpgradeType::RemoteControl:
 		PS->Upgrades.bRemoteControl = true;
 		break;
+
+	case EUpgradeType::FovUp:
+		PS->Upgrades.FovUp = FMath::Min(PS->Upgrades.FovUp + 1, 5);
+		Player->AddFovUp(FovUpAmount);
+		break;
 	}
 
 	if (PickupVFX)

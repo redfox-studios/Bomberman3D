@@ -34,4 +34,7 @@ struct FBombermanPlayerUpgrades
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bInvincible = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 FovUp = 0; // 0-5
 };
