@@ -143,6 +143,9 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	UPROPERTY(EditAnywhere, Category = "Grid Config")
 	TSubclassOf<AActor> RemoteControlClass;
 
+	UPROPERTY(EditAnywhere, Category = "Grid Config")
+	TSubclassOf<AActor> FovUpClass;
+
 	// 0.0 - 1.0, how many soft blocks hide an upgrade
 	UPROPERTY(EditAnywhere, Category = "Grid Config")
 	float UpgradeDensity = 0.2f;

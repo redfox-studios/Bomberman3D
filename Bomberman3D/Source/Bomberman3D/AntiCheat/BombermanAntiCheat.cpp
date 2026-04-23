@@ -13,7 +13,9 @@
 double FBombermanAntiCheat::LastCheckTime = 0.0;
 double FBombermanAntiCheat::NextInterval = 3.0;
 
-// --- yes ---
+// ===================================================================
+//  DEBUGGER CHECKS
+// ===================================================================
 
 bool FBombermanAntiCheat::IsDebuggerAttached()
 {
@@ -38,7 +40,7 @@ bool FBombermanAntiCheat::IsRemoteDebuggerAttached()
 bool FBombermanAntiCheat::IsKernelDebuggerAttached()
 {
 #if PLATFORM_WINDOWS
-	typedef NTSTATUS(WINAPI* NtQueryInformationProcessFn)(HANDLE, UINT, PVOID, ULONG, PULONG);
+	typedef NTSTATUS(WINAPI * NtQueryInformationProcessFn)(HANDLE, UINT, PVOID, ULONG, PULONG);
 
 	HMODULE NtDll = GetModuleHandleA("ntdll.dll");
 	if (!NtDll) return false;
@@ -65,27 +67,38 @@ bool FBombermanAntiCheat::IsKernelDebuggerAttached()
 #endif
 }
 
+// ===================================================================
+//  MAIN DETECTION (now with full logging + fewer false positives)
+// ===================================================================
+
 bool FBombermanAntiCheat::DetectAnalysis()
 {
 #if PLATFORM_WINDOWS
 
-	// ---- window title scan ----
+	// ---- window title scan (skip our own game windows) ----
 	{
 		HWND hwnd = GetTopWindow(NULL);
 		while (hwnd)
 		{
-			// skip invisible and minimized windows
+			DWORD dwProcessId = 0;
+			GetWindowThreadProcessId(hwnd, &dwProcessId);
+			if (dwProcessId == GetCurrentProcessId()) // skip our own windows
+			{
+				hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
+				continue;
+			}
+
 			if (!IsWindowVisible(hwnd) || IsIconic(hwnd))
 			{
 				hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
 				continue;
 			}
 
-			char className[256];
+			char className[256] = {};
 			GetClassNameA(hwnd, className, sizeof(className));
 			FString cls = UTF8_TO_TCHAR(className);
 
-			// skip explorer, taskbar, etc
+			// skip explorer/taskbar/etc
 			if (cls.Equals(TEXT("CabinetWClass"), ESearchCase::IgnoreCase) ||
 				cls.Equals(TEXT("ExploreWClass"), ESearchCase::IgnoreCase) ||
 				cls.Equals(TEXT("Shell_TrayWnd"), ESearchCase::IgnoreCase))
@@ -94,18 +107,19 @@ bool FBombermanAntiCheat::DetectAnalysis()
 				continue;
 			}
 
-			char title[256];
+			char title[256] = {};
 			GetWindowTextA(hwnd, title, sizeof(title));
-			FString t = UTF8_TO_TCHAR(title);
-			t = t.ToLower();
+			FString originalTitle = UTF8_TO_TCHAR(title);
+			FString lowerTitle = originalTitle.ToLower();
 
-			if (t.Contains("cheat engine") ||
-				t.Contains("cheatengine") ||
-				t.Contains("x64dbg") ||
-				t.Contains("ida ") || // ida with space to get rid of false positives
-				t.Contains("ghidra") ||
-				t.Contains("ollydbg"))
+			if (lowerTitle.Contains("cheat engine") ||
+				lowerTitle.Contains("cheatengine") ||
+				lowerTitle.Contains("x64dbg") ||
+				lowerTitle.Contains("ida ") ||
+				lowerTitle.Contains("ghidra") ||
+				lowerTitle.Contains("ollydbg"))
 			{
+				UE_LOG(LogTemp, Error, TEXT("[AntiCheat] SUSPICIOUS WINDOW TITLE: \"%s\" (class: %s)"), *originalTitle, *cls);
 				return true;
 			}
 
@@ -113,20 +127,27 @@ bool FBombermanAntiCheat::DetectAnalysis()
 		}
 	}
 
-	// ---- class name scan ----
+	// ---- class name scan (Delphi/Cheat Engine main form) ----
 	{
 		HWND hwnd = GetTopWindow(NULL);
-
 		while (hwnd)
 		{
-			char className[256];
-			GetClassNameA(hwnd, className, sizeof(className));
+			DWORD dwProcessId = 0;
+			GetWindowThreadProcessId(hwnd, &dwProcessId);
+			if (dwProcessId == GetCurrentProcessId())
+			{
+				hwnd = GetNextWindow(hwnd, GW_HWNDNEXT);
+				continue;
+			}
 
+			char className[256] = {};
+			GetClassNameA(hwnd, className, sizeof(className));
 			FString c = UTF8_TO_TCHAR(className);
 			c = c.ToLower();
 
-			if (c.Contains("tmainform") /* || c.Contains("tapplication") */)
+			if (c.Contains("tmainform"))
 			{
+				UE_LOG(LogTemp, Error, TEXT("[AntiCheat] SUSPICIOUS WINDOW CLASS: \"%s\""), *c);
 				return true;
 			}
 
@@ -134,19 +155,19 @@ bool FBombermanAntiCheat::DetectAnalysis()
 		}
 	}
 
-	// ---- driver scan ----
+	// ---- driver scan (ONLY currently RUNNING drivers -> way fewer false positives) ----
 	{
 		SC_HANDLE sc = OpenSCManager(NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE);
-
 		if (sc)
 		{
 			DWORD bytesNeeded = 0, count = 0;
 
+			// First call to get required buffer size
 			EnumServicesStatusEx(
 				sc,
 				SC_ENUM_PROCESS_INFO,
 				SERVICE_DRIVER,
-				SERVICE_STATE_ALL,
+				SERVICE_ACTIVE, // <- CHANGED: only running drivers
 				NULL,
 				0,
 				&bytesNeeded,
@@ -162,7 +183,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 					sc,
 					SC_ENUM_PROCESS_INFO,
 					SERVICE_DRIVER,
-					SERVICE_STATE_ALL,
+					SERVICE_ACTIVE, // <- CHANGED
 					buffer.GetData(),
 					bytesNeeded,
 					&bytesNeeded,
@@ -180,6 +201,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 
 					if (name.Contains("cheat") || name.Contains("cedriver"))
 					{
+						UE_LOG(LogTemp, Error, TEXT("[AntiCheat] SUSPICIOUS DRIVER RUNNING: \"%s\""), *name);
 						CloseServiceHandle(sc);
 						return true;
 					}
@@ -192,14 +214,12 @@ bool FBombermanAntiCheat::DetectAnalysis()
 
 #endif
 
-	// process name checks are bypassable by just renaming the executable.
-	// But for my braindead classmates who installed CE without knowing how computers, nor game engines work,
-	// this is honestly more than enough.
-
 	return false;
 }
 
-// ------ checks ------
+// ===================================================================
+//  RUN CHECKS (now logs exactly which check fired)
+// ===================================================================
 
 void FBombermanAntiCheat::RunChecks()
 {
@@ -211,14 +231,36 @@ void FBombermanAntiCheat::RunChecks()
 	LastCheckTime = Now;
 	NextInterval = FMath::FRandRange(3.0, 5.0);
 
-	if (
-		IsDebuggerAttached() ||
-		IsRemoteDebuggerAttached() ||
-		IsKernelDebuggerAttached() ||
-		DetectAnalysis()
-	)
+	bool bCheatDetected = false;
+
+	if (IsDebuggerAttached())
 	{
-		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] caught ya fool"));
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] IsDebuggerAttached() -> TRUE"));
+		bCheatDetected = true;
+	}
+	if (IsRemoteDebuggerAttached())
+	{
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] IsRemoteDebuggerAttached() -> TRUE"));
+		bCheatDetected = true;
+	}
+	if (IsKernelDebuggerAttached())
+	{
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] IsKernelDebuggerAttached() -> TRUE"));
+		bCheatDetected = true;
+	}
+	if (DetectAnalysis()) // logging happens inside
+	{
+		bCheatDetected = true;
+	}
+
+	if (bCheatDetected)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[AntiCheat] CHEAT DETECTED - check the logs above for the exact reason"));
+
+#if PLATFORM_WINDOWS
+		MessageBoxA(NULL, "Cheater Detected!\n\nCheck the Unreal Output Log for details.", "Bomberman Anti-Cheat", MB_OK | MB_ICONERROR | MB_TOPMOST | MB_SYSTEMMODAL);
+#endif
+
 		// FPlatformMisc::RequestExit(true);
 	}
 }
