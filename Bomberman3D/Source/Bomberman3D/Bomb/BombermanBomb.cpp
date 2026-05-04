@@ -117,7 +117,7 @@ void ABombermanBomb::Explode()
 			UE_LOG(LogTemp, Warning, TEXT("Checking tile [%d, %d] = %d"), X, Y, (int32)Tile);
 
 			// FVector Center = FVector(Dir.X, Dir.Y, 50.f);
-			DrawDebugBox(GetWorld(), Grid->GetTileWorldPosition(X, Y), FVector(Grid->GetTileSize() * 0.25f), FColor::Purple, false, 2.f, 0, 2.f);
+			DrawDebugBox(GetWorld(), Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f), FVector(Grid->GetTileSize() * 0.25f), FColor::Purple, false, 2.f, 0, 2.f);
 
 			if (Tile == ETileContent::HardBlock)
 			{
@@ -130,7 +130,7 @@ void ABombermanBomb::Explode()
 
 				if (ExplosionVFX)
 				{
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y));
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f));
 				}
 
 				break;
@@ -149,7 +149,7 @@ void ABombermanBomb::Explode()
 
 				if (ExplosionVFX)
 				{
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y));
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f));
 				}
 			}
 		}

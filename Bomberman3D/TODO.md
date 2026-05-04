@@ -202,7 +202,6 @@
 - when i go to main menu, the game music still plays
 - when player dies, the whole stage/level is supposed to restart, not just respawning the player
   - bonus stage will just throw player to next stage
-- since last grid update, the grid is completely broken, some stuff is halfway down in it, some is not...
 - i'll definitely find more later
 
 ### Probably Fixed
