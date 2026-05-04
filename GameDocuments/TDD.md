@@ -182,9 +182,9 @@ Each enemy type is a separate C++ class inheriting from `AEnemyBase`. Behavior c
 | Pontant | Always chase, fastest                   | Medium - C++         | Done    |
 
 All enemies share these systems from `AEnemyBase`:
-- Corner rounding — nudges enemy toward tile center on the axis they're not moving on, prevents getting stuck on corners
-- Tile occupancy — before moving to a tile, checks if another enemy is already there via `IsTileOccupiedByEnemy()`
-- Health component — reusable `UBombermanHealthComponent`, notifies GameMode on death
+- Corner rounding - nudges enemy toward tile center on the axis they're not moving on, prevents getting stuck on corners
+- Tile occupancy - before moving to a tile, checks if another enemy is already there via `IsTileOccupiedByEnemy()`
+- Health component - reusable `UBombermanHealthComponent`, notifies GameMode on death
 
 <br><br>
 
@@ -241,7 +241,7 @@ Using UE5's built-in `USaveGame`. No password system.
 - Current score
 - Active upgrades struct
 
-Grid size is NOT saved — it's calculated from stage number on load, so it's always correct without storing it.
+Grid size is NOT saved - it's calculated from stage number on load, so it's always correct without storing it.
 
 Save happens on stage clear and on game over. Load happens via `UBombermanGameInstance::Init()` on game start, and explicitly on "Continue" from main menu.
 

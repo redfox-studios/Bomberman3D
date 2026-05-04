@@ -109,6 +109,22 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float RespawnInvincibilityDuration = 2.f;
 
+	// --- animation state (read by AnimBP) ---
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bIsPlacingBomb = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bIsDead = false;
+
+	// How long the place-bomb animation plays before clearing the flag
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float PlaceBombAnimDuration = 0.5f;
+
+	// How long the death animation plays before respawn/game-over logic fires
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float DeathAnimDuration = 1.5f;
+
   private:
 	void Move(const FInputActionValue& Value);
 	void PlaceBomb(const FInputActionValue& Value);
@@ -126,6 +142,8 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	void OnDeath();
 
 	FTimerHandle InvincibilityTimerHandle;
+	FTimerHandle PlaceBombAnimTimerHandle;
+	FTimerHandle DeathAnimTimerHandle;
 
 	TArray<ABombermanBomb*> ActiveBombs;
 };

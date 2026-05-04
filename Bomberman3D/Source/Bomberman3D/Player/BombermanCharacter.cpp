@@ -170,6 +170,13 @@ void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)
 	ActiveBombs.Add(Bomb);
 	Bomb->OnDestroyed.AddDynamic(this, &ABombermanCharacter::OnBombDestroyed);
 
+	// Trigger place-bomb animation
+	bIsPlacingBomb = true;
+	GetWorld()->GetTimerManager().SetTimer(PlaceBombAnimTimerHandle, [this]()
+										   { bIsPlacingBomb = false; },
+										   PlaceBombAnimDuration,
+										   false);
+
 	UE_LOG(LogTemp, Warning, TEXT("Bomb placed at [%d, %d]"), GX, GY);
 }
 
@@ -181,60 +188,83 @@ void ABombermanCharacter::OnBombDestroyed(AActor* DestroyedActor)
 
 void ABombermanCharacter::OnDeath()
 {
-	ABombermanPlayerState* PS = GetPlayerState<ABombermanPlayerState>();
-	if (!PS) return;
+	if (bIsDead) return;
+	bIsDead = true;
 
-	// decrement lives
-	PS->Lives--;
-
-	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+	// Freeze movement and input immediately
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-		if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
-		{
-			GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
-		}
+		DisableInput(PC);
 	}
-
-	// reset upgrades except bombup & fireup
-	// PS->Upgrades.BombUp = 0;
-	// PS->Upgrades.FireUp = 0;
-	PS->Upgrades.SpeedUp = 0;
-	PS->Upgrades.bRemoteControl = false;
-	PS->Upgrades.bWallPass = false;
-	PS->Upgrades.bBombPass = false;
-	PS->Upgrades.bFlamePass = false;
-	PS->Upgrades.bInvincible = false;
-	PS->Upgrades.FovUp = 0;
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
-	SetWallPass(false);
-	TargetFOV = BaseFOV;
-
-	UE_LOG(LogTemp, Warning, TEXT("Player died. Lives remaining: %d"), PS->Lives);
 
 	if (DeathSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 	}
 
-	if (PS->Lives <= 0)
+	// Wait for death animation, then handle respawn / game over
+	GetWorld()->GetTimerManager().SetTimer(DeathAnimTimerHandle, [this]()
 	{
-		if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+		ABombermanPlayerState* PS = GetPlayerState<ABombermanPlayerState>();
+		if (!PS) return;
+
+		// decrement lives
+		PS->Lives--;
+
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 		{
-			GM->OnGameOver();
+			if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
+			{
+				GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
+			}
 		}
-		return;
-	}
 
-	// Still has lives - reset and respawn
-	HealthComponent->ResetHealth();
-	SetActorLocation(Grid ? Grid->GetPlayerSpawnPosition() : FVector::ZeroVector);
+		// reset upgrades except bombup & fireup
+		// PS->Upgrades.BombUp = 0;
+		// PS->Upgrades.FireUp = 0;
+		PS->Upgrades.SpeedUp = 0;
+		PS->Upgrades.bRemoteControl = false;
+		PS->Upgrades.bWallPass = false;
+		PS->Upgrades.bBombPass = false;
+		PS->Upgrades.bFlamePass = false;
+		PS->Upgrades.bInvincible = false;
+		PS->Upgrades.FovUp = 0;
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+		SetWallPass(false);
+		TargetFOV = BaseFOV;
 
-	HealthComponent->bInvincible = true;
+		UE_LOG(LogTemp, Warning, TEXT("Player died. Lives remaining: %d"), PS->Lives);
 
-	GetWorld()->GetTimerManager().SetTimer(InvincibilityTimerHandle, [this]()
-										   { HealthComponent->bInvincible = false; },
-										   RespawnInvincibilityDuration,
-										   false);
+		if (PS->Lives <= 0)
+		{
+			if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				GM->OnGameOver();
+			}
+			return;
+		}
+
+		// Still has lives - restore movement, reset, respawn
+		bIsDead = false;
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			EnableInput(PC);
+		}
+
+		HealthComponent->ResetHealth();
+		SetActorLocation(Grid ? Grid->GetPlayerSpawnPosition() : FVector::ZeroVector);
+
+		HealthComponent->bInvincible = true;
+		GetWorld()->GetTimerManager().SetTimer(InvincibilityTimerHandle, [this]()
+												{ HealthComponent->bInvincible = false; },
+												RespawnInvincibilityDuration,
+												false);
+	},
+	DeathAnimDuration,
+	false);
 }
 
 FVector2D ABombermanCharacter::GetCurrentGridPosition() const

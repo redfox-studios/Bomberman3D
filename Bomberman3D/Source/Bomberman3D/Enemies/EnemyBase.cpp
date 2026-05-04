@@ -59,7 +59,7 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!Grid) return;
+	if (!Grid || bIsDead) return;
 
 	if (!bMovingToTile)
 	{
@@ -186,14 +186,25 @@ bool AEnemyBase::IsNextTileOccupied(FVector2D Dir) const
 
 void AEnemyBase::OnDeath()
 {
+	if (bIsDead) return;
+	bIsDead = true;
+
 	ReleaseReservation();
+
+	// Stop movement immediately so the death anim plays in place
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
 
 	if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		GM->OnEnemyDied(PointValue);
 	}
 
-	Destroy();
+	// Wait for death animation before destroying
+	GetWorld()->GetTimerManager().SetTimer(DeathAnimTimerHandle, [this]()
+										   { Destroy(); },
+										   DeathAnimDuration,
+										   false);
 }
 
 void AEnemyBase::OnCapsuleOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
