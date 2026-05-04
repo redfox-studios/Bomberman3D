@@ -163,6 +163,7 @@
   - [x] sound settings
   - [x] video settings
 - [x] Random game tips in main menu and pause menu
+- [ ] High score display in main menu
 
 ### Music (code, not assets)
 - [x] Background music persistent trough levels
