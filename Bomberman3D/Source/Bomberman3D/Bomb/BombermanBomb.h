@@ -74,6 +74,9 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	UFUNCTION()
 	void Detonate();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bomb")
+	void OnChainDetonated();
+
 	static void ResetExplosionSoundTimer() { LastExplosionSoundTime = -999.f; }
 
 	UPROPERTY(EditDefaultsOnly, Category = "Bomb")

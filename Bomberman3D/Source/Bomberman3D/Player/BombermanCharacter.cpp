@@ -80,7 +80,7 @@ void ABombermanCharacter::BeginPlay()
 				GetCharacterMovement()->MaxWalkSpeed = BaseSpeed + (PS->Upgrades.SpeedUp * SpeedUpIncrement);
 				SetWallPass(PS->Upgrades.bWallPass);
 
-				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * 10.f); // restore stacked FOV
+				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * FovUpAmount);
 			}
 			else
 			{
@@ -287,4 +287,5 @@ void ABombermanCharacter::SetWallPass(bool bEnabled)
 {
 	ECollisionResponse Response = bEnabled ? ECR_Ignore : ECR_Block;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_SoftBlock, Response);
+	GetCapsuleComponent()->UpdateOverlaps();
 }

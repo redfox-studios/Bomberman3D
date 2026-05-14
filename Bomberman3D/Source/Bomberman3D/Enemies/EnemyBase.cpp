@@ -67,6 +67,19 @@ void AEnemyBase::Tick(float DeltaTime)
 		return;
 	}
 
+	{
+		FVector2D TargetGridPos = Grid->GetGridPositionFromWorld(TargetWorldPos);
+		int32 TX = FMath::RoundToInt(TargetGridPos.X);
+		int32 TY = FMath::RoundToInt(TargetGridPos.Y);
+		if (Grid->GetTileContent(TX, TY) == ETileContent::Bomb)
+		{
+			ReleaseReservation();
+			bMovingToTile = false;
+			CurrentDirection = PickRandomUnblockedDirection();
+			return;
+		}
+	}
+
 	FVector Current = GetActorLocation();
 	FVector Dir = (TargetWorldPos - Current);
 	float DistRemaining = Dir.Size2D();
@@ -113,6 +126,11 @@ void AEnemyBase::StartMovingToNextTile()
 	}
 
 	FVector2D GridPos = Grid->GetGridPositionFromWorld(GetActorLocation());
+	int32 CX = FMath::RoundToInt(GridPos.X);
+	int32 CY = FMath::RoundToInt(GridPos.Y);
+	if (Grid->GetTileContent(CX, CY) == ETileContent::Bomb)
+		return;
+
 	int32 NX = FMath::RoundToInt(GridPos.X + CurrentDirection.X);
 	int32 NY = FMath::RoundToInt(GridPos.Y + CurrentDirection.Y);
 
@@ -209,7 +227,7 @@ void AEnemyBase::OnDeath()
 
 void AEnemyBase::OnCapsuleOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy overlap with: %s"), *OtherActor->GetName());
+	if (bIsDead) return;
 
 	if (!Cast<ABombermanCharacter>(OtherActor)) return;
 

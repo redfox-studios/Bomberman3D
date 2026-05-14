@@ -207,6 +207,7 @@ void ABombermanBomb::TriggerChainReaction(int32 X, int32 Y)
 		if (FMath::RoundToInt(OtherGridPos.X) == X && FMath::RoundToInt(OtherGridPos.Y) == Y)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found bomb actor, detonating"));
+			OtherBomb->OnChainDetonated();
 			OtherBomb->Detonate();
 			return;
 		}

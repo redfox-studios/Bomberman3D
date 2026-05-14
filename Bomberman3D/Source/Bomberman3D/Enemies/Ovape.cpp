@@ -38,3 +38,20 @@ void AOvape::OnTileReached()
 	// default random behavior
 	AEnemyBase::OnTileReached();
 }
+
+bool AOvape::IsDirectionBlocked(FVector2D Dir) const
+{
+	if (!Grid || Dir.IsZero()) return true;
+
+	FVector2D GridPos = Grid->GetGridPositionFromWorld(GetActorLocation());
+	int32 NX = FMath::RoundToInt(GridPos.X + Dir.X);
+	int32 NY = FMath::RoundToInt(GridPos.Y + Dir.Y);
+
+	if (!Grid->IsInBounds(NX, NY)) return true;
+
+	ETileContent Tile = Grid->GetTileContent(NX, NY);
+	if (Tile == ETileContent::HardBlock) return true;
+	if (Tile == ETileContent::Bomb) return true;
+
+	return false;
+}

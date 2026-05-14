@@ -68,7 +68,7 @@ class BOMBERMAN3D_API AEnemyBase : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	float DeathAnimDuration = 1.5f;
 
-  private:
+  protected:
 	// Tile-to-tile movement state
 	FVector TargetWorldPos = FVector::ZeroVector;
 	bool bMovingToTile = false;

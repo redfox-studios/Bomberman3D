@@ -109,6 +109,8 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 		break;
 	}
 
+	Player->OnUpgradePickedUp(UpgradeType);
+
 	if (PickupVFX)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PickupVFX, GetActorLocation());
