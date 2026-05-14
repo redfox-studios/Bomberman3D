@@ -81,6 +81,22 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 		return BombermanGameState && BombermanGameState->EnemiesRemaining <= 0;
 	}
 
+	bool GetIsCurrentStageBonus() const { return bCurrentStageIsBonus; }
+
+	int32 GetLastNonBonusStage() const
+	{
+		if (!StageConfigTable) return TotalStages;
+		TArray<FBombermanStageConfig*> AllRows;
+		StageConfigTable->GetAllRows<FBombermanStageConfig>(TEXT(""), AllRows);
+		int32 Last = 0;
+		for (int32 i = 0; i < AllRows.Num(); i++)
+		{
+			if (AllRows[i] && !AllRows[i]->bBonusStage)
+				Last = i + 1;
+		}
+		return Last;
+	}
+
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	float DiscordUpdateDelay = 0.2f;
 

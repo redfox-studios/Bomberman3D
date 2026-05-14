@@ -246,22 +246,20 @@ void ABombermanCharacter::OnDeath()
 			return;
 		}
 
-		// Still has lives - restore movement, reset, respawn
-		bIsDead = false;
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 		{
-			EnableInput(PC);
+			GI->Lives = PS->Lives;
+			GI->Upgrades = PS->Upgrades;
+			GI->Score = PS->GetScore();
+
+			ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode());
+			if (GM && GM->GetIsCurrentStageBonus())
+			{
+				GI->CurrentStage++;
+			}
 		}
 
-		HealthComponent->ResetHealth();
-		SetActorLocation(Grid ? Grid->GetPlayerSpawnPosition() : FVector::ZeroVector);
-
-		HealthComponent->bInvincible = true;
-		GetWorld()->GetTimerManager().SetTimer(InvincibilityTimerHandle, [this]()
-												{ HealthComponent->bInvincible = false; },
-												RespawnInvincibilityDuration,
-												false);
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()));
 	},
 	DeathAnimDuration,
 	false);

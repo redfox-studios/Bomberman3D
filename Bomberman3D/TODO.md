@@ -196,12 +196,6 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - TDD is still missing some parts (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- bonus stages should be additional and not replacing stages
-  - add last stage check, not hardcoding 50 (get this shit from DT)
-  - show bonus stage as BONUS in discord RPC
-- when i go to main menu, the game music still plays
-- when player dies, the whole stage/level is supposed to restart, not just respawning the player
-  - bonus stage will just throw player to next stage
 - i'll definitely find more later
 
 ### Probably Fixed

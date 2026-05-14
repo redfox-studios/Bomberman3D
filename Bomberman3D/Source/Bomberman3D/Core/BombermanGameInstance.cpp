@@ -243,3 +243,17 @@ void UBombermanGameInstance::SetMuteOnFocusLost(bool bEnabled)
 	bMuteOnFocusLost = bEnabled;
 	FApp::SetUnfocusedVolumeMultiplier(bEnabled ? 0.f : 1.f);
 }
+
+void UBombermanGameInstance::OnWorldChanged(UWorld* OldWorld, UWorld* NewWorld)
+{
+	Super::OnWorldChanged(OldWorld, NewWorld);
+
+	if (!NewWorld) return;
+
+	FString LevelName = NewWorld->GetName();
+	if (LevelName.Contains(MainMenuLevelName.ToString()))
+	{
+		if (MusicComponent)
+			MusicComponent->FadeOut(MusicFadeDuration, 0.f);
+	}
+}

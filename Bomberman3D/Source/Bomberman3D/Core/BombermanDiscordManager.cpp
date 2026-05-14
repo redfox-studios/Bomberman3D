@@ -39,7 +39,10 @@ void FBombermanDiscordManager::UpdatePresence(int32 Stage, int32 Lives, int32 Sc
 	}
 	else
 	{
-		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Stage %d / 50 - Score: %d", Stage, Score);
+		if (Stage < 0)
+		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Bonus Stage - Score: %d", Score);
+	else
+		FCStringAnsi::Snprintf(DetailsBuffer, sizeof(DetailsBuffer), "Stage %d - Score: %d", Stage, Score);
 		FCStringAnsi::Snprintf(StateBuffer, sizeof(StateBuffer), "%d Lives Remaining", Lives);
 	}
 

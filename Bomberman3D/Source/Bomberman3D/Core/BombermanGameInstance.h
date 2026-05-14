@@ -50,6 +50,7 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	virtual void Init() override;
 	virtual void OnStart() override;
 	virtual void Shutdown() override;
+	virtual void OnWorldChanged(UWorld* OldWorld, UWorld* NewWorld) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	UAudioComponent* MusicComponent = nullptr;
@@ -64,6 +65,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void StopMusicImmediate();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Music")
+	FName MainMenuLevelName = TEXT("MainMenu");
 
 	// --- settings ---
 
