@@ -81,6 +81,7 @@ void ABombermanCharacter::BeginPlay()
 				SetWallPass(PS->Upgrades.bWallPass);
 
 				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * FovUpAmount);
+				if (Camera) Camera->SetFieldOfView(TargetFOV);
 			}
 			else
 			{
@@ -103,6 +104,7 @@ void ABombermanCharacter::Tick(float DeltaTime)
 void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
+	if (Camera) Camera->SetFieldOfView(TargetFOV);
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

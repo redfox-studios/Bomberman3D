@@ -198,9 +198,7 @@
 - TDD is still missing some parts (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
 - when enemy is moving to a certain tile, and i place the bomb on that tile, the enemy just stops and doesnt move
 - wallpass doesnt work
-- fovup doesnt work
 - when bombs explode by chain reaction, the ignition sound and niagara is still playing
-- when enemy dies and the enemy death animation is playing, i can still get killed when running into him
 - ovape only moves forward or smth, his movement is kinda bugged idk
 - player doesnt know what upgrades he has, we need to add upgrade list to pause menu or smth, i honestly dont know. maybe some popup when picking up upgrade?
 - i'll definitely find more later
