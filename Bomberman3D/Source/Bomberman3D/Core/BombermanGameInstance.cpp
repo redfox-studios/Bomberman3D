@@ -145,6 +145,13 @@ void UBombermanGameInstance::SetSFXVolume(float Volume)
 		SFXSoundClass->Properties.Volume = SFXVolume;
 }
 
+void UBombermanGameInstance::SetUIVolume(float Volume)
+{
+	UIVolume = FMath::Clamp(Volume, 0.f, 1.f);
+	if (UISoundClass)
+		UISoundClass->Properties.Volume = UIVolume;
+}
+
 void UBombermanGameInstance::SetAmbienceVolume(float Volume)
 {
 	AmbienceVolume = FMath::Clamp(Volume, 0.f, 1.f);
