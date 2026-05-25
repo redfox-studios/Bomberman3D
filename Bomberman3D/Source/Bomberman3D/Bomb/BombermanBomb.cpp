@@ -20,6 +20,9 @@ ABombermanBomb::ABombermanBomb()
 	RootComponent = BombMesh;
 
 	BombMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+
+	FirePoint = CreateDefaultSubobject<USceneComponent>(TEXT("Fire Point")); //where the ignition niagara spawns
+	FirePoint->SetupAttachment(RootComponent);
 }
 
 void ABombermanBomb::BeginPlay()
@@ -27,6 +30,8 @@ void ABombermanBomb::BeginPlay()
 	Super::BeginPlay();
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), IgnitionVFX, FirePoint->GetComponentLocation());
 
 	GetWorld()->GetTimerManager().SetTimer(FuseTimerHandle, this, &ABombermanBomb::Detonate, FuseTimer, false);
 }

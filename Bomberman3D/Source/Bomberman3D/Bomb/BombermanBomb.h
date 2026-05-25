@@ -58,11 +58,17 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	UPROPERTY(VisibleAnywhere, Category = "Bomb")
 	UStaticMeshComponent* BombMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Fire Point (leave empty)")
+	USceneComponent* FirePoint;
+
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	ABombermanGrid* Grid;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	UNiagaraSystem* ExplosionVFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UNiagaraSystem* IgnitionVFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* ExplosionSound;
