@@ -185,6 +185,7 @@
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 - [x] Open/Closed Material variations for Doors
 - [ ] Bomb placement indicator
+- [ ] TimeUp upgrade
 
 ---
 
