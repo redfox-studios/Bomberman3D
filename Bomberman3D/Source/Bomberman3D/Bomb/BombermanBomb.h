@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "NiagaraSystem.h"
+#include "Components/AudioComponent.h"
 #include "BombermanBomb.generated.h"
 
 // Placed -> Armed -> Detonating -> Explosion -> Cleanup
@@ -73,6 +74,9 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* ExplosionSound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	USoundBase* PlaceBombSound;
+
 	ACharacter* OwnerCharacter = nullptr;
 
 	FTimerHandle FuseTimerHandle;
@@ -98,4 +102,5 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	bool bCollisionEnabled = false;
 	static float LastExplosionSoundTime;
 	UNiagaraComponent* IgnitionNiagara = nullptr;
+	UAudioComponent* IgnitionSound = nullptr;
 };

@@ -161,8 +161,6 @@ void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)
 	ABombermanBomb* Bomb = GetWorld()->SpawnActor<ABombermanBomb>(BombClass, WorldPos, FRotator::ZeroRotator);
 	if (!Bomb) return;
 
-	if (PlaceBombSound) UGameplayStatics::PlaySoundAtLocation(this, PlaceBombSound, GetActorLocation());
-
 	Bomb->OwnerCharacter = this;
 	if (PS) Bomb->BlastRadius = PS->GetBlastRadius();
 

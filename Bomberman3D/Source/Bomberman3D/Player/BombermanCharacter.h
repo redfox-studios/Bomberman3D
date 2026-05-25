@@ -100,9 +100,6 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	//USoundBase* WalkSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	USoundBase* PlaceBombSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* DeathSound;
 
 	// --- misc ---
