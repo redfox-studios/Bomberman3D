@@ -4,4 +4,4 @@
 
 #include "CoreMinimal.h"
 
-#define ECC_SoftBlock ECC_GameTraceChannel1 // check DefaultEngine.ini for more info nigga
+#define ECC_SoftBlock ECC_GameTraceChannel1 // see DefaultEngine.ini for channel mapping

@@ -50,6 +50,7 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	virtual void Init() override;
 	virtual void OnStart() override;
 	virtual void Shutdown() override;
+	virtual void OnWorldChanged(UWorld* OldWorld, UWorld* NewWorld) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	UAudioComponent* MusicComponent = nullptr;
@@ -64,6 +65,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void StopMusicImmediate();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Music")
+	FName MainMenuLevelName = TEXT("MainMenu");
 
 	// --- settings ---
 
@@ -80,6 +84,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 	USoundClass* SFXSoundClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	USoundClass* UISoundClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	USoundClass* AmbienceSoundClass;
 
 	UFUNCTION(BlueprintCallable)
@@ -87,6 +94,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UFUNCTION(BlueprintCallable)
 	void SetSFXVolume(float Volume);
+
+	UFUNCTION(BlueprintCallable)
+	void SetUIVolume(float Volume);
 
 	UFUNCTION(BlueprintCallable)
 	void SetAmbienceVolume(float Volume);
@@ -99,6 +109,9 @@ class BOMBERMAN3D_API UBombermanGameInstance : public UGameInstance
 
 	UPROPERTY(BlueprintReadWrite, Category = "Settings")
 	float SFXVolume = 1.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	float UIVolume = 1.f;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Settings")
 	float AmbienceVolume = 1.f;

@@ -20,6 +20,9 @@ ABombermanBomb::ABombermanBomb()
 	RootComponent = BombMesh;
 
 	BombMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+
+	FirePoint = CreateDefaultSubobject<USceneComponent>(TEXT("Fire Point")); //where the ignition niagara spawns
+	FirePoint->SetupAttachment(RootComponent);
 }
 
 void ABombermanBomb::BeginPlay()
@@ -27,6 +30,9 @@ void ABombermanBomb::BeginPlay()
 	Super::BeginPlay();
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
+
+	if (IgnitionVFX) IgnitionNiagara = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), IgnitionVFX, FirePoint->GetComponentLocation());
+	if (PlaceBombSound) IgnitionSound = UGameplayStatics::SpawnSoundAtLocation(this, PlaceBombSound, GetActorLocation(), FRotator::ZeroRotator);
 
 	GetWorld()->GetTimerManager().SetTimer(FuseTimerHandle, this, &ABombermanBomb::Detonate, FuseTimer, false);
 }
@@ -117,7 +123,7 @@ void ABombermanBomb::Explode()
 			UE_LOG(LogTemp, Warning, TEXT("Checking tile [%d, %d] = %d"), X, Y, (int32)Tile);
 
 			// FVector Center = FVector(Dir.X, Dir.Y, 50.f);
-			DrawDebugBox(GetWorld(), Grid->GetTileWorldPosition(X, Y), FVector(Grid->GetTileSize() * 0.25f), FColor::Purple, false, 2.f, 0, 2.f);
+			DrawDebugBox(GetWorld(), Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f), FVector(Grid->GetTileSize() * 0.25f), FColor::Purple, false, 2.f, 0, 2.f);
 
 			if (Tile == ETileContent::HardBlock)
 			{
@@ -130,7 +136,7 @@ void ABombermanBomb::Explode()
 
 				if (ExplosionVFX)
 				{
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y));
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f));
 				}
 
 				break;
@@ -149,13 +155,16 @@ void ABombermanBomb::Explode()
 
 				if (ExplosionVFX)
 				{
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y));
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionVFX, Grid->GetTileWorldPosition(X, Y) + FVector(0.f, 0.f, Grid->GetTileSize() * 0.5f));
 				}
 			}
 		}
 	}
 
+	//cleanup shi
 	CurrentState = EBombState::Cleanup;
+	if (IgnitionNiagara) IgnitionNiagara->DeactivateImmediate();
+	if (IgnitionSound) IgnitionSound->Stop();
 	Destroy();
 }
 
@@ -207,6 +216,7 @@ void ABombermanBomb::TriggerChainReaction(int32 X, int32 Y)
 		if (FMath::RoundToInt(OtherGridPos.X) == X && FMath::RoundToInt(OtherGridPos.Y) == Y)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found bomb actor, detonating"));
+			OtherBomb->OnChainDetonated();
 			OtherBomb->Detonate();
 			return;
 		}

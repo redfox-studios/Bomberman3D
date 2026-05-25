@@ -20,6 +20,9 @@ class BOMBERMAN3D_API UBombermanSaveSettings : public USaveGame
 	float SFXVolume = 1.f;
 
 	UPROPERTY()
+	float UIVolume = 1.f;
+
+	UPROPERTY()
 	float AmbienceVolume = 1.f;
 
 	UPROPERTY()

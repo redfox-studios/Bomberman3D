@@ -17,6 +17,7 @@ class BOMBERMAN3D_API AOvape : public AEnemyBase
 
   protected:
 	virtual void OnTileReached() override;
+	virtual bool IsDirectionBlocked(FVector2D Dir) const override;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	float ChaseChance = 0.1f; // 10% chance to chase player each tile

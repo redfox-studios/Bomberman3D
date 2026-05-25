@@ -129,7 +129,8 @@ void ABombermanGameMode::StartStage()
 			if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 			{
 				ABombermanPlayerState* PS = GetLocalPlayerState();
-				GI->DiscordManager.UpdatePresence(BombermanGameState->CurrentStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
+				int32 DiscordStage = bCurrentStageIsBonus ? -1 : BombermanGameState->CurrentStage;
+					GI->DiscordManager.UpdatePresence(DiscordStage, PS ? PS->Lives : 3, PS ? PS->GetCurrentScore() : 0, false);
 			}
 		}, DiscordUpdateDelay, false);
 
@@ -400,7 +401,7 @@ void ABombermanGameMode::StageClear()
 		break;
 	}
 
-	if (BombermanGameState->CurrentStage >= TotalStages)
+	if (StageConfigTable && BombermanGameState->CurrentStage >= GetLastNonBonusStage())
 	{
 		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 		{

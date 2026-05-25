@@ -6,6 +6,8 @@
 #include "Core/BombermanGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Enemies/EnemyBase.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 ABombermanGrid::ABombermanGrid() { PrimaryActorTick.bCanEverTick = true; }
 
@@ -140,7 +142,15 @@ void ABombermanGrid::GenerateSoftBlocks()
 			{
 				Data[X][Y] = ETileContent::SoftBlock;
 				UE_LOG(LogTemp, Log, TEXT("SoftBlock at [%d,%d]"), X, Y);
-				SpawnActorOnTile(X, Y, SoftBlockClass);
+
+				AActor* SpawnedBlock = SpawnActorOnTile(X, Y, SoftBlockClass);
+
+				//random rotation
+				if (SpawnedBlock)
+				{
+					const int32 RandomRotation = FMath::RandRange(0, 3) * 90;
+					SpawnedBlock->SetActorRotation(FRotator(0.f, RandomRotation, 0.f));
+				}
 			}
 		}
 	}
@@ -362,11 +372,15 @@ void ABombermanGrid::DestroyActorOnTile(int32 X, int32 Y)
 		TSubclassOf<AActor> UpgradeClass = UpgradeMap[X][Y];
 		UpgradeMap[X][Y] = nullptr;
 
-		FVector WorldPos = GetTileCenterWorldPosition(X, Y);
-		AActor* Upgrade = GetWorld()->SpawnActor<AActor>(UpgradeClass, WorldPos, FRotator::ZeroRotator);
+		FVector CenterWorldPos = GetTileCenterWorldPosition(X, Y);
+		AActor* Upgrade = GetWorld()->SpawnActor<AActor>(UpgradeClass, CenterWorldPos, FRotator::ZeroRotator);
 		if (Upgrade)
 		{
 			ActorMap[X][Y] = Upgrade;
+			if (RevealVFX)
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), RevealVFX, CenterWorldPos);
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Player/BombermanPlayerUpgrades.h"
+#include "NiagaraSystem.h"
 #include "BombermanGrid.generated.h"
 
 UENUM(BlueprintType)
@@ -172,6 +173,9 @@ class BOMBERMAN3D_API ABombermanGrid : public AActor
 	void ReserveTile(int32 X, int32 Y);
 	void ReleaseTile(int32 X, int32 Y);
 	bool IsTileReserved(int32 X, int32 Y) const;
+
+	UPROPERTY(EditAnywhere, Category = "VFX")
+	UNiagaraSystem* RevealVFX;
 
   private:
 	TSet<FIntPoint> ReservedTiles;

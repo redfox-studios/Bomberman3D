@@ -80,7 +80,8 @@ void ABombermanCharacter::BeginPlay()
 				GetCharacterMovement()->MaxWalkSpeed = BaseSpeed + (PS->Upgrades.SpeedUp * SpeedUpIncrement);
 				SetWallPass(PS->Upgrades.bWallPass);
 
-				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * 10.f); // restore stacked FOV
+				TargetFOV = BaseFOV + (PS->Upgrades.FovUp * FovUpAmount);
+				if (Camera) Camera->SetFieldOfView(TargetFOV);
 			}
 			else
 			{
@@ -103,6 +104,7 @@ void ABombermanCharacter::Tick(float DeltaTime)
 void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
+	if (Camera) Camera->SetFieldOfView(TargetFOV);
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -123,10 +125,10 @@ void ABombermanCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(FVector::ForwardVector, Input.Y);
 	AddMovementInput(FVector::RightVector, Input.X);
 
-	if (WalkSound && !GetCharacterMovement()->Velocity.IsZero())
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, WalkSound, GetActorLocation());
-	}
+	// if (WalkSound && !GetCharacterMovement()->Velocity.IsZero())
+	// {
+	//     UGameplayStatics::PlaySoundAtLocation(this, WalkSound, GetActorLocation());
+	// }
 }
 
 void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)
@@ -159,8 +161,6 @@ void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)
 	ABombermanBomb* Bomb = GetWorld()->SpawnActor<ABombermanBomb>(BombClass, WorldPos, FRotator::ZeroRotator);
 	if (!Bomb) return;
 
-	if (PlaceBombSound) UGameplayStatics::PlaySoundAtLocation(this, PlaceBombSound, GetActorLocation());
-
 	Bomb->OwnerCharacter = this;
 	if (PS) Bomb->BlastRadius = PS->GetBlastRadius();
 
@@ -169,6 +169,13 @@ void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)
 
 	ActiveBombs.Add(Bomb);
 	Bomb->OnDestroyed.AddDynamic(this, &ABombermanCharacter::OnBombDestroyed);
+
+	// Trigger place-bomb animation
+	bIsPlacingBomb = true;
+	GetWorld()->GetTimerManager().SetTimer(PlaceBombAnimTimerHandle, [this]()
+										   { bIsPlacingBomb = false; },
+										   PlaceBombAnimDuration,
+										   false);
 
 	UE_LOG(LogTemp, Warning, TEXT("Bomb placed at [%d, %d]"), GX, GY);
 }
@@ -181,60 +188,81 @@ void ABombermanCharacter::OnBombDestroyed(AActor* DestroyedActor)
 
 void ABombermanCharacter::OnDeath()
 {
-	ABombermanPlayerState* PS = GetPlayerState<ABombermanPlayerState>();
-	if (!PS) return;
+	if (bIsDead) return;
+	bIsDead = true;
 
-	// decrement lives
-	PS->Lives--;
-
-	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+	// Freeze movement and input immediately
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-		if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
-		{
-			GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
-		}
+		DisableInput(PC);
 	}
-
-	// reset upgrades except bombup & fireup
-	// PS->Upgrades.BombUp = 0;
-	// PS->Upgrades.FireUp = 0;
-	PS->Upgrades.SpeedUp = 0;
-	PS->Upgrades.bRemoteControl = false;
-	PS->Upgrades.bWallPass = false;
-	PS->Upgrades.bBombPass = false;
-	PS->Upgrades.bFlamePass = false;
-	PS->Upgrades.bInvincible = false;
-	PS->Upgrades.FovUp = 0;
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
-	SetWallPass(false);
-	TargetFOV = BaseFOV;
-
-	UE_LOG(LogTemp, Warning, TEXT("Player died. Lives remaining: %d"), PS->Lives);
 
 	if (DeathSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 	}
 
-	if (PS->Lives <= 0)
+	// Wait for death animation, then handle respawn / game over
+	GetWorld()->GetTimerManager().SetTimer(DeathAnimTimerHandle, [this]()
 	{
-		if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+		ABombermanPlayerState* PS = GetPlayerState<ABombermanPlayerState>();
+		if (!PS) return;
+
+		// decrement lives
+		PS->Lives--;
+
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 		{
-			GM->OnGameOver();
+			if (ABombermanGameState* GS = GetWorld()->GetGameState<ABombermanGameState>())
+			{
+				GI->DiscordManager.UpdatePresence(GS->CurrentStage, PS->Lives, PS->GetCurrentScore(), false);
+			}
 		}
-		return;
-	}
 
-	// Still has lives - reset and respawn
-	HealthComponent->ResetHealth();
-	SetActorLocation(Grid ? Grid->GetPlayerSpawnPosition() : FVector::ZeroVector);
+		// reset upgrades except bombup & fireup
+		// PS->Upgrades.BombUp = 0;
+		// PS->Upgrades.FireUp = 0;
+		PS->Upgrades.SpeedUp = 0;
+		PS->Upgrades.bRemoteControl = false;
+		PS->Upgrades.bWallPass = false;
+		PS->Upgrades.bBombPass = false;
+		PS->Upgrades.bFlamePass = false;
+		PS->Upgrades.bInvincible = false;
+		PS->Upgrades.FovUp = 0;
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
+		SetWallPass(false);
+		TargetFOV = BaseFOV;
 
-	HealthComponent->bInvincible = true;
+		UE_LOG(LogTemp, Warning, TEXT("Player died. Lives remaining: %d"), PS->Lives);
 
-	GetWorld()->GetTimerManager().SetTimer(InvincibilityTimerHandle, [this]()
-										   { HealthComponent->bInvincible = false; },
-										   RespawnInvincibilityDuration,
-										   false);
+		if (PS->Lives <= 0)
+		{
+			if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				GM->OnGameOver();
+			}
+			return;
+		}
+
+		if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
+		{
+			GI->Lives = PS->Lives;
+			GI->Upgrades = PS->Upgrades;
+			GI->Score = PS->GetScore();
+
+			ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode());
+			if (GM && GM->GetIsCurrentStageBonus())
+			{
+				GI->CurrentStage++;
+			}
+		}
+
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()));
+	},
+	DeathAnimDuration,
+	false);
 }
 
 FVector2D ABombermanCharacter::GetCurrentGridPosition() const
@@ -259,4 +287,5 @@ void ABombermanCharacter::SetWallPass(bool bEnabled)
 {
 	ECollisionResponse Response = bEnabled ? ECR_Ignore : ECR_Block;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_SoftBlock, Response);
+	GetCapsuleComponent()->UpdateOverlaps();
 }

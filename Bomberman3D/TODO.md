@@ -131,7 +131,7 @@
 
 ### VFX & Sound
 - [x] Explosion VFX support
-- [ ] Soft block destroy VFX (probably not gonna do this)
+- [x] Soft block destroy VFX
 - [x] Upgrade pickup VFX support
 - [x] Background music
   - [x] Background music in game
@@ -139,7 +139,7 @@
   - [x] Background music fade when switching between different ones
 - [x] SFX support (bomb place, explosion, pickup, death, enter door)
   - [x] Nearby door sound
-- [ ] Actual VFX/SFX assets
+- [x] Actual VFX/SFX assets
 - [x] Entering portal in the final stage should have a different sound
 
 ---
@@ -163,6 +163,7 @@
   - [x] sound settings
   - [x] video settings
 - [x] Random game tips in main menu and pause menu
+- [ ] High score display in main menu
 
 ### Music (code, not assets)
 - [x] Background music persistent trough levels
@@ -183,6 +184,8 @@
   - [ ] Full Multiplayer bugfix pass
 - [ ] Optimization - currently the game build has ~300mb which is pretty small (and good) for UE game but im pretty sure we can lower this
 - [x] Open/Closed Material variations for Doors
+- [ ] Bomb placement indicator
+- [ ] TimeUp upgrade
 
 ---
 
@@ -195,13 +198,9 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - TDD is still missing some parts (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- bonus stages should be additional and not replacing stages
-  - add last stage check, not hardcoding 50 (get this shit from DT)
-  - show bonus stage as BONUS in discord RPC
-- when i go to main menu, the game music still plays
-- when player dies, the whole stage/level is supposed to restart, not just respawning the player
-  - bonus stage will just throw player to next stage
-- since last grid update, the grid is completely broken, some stuff is halfway down in it, some is not...
+- wallpass doesnt work
+- ovape only moves forward or smth, his movement is kinda bugged idk
+- player doesnt know what upgrades he has, we need to add upgrade list to pause menu or smth, i honestly dont know. maybe some popup when picking up upgrade?
 - i'll definitely find more later
 
 ### Probably Fixed

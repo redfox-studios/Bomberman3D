@@ -4,4 +4,4 @@
 
 // TODO:
 // - move SetStage from gameinstance here
-// - create commands to set lives, score, and dump GObjects, GWorld and GNames
+// - create commands to set lives, score, and dump GObjects, GWorld and GNames for fun

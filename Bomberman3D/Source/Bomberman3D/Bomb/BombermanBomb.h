@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "NiagaraSystem.h"
+#include "Components/AudioComponent.h"
 #include "BombermanBomb.generated.h"
 
 // Placed -> Armed -> Detonating -> Explosion -> Cleanup
@@ -58,14 +59,23 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	UPROPERTY(VisibleAnywhere, Category = "Bomb")
 	UStaticMeshComponent* BombMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Fire Point (leave empty)")
+	USceneComponent* FirePoint;
+
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	ABombermanGrid* Grid;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	UNiagaraSystem* ExplosionVFX;
 
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UNiagaraSystem* IgnitionVFX;
+
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* ExplosionSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	USoundBase* PlaceBombSound;
 
 	ACharacter* OwnerCharacter = nullptr;
 
@@ -73,6 +83,9 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 
 	UFUNCTION()
 	void Detonate();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bomb")
+	void OnChainDetonated();
 
 	static void ResetExplosionSoundTimer() { LastExplosionSoundTime = -999.f; }
 
@@ -88,4 +101,6 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	void DamageActorsOnTile(int32 X, int32 Y);
 	bool bCollisionEnabled = false;
 	static float LastExplosionSoundTime;
+	UNiagaraComponent* IgnitionNiagara = nullptr;
+	UAudioComponent* IgnitionSound = nullptr;
 };

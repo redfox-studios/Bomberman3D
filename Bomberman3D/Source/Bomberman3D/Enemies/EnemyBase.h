@@ -59,7 +59,16 @@ class BOMBERMAN3D_API AEnemyBase : public ACharacter
 	UPROPERTY(EditAnywhere, Category = "AI")
 	bool bCanPassThroughSoftBlocks = false;
 
-  private:
+	// --- animation state (read by AnimBP) ---
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bIsDead = false;
+
+	// How long the death animation plays before the actor is destroyed
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float DeathAnimDuration = 1.5f;
+
+  protected:
 	// Tile-to-tile movement state
 	FVector TargetWorldPos = FVector::ZeroVector;
 	bool bMovingToTile = false;
@@ -71,4 +80,6 @@ class BOMBERMAN3D_API AEnemyBase : public ACharacter
 
 	UFUNCTION()
 	void OnCapsuleOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	FTimerHandle DeathAnimTimerHandle;
 };

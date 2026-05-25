@@ -14,6 +14,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "Bomb/BombermanBomb.h"
+#include "Upgrades/BombermanUpgrade.h"
 #include "Components/BombermanHealthComponent.h"
 
 #include "BombermanCharacter.generated.h"
@@ -39,6 +40,9 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 
 	void SetWallPass(bool bEnabled);
 	void AddFovUp(float Amount);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Upgrade")
+	void OnUpgradePickedUp(EUpgradeType UpgradeType);
 
 	// --- input actions ---
 
@@ -92,11 +96,8 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	float GetSpeedUpIncrement() const { return SpeedUpIncrement; }
 
 	// --- sfx ---
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	USoundBase* WalkSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	USoundBase* PlaceBombSound;
+	//UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	//USoundBase* WalkSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* DeathSound;
@@ -108,6 +109,25 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float RespawnInvincibilityDuration = 2.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+	float FovUpAmount = 10.f;
+
+	// --- animation state (read by AnimBP) ---
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bIsPlacingBomb = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bIsDead = false;
+
+	// How long the place-bomb animation plays before clearing the flag
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float PlaceBombAnimDuration = 0.5f;
+
+	// How long the death animation plays before respawn/game-over logic fires
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	float DeathAnimDuration = 1.5f;
 
   private:
 	void Move(const FInputActionValue& Value);
@@ -126,6 +146,8 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	void OnDeath();
 
 	FTimerHandle InvincibilityTimerHandle;
+	FTimerHandle PlaceBombAnimTimerHandle;
+	FTimerHandle DeathAnimTimerHandle;
 
 	TArray<ABombermanBomb*> ActiveBombs;
 };
