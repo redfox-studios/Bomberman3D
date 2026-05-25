@@ -125,10 +125,10 @@ void ABombermanCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(FVector::ForwardVector, Input.Y);
 	AddMovementInput(FVector::RightVector, Input.X);
 
-	if (WalkSound && !GetCharacterMovement()->Velocity.IsZero())
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, WalkSound, GetActorLocation());
-	}
+	// if (WalkSound && !GetCharacterMovement()->Velocity.IsZero())
+	// {
+	//     UGameplayStatics::PlaySoundAtLocation(this, WalkSound, GetActorLocation());
+	// }
 }
 
 void ABombermanCharacter::PlaceBomb(const FInputActionValue& Value)

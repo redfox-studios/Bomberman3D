@@ -96,8 +96,8 @@ class BOMBERMAN3D_API ABombermanCharacter : public ACharacter
 	float GetSpeedUpIncrement() const { return SpeedUpIncrement; }
 
 	// --- sfx ---
-	UPROPERTY(EditDefaultsOnly, Category = "SFX")
-	USoundBase* WalkSound;
+	//UPROPERTY(EditDefaultsOnly, Category = "SFX")
+	//USoundBase* WalkSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SFX")
 	USoundBase* PlaceBombSound;
