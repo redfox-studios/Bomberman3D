@@ -31,7 +31,7 @@ void ABombermanBomb::BeginPlay()
 
 	Grid = Cast<ABombermanGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ABombermanGrid::StaticClass()));
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), IgnitionVFX, FirePoint->GetComponentLocation());
+	IgnitionNiagara = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), IgnitionVFX, FirePoint->GetComponentLocation());
 
 	GetWorld()->GetTimerManager().SetTimer(FuseTimerHandle, this, &ABombermanBomb::Detonate, FuseTimer, false);
 }
@@ -160,7 +160,9 @@ void ABombermanBomb::Explode()
 		}
 	}
 
+	//cleanup shi
 	CurrentState = EBombState::Cleanup;
+	IgnitionNiagara->DeactivateImmediate();
 	Destroy();
 }
 

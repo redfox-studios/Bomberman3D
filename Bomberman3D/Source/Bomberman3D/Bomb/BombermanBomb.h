@@ -97,4 +97,5 @@ class BOMBERMAN3D_API ABombermanBomb : public AActor
 	void DamageActorsOnTile(int32 X, int32 Y);
 	bool bCollisionEnabled = false;
 	static float LastExplosionSoundTime;
+	UNiagaraComponent* IgnitionNiagara = nullptr;
 };
