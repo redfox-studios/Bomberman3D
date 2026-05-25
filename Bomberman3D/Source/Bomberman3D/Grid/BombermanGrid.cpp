@@ -142,7 +142,15 @@ void ABombermanGrid::GenerateSoftBlocks()
 			{
 				Data[X][Y] = ETileContent::SoftBlock;
 				UE_LOG(LogTemp, Log, TEXT("SoftBlock at [%d,%d]"), X, Y);
-				SpawnActorOnTile(X, Y, SoftBlockClass);
+
+				AActor* SpawnedBlock = SpawnActorOnTile(X, Y, SoftBlockClass);
+
+				//random rotation
+				if (SpawnedBlock)
+				{
+					const int32 RandomRotation = FMath::RandRange(0, 3) * 90;
+					SpawnedBlock->SetActorRotation(FRotator(0.f, RandomRotation, 0.f));
+				}
 			}
 		}
 	}
