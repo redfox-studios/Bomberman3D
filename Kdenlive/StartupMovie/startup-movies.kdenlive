@@ -289,29 +289,6 @@
   <property name="meta.media.height">2160</property>
   <property name="kdenlive:monitorPosition">120</property>
  </producer>
- <producer id="producer2" in="00:00:00.000" out="00:00:04.983">
-  <property name="length">00:00:05.000</property>
-  <property name="eof">pause</property>
-  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/Moonforge-Logo-Black-Text.png</property>
-  <property name="ttl">25</property>
-  <property name="aspect_ratio">1</property>
-  <property name="meta.media.progressive">1</property>
-  <property name="seekable">1</property>
-  <property name="format">1</property>
-  <property name="meta.media.width">2228</property>
-  <property name="meta.media.height">2287</property>
-  <property name="mlt_service">qimage</property>
-  <property name="kdenlive:duration">00:00:05:00</property>
-  <property name="xml">was here</property>
-  <property name="kdenlive:folderid">16</property>
-  <property name="kdenlive:id">12</property>
-  <property name="kdenlive:control_uuid">{6fb36528-8db5-4c36-b167-a06a5a0baec1}</property>
-  <property name="kdenlive:clip_type">2</property>
-  <property name="kdenlive:file_size">1006503</property>
-  <property name="kdenlive:file_hash">73a3db6996090b436e56937e85533d75</property>
-  <property name="kdenlive:monitorPosition">0</property>
-  <property name="kdenlive:kextractor">1</property>
- </producer>
  <producer id="producer1" in="00:00:00.000" out="00:00:04.983">
   <property name="length">300</property>
   <property name="eof">pause</property>
@@ -323,23 +300,23 @@
   <property name="kdenlive:duration">00:00:05:00</property>
   <property name="kdenlive:clipname">Moonforge Studios</property>
   <property name="xmldata">&lt;kdenlivetitle LC_NUMERIC="C" duration="300" height="2160" out="299" width="3840">
- &lt;item type="QGraphicsPixmapItem" z-index="3">
-  &lt;position x="1529" y="441">
-   &lt;transform>0.351073,0,0,0,0.351073,0,0,0,1&lt;/transform>
+ &lt;item type="QGraphicsPixmapItem" z-index="5">
+  &lt;position x="1204" y="963">
+   &lt;transform>0.631632,0,0,0,0.631632,0,0,0,1&lt;/transform>
   &lt;/position>
-  &lt;content url="C:/git-repos/Bomberman3D/Kdenlive/Assets/Moonforge-Logo-Black-Text.png"/>
+  &lt;content url="C:/git-repos/Bomberman3D/Kdenlive/Assets/moonforge-label.png"/>
+ &lt;/item>
+ &lt;item type="QGraphicsPixmapItem" z-index="4">
+  &lt;position x="1353" y="437">
+   &lt;transform zoom="50">0.5,0,0,0,0.5,0,0,0,1&lt;/transform>
+  &lt;/position>
+  &lt;content url="C:/git-repos/Bomberman3D/Kdenlive/Assets/moonforge-logo.png"/>
  &lt;/item>
  &lt;item type="QGraphicsTextItem" z-index="2">
   &lt;position x="1136" y="1894">
    &lt;transform>1,0,0,0,1,0,0,0,1&lt;/transform>
   &lt;/position>
   &lt;content alignment="1" box-height="49" box-width="1565" font="Montserrat" font-color="200,200,200,255" font-italic="0" font-pixel-size="40" font-underline="0" font-weight="400" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Copyright (c) 2026, Moonforge Studios. Asset Ripping and Missuse is strictly prohibited.&lt;/content>
- &lt;/item>
- &lt;item type="QGraphicsTextItem" z-index="0">
-  &lt;position x="1190" y="1284">
-   &lt;transform>1,0,0,0,1,0,0,0,1&lt;/transform>
-  &lt;/position>
-  &lt;content alignment="1" box-height="279" box-width="1457" font="Segoe Print" font-color="255,255,255,255" font-italic="0" font-outline="0" font-outline-color="0,0,0,255" font-pixel-size="160" font-underline="0" font-weight="700" kdenlive-axis-x-inverted="1" letter-spacing="-2" line-spacing="0" shadow="0;#64000000;3;3;3" tab-width="80" typewriter="0;2;1;0;0">Moonforge Studios&lt;/content>
  &lt;/item>
  &lt;startviewport rect="0,0,3840,2160"/>
  &lt;endviewport rect="0,0,3840,2160"/>
@@ -453,6 +430,70 @@
   <property name="meta.media.width">3840</property>
   <property name="meta.media.height">2160</property>
  </producer>
+ <chain id="chain12" out="00:00:07.967">
+  <property name="length">479</property>
+  <property name="eof">pause</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/CWBUM6t4XtDjL9BAVcbh.mp4</property>
+  <property name="mlt_service">avformat-novalidate</property>
+  <property name="meta.media.nb_streams">2</property>
+  <property name="meta.media.0.stream.type">video</property>
+  <property name="meta.media.0.stream.frame_rate">60</property>
+  <property name="meta.media.0.stream.sample_aspect_ratio">1</property>
+  <property name="meta.media.0.codec.width">1920</property>
+  <property name="meta.media.0.codec.height">1080</property>
+  <property name="meta.media.0.codec.rotate">0</property>
+  <property name="meta.media.0.codec.pix_fmt">yuv420p</property>
+  <property name="meta.media.0.codec.sample_aspect_ratio">1</property>
+  <property name="meta.media.0.codec.colorspace">709</property>
+  <property name="meta.media.0.codec.name">h264</property>
+  <property name="meta.media.0.codec.long_name">H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10</property>
+  <property name="meta.media.0.codec.bit_rate">1836758</property>
+  <property name="meta.attr.0.stream.language.markup">eng</property>
+  <property name="meta.attr.0.stream.handler_name.markup">Mainconcept Video Media Handler</property>
+  <property name="meta.attr.0.stream.vendor_id.markup">[0][0][0][0]</property>
+  <property name="meta.attr.0.stream.encoder.markup">Lavc62.11.100 libx264</property>
+  <property name="meta.media.1.stream.type">audio</property>
+  <property name="meta.media.1.codec.sample_fmt">fltp</property>
+  <property name="meta.media.1.codec.sample_rate">48000</property>
+  <property name="meta.media.1.codec.channels">2</property>
+  <property name="meta.media.1.codec.layout">stereo</property>
+  <property name="meta.media.1.codec.name">aac</property>
+  <property name="meta.media.1.codec.long_name">AAC (Advanced Audio Coding)</property>
+  <property name="meta.media.1.codec.bit_rate">130527</property>
+  <property name="meta.attr.1.stream.language.markup">eng</property>
+  <property name="meta.attr.1.stream.handler_name.markup">#Mainconcept MP4 Sound Media Handler</property>
+  <property name="meta.attr.1.stream.vendor_id.markup">[0][0][0][0]</property>
+  <property name="meta.attr.major_brand.markup">isom</property>
+  <property name="meta.attr.minor_version.markup">512</property>
+  <property name="meta.attr.compatible_brands.markup">isomiso2avc1mp41</property>
+  <property name="meta.attr.encoder.markup">Lavf62.3.100</property>
+  <property name="seekable">1</property>
+  <property name="meta.media.sample_aspect_num">1</property>
+  <property name="meta.media.sample_aspect_den">1</property>
+  <property name="audio_index">1</property>
+  <property name="video_index">0</property>
+  <property name="vstream">0</property>
+  <property name="meta.media.frame_rate_num">60</property>
+  <property name="meta.media.frame_rate_den">1</property>
+  <property name="meta.media.colorspace">709</property>
+  <property name="meta.media.color_trc">2</property>
+  <property name="meta.media.has_b_frames">0</property>
+  <property name="meta.media.width">1920</property>
+  <property name="meta.media.height">1080</property>
+  <property name="meta.media.aspect_ratio">1</property>
+  <property name="meta.media.color_range">mpeg</property>
+  <property name="astream">0</property>
+  <property name="meta.media.top_field_first">0</property>
+  <property name="meta.media.progressive">1</property>
+  <property name="kdenlive:folderid">16</property>
+  <property name="kdenlive:id">20</property>
+  <property name="kdenlive:control_uuid">{d92779ea-ca77-4223-9727-7cf3dfcd3a6b}</property>
+  <property name="mute_on_pause">0</property>
+  <property name="kdenlive:clip_type">0</property>
+  <property name="kdenlive:file_size">1969989</property>
+  <property name="kdenlive:file_hash">a900cdaadcc80e4285cf71f056373128</property>
+  <property name="kdenlive:kextractor">1</property>
+ </chain>
  <producer id="producer0" in="00:00:00.000" out="00:05:16.000">
   <property name="length">2147483647</property>
   <property name="eof">continue</property>
@@ -892,7 +933,6 @@
   <blank length="00:00:00.583"/>
   <entry in="00:00:00.000" out="00:00:06.217" producer="chain10">
    <property name="kdenlive:id">20</property>
-   <property name="kdenlive:activeeffect">0</property>
    <filter id="filter12" out="00:00:00.317">
     <property name="window">75</property>
     <property name="max_gain">20dB</property>
@@ -918,9 +958,9 @@
  </playlist>
  <tractor id="tractor1" in="00:00:00.000" out="00:00:14.950">
   <property name="kdenlive:audio_track">1</property>
-  <property name="kdenlive:trackheight">29</property>
+  <property name="kdenlive:trackheight">48</property>
   <property name="kdenlive:timeline_active">1</property>
-  <property name="kdenlive:collapsed">28</property>
+  <property name="kdenlive:collapsed">0</property>
   <property name="kdenlive:thumbs_format"/>
   <property name="kdenlive:audio_rec"/>
   <track hide="video" producer="playlist2"/>
@@ -1063,7 +1103,6 @@
   <blank length="00:00:00.583"/>
   <entry in="00:00:00.000" out="00:00:06.217" producer="chain11">
    <property name="kdenlive:id">20</property>
-   <property name="kdenlive:activeeffect">0</property>
    <filter id="filter21" out="00:00:00.800">
     <property name="start">1</property>
     <property name="level">1</property>
@@ -1085,9 +1124,9 @@
  </playlist>
  <playlist id="playlist5"/>
  <tractor id="tractor2" in="00:00:00.000" out="00:00:15.983">
-  <property name="kdenlive:trackheight">31</property>
+  <property name="kdenlive:trackheight">46</property>
   <property name="kdenlive:timeline_active">1</property>
-  <property name="kdenlive:collapsed">28</property>
+  <property name="kdenlive:collapsed">0</property>
   <property name="kdenlive:thumbs_format"/>
   <property name="kdenlive:audio_rec"/>
   <track hide="audio" producer="playlist4"/>
@@ -1136,7 +1175,7 @@
 </property>
   <property name="kdenlive:sequenceproperties.hasAudio">1</property>
   <property name="kdenlive:sequenceproperties.hasVideo">1</property>
-  <property name="kdenlive:sequenceproperties.position">959</property>
+  <property name="kdenlive:sequenceproperties.position">390</property>
   <property name="kdenlive:sequenceproperties.scrollPos">0</property>
   <property name="kdenlive:sequenceproperties.subtitlesList">[
     {
@@ -1152,7 +1191,7 @@
   <property name="kdenlive:sequenceproperties.videoTarget">2</property>
   <property name="kdenlive:sequenceproperties.zonein">0</property>
   <property name="kdenlive:sequenceproperties.zoneout">960</property>
-  <property name="kdenlive:sequenceproperties.zoom">6</property>
+  <property name="kdenlive:sequenceproperties.zoom">5</property>
   <property name="kdenlive:sequenceproperties.groups">[
     {
         "children": [
@@ -1237,70 +1276,54 @@
    <property name="disable">1</property>
   </filter>
  </tractor>
- <chain id="chain12" out="00:00:07.967">
-  <property name="length">479</property>
+ <producer id="producer2" in="00:00:00.000" out="00:00:04.983">
+  <property name="length">00:00:05.000</property>
   <property name="eof">pause</property>
-  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/CWBUM6t4XtDjL9BAVcbh.mp4</property>
-  <property name="mlt_service">avformat-novalidate</property>
-  <property name="meta.media.nb_streams">2</property>
-  <property name="meta.media.0.stream.type">video</property>
-  <property name="meta.media.0.stream.frame_rate">60</property>
-  <property name="meta.media.0.stream.sample_aspect_ratio">1</property>
-  <property name="meta.media.0.codec.width">1920</property>
-  <property name="meta.media.0.codec.height">1080</property>
-  <property name="meta.media.0.codec.rotate">0</property>
-  <property name="meta.media.0.codec.pix_fmt">yuv420p</property>
-  <property name="meta.media.0.codec.sample_aspect_ratio">1</property>
-  <property name="meta.media.0.codec.colorspace">709</property>
-  <property name="meta.media.0.codec.name">h264</property>
-  <property name="meta.media.0.codec.long_name">H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10</property>
-  <property name="meta.media.0.codec.bit_rate">1836758</property>
-  <property name="meta.attr.0.stream.language.markup">eng</property>
-  <property name="meta.attr.0.stream.handler_name.markup">Mainconcept Video Media Handler</property>
-  <property name="meta.attr.0.stream.vendor_id.markup">[0][0][0][0]</property>
-  <property name="meta.attr.0.stream.encoder.markup">Lavc62.11.100 libx264</property>
-  <property name="meta.media.1.stream.type">audio</property>
-  <property name="meta.media.1.codec.sample_fmt">fltp</property>
-  <property name="meta.media.1.codec.sample_rate">48000</property>
-  <property name="meta.media.1.codec.channels">2</property>
-  <property name="meta.media.1.codec.layout">stereo</property>
-  <property name="meta.media.1.codec.name">aac</property>
-  <property name="meta.media.1.codec.long_name">AAC (Advanced Audio Coding)</property>
-  <property name="meta.media.1.codec.bit_rate">130527</property>
-  <property name="meta.attr.1.stream.language.markup">eng</property>
-  <property name="meta.attr.1.stream.handler_name.markup">#Mainconcept MP4 Sound Media Handler</property>
-  <property name="meta.attr.1.stream.vendor_id.markup">[0][0][0][0]</property>
-  <property name="meta.attr.major_brand.markup">isom</property>
-  <property name="meta.attr.minor_version.markup">512</property>
-  <property name="meta.attr.compatible_brands.markup">isomiso2avc1mp41</property>
-  <property name="meta.attr.encoder.markup">Lavf62.3.100</property>
-  <property name="seekable">1</property>
-  <property name="meta.media.sample_aspect_num">1</property>
-  <property name="meta.media.sample_aspect_den">1</property>
-  <property name="audio_index">1</property>
-  <property name="video_index">0</property>
-  <property name="vstream">0</property>
-  <property name="meta.media.frame_rate_num">60</property>
-  <property name="meta.media.frame_rate_den">1</property>
-  <property name="meta.media.colorspace">709</property>
-  <property name="meta.media.color_trc">2</property>
-  <property name="meta.media.has_b_frames">0</property>
-  <property name="meta.media.width">1920</property>
-  <property name="meta.media.height">1080</property>
-  <property name="meta.media.aspect_ratio">1</property>
-  <property name="meta.media.color_range">mpeg</property>
-  <property name="astream">0</property>
-  <property name="meta.media.top_field_first">0</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/moonforge-label.png</property>
+  <property name="ttl">25</property>
+  <property name="aspect_ratio">1</property>
   <property name="meta.media.progressive">1</property>
+  <property name="seekable">1</property>
+  <property name="format">2</property>
+  <property name="meta.media.width">2266</property>
+  <property name="meta.media.height">1488</property>
+  <property name="mlt_service">qimage</property>
+  <property name="kdenlive:duration">00:00:05:00</property>
+  <property name="xml">was here</property>
   <property name="kdenlive:folderid">16</property>
-  <property name="kdenlive:id">20</property>
-  <property name="kdenlive:control_uuid">{d92779ea-ca77-4223-9727-7cf3dfcd3a6b}</property>
-  <property name="mute_on_pause">0</property>
-  <property name="kdenlive:clip_type">0</property>
-  <property name="kdenlive:file_size">1969989</property>
-  <property name="kdenlive:file_hash">a900cdaadcc80e4285cf71f056373128</property>
+  <property name="kdenlive:id">21</property>
+  <property name="kdenlive:control_uuid">{998e9056-4a53-49d2-bfe7-e273e7773247}</property>
+  <property name="kdenlive:clip_type">2</property>
+  <property name="kdenlive:file_size">213525</property>
+  <property name="kdenlive:file_hash">4074c43a3144d62df86571b167984472</property>
   <property name="kdenlive:kextractor">1</property>
- </chain>
+  <property name="kdenlive:meta.extractor.Title">Untitled Artwork</property>
+  <property name="kdenlive:monitorPosition">0</property>
+ </producer>
+ <producer id="producer9" in="00:00:00.000" out="00:00:04.983">
+  <property name="length">00:00:05.000</property>
+  <property name="eof">pause</property>
+  <property name="resource">C:/git-repos/Bomberman3D/Kdenlive/Assets/moonforge-logo.png</property>
+  <property name="ttl">25</property>
+  <property name="aspect_ratio">1</property>
+  <property name="meta.media.progressive">1</property>
+  <property name="seekable">1</property>
+  <property name="format">2</property>
+  <property name="meta.media.width">2266</property>
+  <property name="meta.media.height">1488</property>
+  <property name="mlt_service">qimage</property>
+  <property name="kdenlive:duration">00:00:05:00</property>
+  <property name="xml">was here</property>
+  <property name="kdenlive:folderid">16</property>
+  <property name="kdenlive:id">22</property>
+  <property name="kdenlive:control_uuid">{880ecdcb-2b5a-4f98-83b1-d42ce2e4a117}</property>
+  <property name="kdenlive:clip_type">2</property>
+  <property name="kdenlive:file_size">138185</property>
+  <property name="kdenlive:file_hash">86bd525771ec98dcb1b79a426b756a29</property>
+  <property name="kdenlive:kextractor">1</property>
+  <property name="kdenlive:meta.extractor.Title">Untitled Artwork</property>
+  <property name="kdenlive:monitorPosition">0</property>
+ </producer>
  <playlist id="main_bin">
   <property name="kdenlive:folder.-1.2">Sequences</property>
   <property name="kdenlive:folder.-1.15">Audio</property>
@@ -1397,14 +1420,14 @@
   <property name="kdenlive:docproperties.rendertwopass">0</property>
   <property name="kdenlive:docproperties.renderurl">C:/git-repos/Bomberman3D/Bomberman3D/Content/Movies/StartupMovie.mp4</property>
   <property name="kdenlive:docproperties.seekOffset">7500</property>
-  <property name="kdenlive:docproperties.sessionid">{9a7bc5ee-6a96-4f51-8d4a-0f9b929f1625}</property>
+  <property name="kdenlive:docproperties.sessionid">{d0ed911a-52bf-4c24-86b9-9559cbe7c4e1}</property>
   <property name="kdenlive:docproperties.uuid">{223177bf-3f8e-46bd-b61a-a448c3b37815}</property>
   <property name="kdenlive:docproperties.version">1.1</property>
   <property name="kdenlive:docmetadata.meta.attr.author.markup">Michal Flaška</property>
   <property name="kdenlive:docmetadata.meta.attr.copyright.markup">Michal Flaška &amp; RedFox Studios</property>
   <property name="kdenlive:docmetadata.meta.attr.title.markup">Bomberman3D - UE Startup Movie</property>
   <property name="kdenlive:docmetadata.meta.attr.year.markup">2026</property>
-  <property name="kdenlive:expandedFolders">16</property>
+  <property name="kdenlive:expandedFolders">17;16</property>
   <property name="kdenlive:binZoom">4</property>
   <property name="kdenlive:extraBins">project_bin:-1:0</property>
   <property name="kdenlive:documentnotes"/>
@@ -1418,13 +1441,14 @@
   <entry in="00:00:00.000" out="00:00:07.367" producer="chain8"/>
   <entry in="00:00:00.000" out="00:01:59.983" producer="chain5"/>
   <entry in="00:00:00.000" out="00:00:04.983" producer="producer5"/>
-  <entry in="00:00:00.000" out="00:00:04.983" producer="producer2"/>
   <entry in="00:00:00.000" out="00:00:04.983" producer="producer1"/>
   <entry in="00:00:00.000" out="00:00:07.850" producer="chain6"/>
   <entry in="00:00:00.000" out="00:00:23.683" producer="chain9"/>
   <entry in="00:00:00.000" out="00:00:12.483" producer="producer8"/>
-  <entry in="00:00:00.000" out="00:00:12.483" producer="tractor4"/>
   <entry in="00:00:00.000" out="00:00:07.967" producer="chain12"/>
+  <entry in="00:00:00.000" out="00:00:15.983" producer="tractor4"/>
+  <entry in="00:00:00.000" out="00:00:04.983" producer="producer2"/>
+  <entry in="00:00:00.000" out="00:00:04.983" producer="producer9"/>
  </playlist>
  <tractor id="tractor5" in="00:00:00.000" out="00:00:15.983">
   <property name="kdenlive:projectTractor">1</property>
