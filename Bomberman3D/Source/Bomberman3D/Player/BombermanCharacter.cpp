@@ -283,6 +283,7 @@ void ABombermanCharacter::DetonateBomb(const FInputActionValue& Value)
 	if (Oldest) Oldest->Detonate();
 }
 
+// in order for this to work you need to set colision preset and object type on softblock static mesh
 void ABombermanCharacter::SetWallPass(bool bEnabled)
 {
 	ECollisionResponse Response = bEnabled ? ECR_Ignore : ECR_Block;
