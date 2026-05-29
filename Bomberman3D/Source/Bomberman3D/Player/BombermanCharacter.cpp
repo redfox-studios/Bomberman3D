@@ -104,7 +104,7 @@ void ABombermanCharacter::Tick(float DeltaTime)
 void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
-	if (Camera) Camera->SetFieldOfView(TargetFOV);
+	if (Camera) Camera->FieldOfView = TargetFOV;
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
