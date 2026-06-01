@@ -25,4 +25,7 @@ class BOMBERMAN3D_API UBombermanSaveGame : public USaveGame
 
 	UPROPERTY()
 	FBombermanPlayerUpgrades Upgrades;
+
+	//UPROPERTY()
+	//int32 HighScore = 0;
 };

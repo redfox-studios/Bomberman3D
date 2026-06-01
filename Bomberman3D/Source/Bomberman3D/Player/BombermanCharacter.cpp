@@ -105,6 +105,8 @@ void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
 	if (Camera) Camera->FieldOfView = TargetFOV;
+
+	UE_LOG(LogTemp, Warning, TEXT("adding %f to %f"), Amount, TargetFOV);
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
