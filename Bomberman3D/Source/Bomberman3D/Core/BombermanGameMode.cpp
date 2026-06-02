@@ -41,7 +41,7 @@ void ABombermanGameMode::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// ac checks
-	FBombermanAntiCheat::RunChecks();
+	// FBombermanAntiCheat::RunChecks();
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
