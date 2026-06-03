@@ -410,6 +410,7 @@ void ABombermanGrid::PlaceUpgrades(const FBombermanPlayerUpgrades& PlayerUpgrade
 			if (PlayerUpgrades.BombUp < 10 && BombUpClass) Pool.Add(BombUpClass);
 			if (PlayerUpgrades.FireUp < 10 && FireUpClass) Pool.Add(FireUpClass);
 			if (PlayerUpgrades.SpeedUp < 3 && SpeedUpClass && CurrentStage == 4) Pool.Add(SpeedUpClass);
+			if (TimeUpClass) Pool.Add(TimeUpClass);
 
 			// mid game
 			if (CurrentStage >= 6)
