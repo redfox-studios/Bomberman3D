@@ -440,6 +440,16 @@ void ABombermanGameMode::StageClear()
 	GetWorld()->GetTimerManager().SetTimer(StageClearDelayHandle, this, &ABombermanGameMode::LoadNextStage, StageClearDelay, false);
 }
 
+void ABombermanGameMode::AddStageTime(float Seconds)
+{
+	if (!BombermanGameState) return;
+
+	BombermanGameState->StageTimeRemaining += Seconds;
+
+	GetWorld()->GetTimerManager().ClearTimer(StageTimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(StageTimerHandle, this, &ABombermanGameMode::OnStageTimerExpired, BombermanGameState->StageTimeRemaining, false);
+}
+
 void ABombermanGameMode::AddScore(int32 Points)
 {
 	if (ABombermanPlayerState* PS = GetLocalPlayerState())

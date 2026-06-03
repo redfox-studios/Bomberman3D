@@ -58,6 +58,8 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Points);
 
+	void AddStageTime(float Seconds);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 	TSubclassOf<AEnemyBase> PontantClass;
 

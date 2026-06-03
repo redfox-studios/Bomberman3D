@@ -1,6 +1,7 @@
 // Copyright (c) 2026, Michal Flaška & RedFox Studios. All Rights Reserved.
 
 #include "Upgrades/BombermanUpgrade.h"
+#include "Core/BombermanGameMode.h"
 #include "Components/BoxComponent.h"
 #include "Player/BombermanCharacter.h"
 #include "Player/BombermanPlayerState.h"
@@ -108,6 +109,11 @@ void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	case EUpgradeType::FovUp:
 		PS->Upgrades.FovUp = FMath::Min(PS->Upgrades.FovUp + 1, 5);
 		Player->AddFovUp(FovUpAmount);
+		break;
+
+	case EUpgradeType::TimeUp:
+		if (ABombermanGameMode* GM = Cast<ABombermanGameMode>(GetWorld()->GetAuthGameMode()))
+			GM->AddStageTime(TimeUpAmount);
 		break;
 	}
 
