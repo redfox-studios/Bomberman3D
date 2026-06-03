@@ -65,7 +65,9 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UDataTable* StageConfigTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
+#if !UE_BUILD_SHIPPING
 	bool bShowDebugInfo = true; // toggle this off before building
+#endif
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 	int32 EnemyRushCount = 10;
