@@ -198,14 +198,9 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - TDD is still missing some parts (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- wallpass doesnt work
 - ovape only moves forward or smth, his movement is kinda bugged idk
 - player doesnt know what upgrades he has, we need to add upgrade list to pause menu or smth, i honestly dont know. maybe some popup when picking up upgrade?
 - i'll definitely find more later
-
-### Probably Fixed
-- player can get stuck in corners
-  - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
 ## Notes
 - if we want to do multiplayer, there are still some things we should get rid off/replace (hardcoded player index 0, etc)
