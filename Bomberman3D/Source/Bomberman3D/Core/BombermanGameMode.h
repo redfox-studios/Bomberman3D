@@ -67,8 +67,11 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UDataTable* StageConfigTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
+	bool bShowDebugInfo =
 #if !UE_BUILD_SHIPPING
-	bool bShowDebugInfo = true; // toggle this off before building
+	true;
+#else
+	false;
 #endif
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
