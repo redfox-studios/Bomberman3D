@@ -104,7 +104,7 @@ void ABombermanCharacter::Tick(float DeltaTime)
 void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
-	if (Camera) Camera->FieldOfView = TargetFOV;
+	// if (Camera) Camera->FieldOfView = TargetFOV; // now handled by tick
 
 	UE_LOG(LogTemp, Warning, TEXT("adding %f to %f"), Amount, TargetFOV);
 }

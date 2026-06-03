@@ -46,6 +46,8 @@ void ABombermanUpgrade::BeginPlay()
 {
 	Super::BeginPlay();
 	OverlapBox->OnComponentBeginOverlap.AddDynamic(this, &ABombermanUpgrade::OnOverlapBegin);
+
+	UE_LOG(LogTemp, Warning, TEXT("Upgrade BeginPlay, overlap events: %s"), OverlapBox->GetGenerateOverlapEvents() ? TEXT("YES") : TEXT("NO"));
 }
 
 void ABombermanUpgrade::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
