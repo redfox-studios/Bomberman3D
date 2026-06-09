@@ -20,7 +20,8 @@ enum class EUpgradeType : uint8
 	BombPass		UMETA(DisplayName = "Bomb Pass"),
 	FlamePass		UMETA(DisplayName = "Flame Pass"),
 	RemoteControl	UMETA(DisplayName = "Remote Control"),
-	FovUp			UMETA(DisplayName = "FOV Up")
+	FovUp			UMETA(DisplayName = "FOV Up"),
+	TimeUp			UMETA(DisplayName = "Time Up")
 };
 // clang-format on
 
@@ -61,6 +62,9 @@ class BOMBERMAN3D_API ABombermanUpgrade : public AActor
 
 	UPROPERTY(EditDefaultsOnly, Category = "Upgrade")
 	float FovUpAmount = 10.f; // degrees added per stack
+
+	UPROPERTY(EditDefaultsOnly, Category = "Upgrade")
+	float TimeUpAmount = 20.f;
 
   private:
 	UPROPERTY(VisibleAnywhere)

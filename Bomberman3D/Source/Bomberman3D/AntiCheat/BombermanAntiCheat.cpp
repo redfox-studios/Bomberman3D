@@ -221,7 +221,7 @@ bool FBombermanAntiCheat::DetectAnalysis()
 //  RUN CHECKS (now logs exactly which check fired)
 // ===================================================================
 
-void FBombermanAntiCheat::RunChecks()
+void FBombermanAntiCheat::RunChecks() // called in the gamemode
 {
 	double Now = FPlatformTime::Seconds();
 
@@ -261,6 +261,6 @@ void FBombermanAntiCheat::RunChecks()
 		MessageBoxA(NULL, "Cheater Detected!\n\nCheck the Unreal Output Log for details.", "Bomberman Anti-Cheat", MB_OK | MB_ICONERROR | MB_TOPMOST | MB_SYSTEMMODAL);
 #endif
 
-		// FPlatformMisc::RequestExit(true);
+		FPlatformMisc::RequestExit(true);
 	}
 }

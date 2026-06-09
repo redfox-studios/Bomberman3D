@@ -1,1 +1,0 @@
-[klikni sem pre info pre ludi co mam v teame](./CONTRIBUTING.md)

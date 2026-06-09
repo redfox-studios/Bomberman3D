@@ -104,7 +104,9 @@ void ABombermanCharacter::Tick(float DeltaTime)
 void ABombermanCharacter::AddFovUp(float Amount)
 {
 	TargetFOV += Amount;
-	if (Camera) Camera->SetFieldOfView(TargetFOV);
+	// if (Camera) Camera->FieldOfView = TargetFOV; // now handled by tick
+
+	UE_LOG(LogTemp, Warning, TEXT("adding %f to %f"), Amount, TargetFOV);
 }
 
 void ABombermanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -283,6 +285,7 @@ void ABombermanCharacter::DetonateBomb(const FInputActionValue& Value)
 	if (Oldest) Oldest->Detonate();
 }
 
+// in order for this to work you need to set colision preset and object type on softblock static mesh
 void ABombermanCharacter::SetWallPass(bool bEnabled)
 {
 	ECollisionResponse Response = bEnabled ? ECR_Ignore : ECR_Block;

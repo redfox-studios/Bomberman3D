@@ -58,6 +58,8 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Points);
 
+	void AddStageTime(float Seconds);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 	TSubclassOf<AEnemyBase> PontantClass;
 
@@ -65,7 +67,12 @@ class BOMBERMAN3D_API ABombermanGameMode : public AGameModeBase
 	UDataTable* StageConfigTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
-	bool bShowDebugInfo = true; // toggle this off before building
+	bool bShowDebugInfo =
+#if !UE_BUILD_SHIPPING
+	true;
+#else
+	false;
+#endif
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 	int32 EnemyRushCount = 10;

@@ -95,12 +95,12 @@
 - [x] FlamePass (immune to own explosions, persists between stages)
 - [x] Invincible (30s immunity to blasts and enemies, persists between stages)
 - [ ] Special Items system (challenge-based, available on specific stages only)
-  - [ ] B Panel (reach exit without killing any enemies,                                    stages 6 8 14 16 22 24 30 32 38 40 45 48)   - 10 000 pts
-  - [ ] Goddess (defeat all enemies then walk outer ring,                                   stages 1 7 9 15 17 23 25 31 33 39 41 47 49) - 20 000 pts
-  - [ ] Cola (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,      stages 4 12 20 28 36 44)                    - 30 000 pts
-  - [ ] Famicon (defeat all enemies, detonate 248 chain reaction,                           stages 3 11 19 27 35 43)                    - 500 000 pts
-  - [ ] Programmer Nakamoto (defeat all enemies without destroying any soft block,          stages 2 10 18 26 34 42 50)                 - 10 000 000 pts
-  - [ ] Dezeniman (destroy all soft blocks without killing enemies, then bomb exit 3 times, stages 5 13 21 29 37 45)                    - 20 000 000 pts
+  - [ ] B Panel (reach exit without killing any enemies,                                    stages 6 8  14 16 22 24 30 32 38 40 45 48)   - 10 000 pts
+  - [ ] Goddess (defeat all enemies then walk outer ring,                                   stages 1 7  9  15 17 23 25 31 33 39 41 47 49) - 20 000 pts
+  - [ ] Cola (defeat all enemies, find exit, keep walking 15s without releasing D-Pad,      stages 4 12 20 28 36 44 )                    - 30 000 pts
+  - [ ] Famicon (defeat all enemies, detonate 248 chain reaction,                           stages 3 11 19 27 35 43 )                    - 500 000 pts
+  - [ ] Programmer Nakamoto (defeat all enemies without destroying any soft block,          stages 2 10 18 26 34 42 50 )                 - 10 000 000 pts
+  - [ ] Dezeniman (destroy all soft blocks without killing enemies, then bomb exit 3 times, stages 5 13 21 29 37 45 )                    - 20 000 000 pts
 
 ### Save System
 - [x] GameInstance persists stage, lives, upgrades across level loads
@@ -198,14 +198,8 @@
 ## Known Bugs & Issues
 - enemy can walk through my bomb when i place the bomb on the enemy (makes sense since we have bombpass upgrade and the temporary bombpass for handling collision with player after bomb placement)
 - TDD is still missing some parts (UI Components, anticheat, etc.) - but this is not very important since we dont have those features fully developed yet + im the only programmer in this project
-- wallpass doesnt work
-- ovape only moves forward or smth, his movement is kinda bugged idk
 - player doesnt know what upgrades he has, we need to add upgrade list to pause menu or smth, i honestly dont know. maybe some popup when picking up upgrade?
 - i'll definitely find more later
-
-### Probably Fixed
-- player can get stuck in corners
-  - player can be invincible after stucking themselves in the corner and can also noclip into the enemy... idk how but my teacher managed to discover this bug...
 
 ## Notes
 - if we want to do multiplayer, there are still some things we should get rid off/replace (hardcoded player index 0, etc)

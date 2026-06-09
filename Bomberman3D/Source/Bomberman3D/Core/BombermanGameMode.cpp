@@ -41,7 +41,7 @@ void ABombermanGameMode::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// ac checks
-	FBombermanAntiCheat::RunChecks();
+	// FBombermanAntiCheat::RunChecks();
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
@@ -438,6 +438,16 @@ void ABombermanGameMode::StageClear()
 
 	// FTimerHandle StageClearDelayHandle; - moved to .h
 	GetWorld()->GetTimerManager().SetTimer(StageClearDelayHandle, this, &ABombermanGameMode::LoadNextStage, StageClearDelay, false);
+}
+
+void ABombermanGameMode::AddStageTime(float Seconds)
+{
+	if (!BombermanGameState) return;
+
+	BombermanGameState->StageTimeRemaining += Seconds;
+
+	GetWorld()->GetTimerManager().ClearTimer(StageTimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(StageTimerHandle, this, &ABombermanGameMode::OnStageTimerExpired, BombermanGameState->StageTimeRemaining, false);
 }
 
 void ABombermanGameMode::AddScore(int32 Points)
