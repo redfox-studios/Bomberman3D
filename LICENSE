@@ -1,21 +1,61 @@
-MIT License
+Copyright (c) 2026, Michal Flaška & RedFox Studios. All Rights Reserved.
 
-Copyright (c) 2026 RedFox Studios
+This project, including but not limited to:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+- Source code
+- Game assets
+- Models
+- Textures
+- Materials
+- Audio
+- Documentation
+- Unreal Engine content
+- Build files
+- Project files
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+is proprietary property of the copyright holders.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Permission
+
+Permission is granted only to approved members of the project team to:
+
+- Access the repository
+- Modify the source code
+- Contribute to development
+- Build and test the project
+
+## Restrictions
+
+No person, company, school, educational institution, teacher, student, organization, or third party may:
+
+- Copy any portion of this project
+- Reuse any source code
+- Reuse any assets
+- Redistribute the project
+- Upload the project elsewhere
+- Sell any part of the project
+- Incorporate any part of the project into another project
+- Train AI systems using project content
+- Create derivative works based on project content
+
+without prior written permission from the copyright holders.
+
+## Educational Use
+
+Submission, review, grading, or demonstration of this project does not transfer ownership, copyright, licensing rights, commercialization rights, publishing rights, or redistribution rights to any school, teacher, educational institution, or third party.
+
+Viewing the project for assessment purposes does not grant permission to copy, modify, distribute, commercialize, or reuse any part of the project.
+
+## Ownership
+
+All intellectual property rights remain exclusively with the copyright holders and approved project team members.
+
+## No Warranty
+
+This project is provided "as is" without warranty of any kind.
+
+## Enforcement
+
+Unauthorized use of any portion of this project constitutes copyright infringement and may result in legal action.
+
+For licensing requests, written permission must be obtained from the copyright holders.
