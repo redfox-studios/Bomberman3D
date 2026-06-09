@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Bomberman3D.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -45,10 +46,18 @@ void AEnemyBase::BeginPlay()
 	HealthComponent->OnDeath.AddDynamic(this, &AEnemyBase::OnDeath);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnCapsuleOverlap);
 
-	// Disable UE's built-in movement input — we drive position directly in Tick
+	// Disable UE's built-in movement input - we drive position directly in Tick
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
 	SpawnDefaultController();
+
+	// wallpass
+	if (bCanPassThroughSoftBlocks)
+	{
+		ECollisionResponse Response = ECR_Ignore;
+		GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_SoftBlock, Response);
+		GetCapsuleComponent()->UpdateOverlaps();
+	}
 
 	// Pick initial direction and start moving
 	CurrentDirection = PickRandomUnblockedDirection();
