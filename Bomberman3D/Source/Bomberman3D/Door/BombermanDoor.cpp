@@ -21,6 +21,12 @@ ABombermanDoor::ABombermanDoor()
 	OverlapBox->SetBoxExtent(FVector(40.f));
 	OverlapBox->SetCollisionProfileName(TEXT("Trigger"));
 
+#if !WITH_EDITOR
+	OverlapBox->SetHiddenInGame(true);
+#else
+	OverlapBox->SetHiddenInGame(false);
+#endif
+
 	MaterialBillboard = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("MaterialBillboard"));
 	MaterialBillboard->SetupAttachment(RootComponent);
 }

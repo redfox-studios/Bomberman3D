@@ -40,8 +40,10 @@ void ABombermanGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+#if !WITH_EDITOR
 	// ac checks
-	// FBombermanAntiCheat::RunChecks();
+	FBombermanAntiCheat::RunChecks();
+#endif
 
 	if (UBombermanGameInstance* GI = Cast<UBombermanGameInstance>(GetGameInstance()))
 	{
@@ -67,28 +69,6 @@ void ABombermanGameMode::Tick(float DeltaTime)
 				(int32)BombermanGameState->StageState,
 				BombermanGameState->StageTimeRemaining,
 				BombermanGameState->EnemiesRemaining
-			)
-		);
-	}
-
-	if (PS)
-	{
-		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::Cyan, FString::Printf(TEXT("Lives: %d | Score: %d"), PS->Lives, (int32)PS->GetScore()));
-
-		GEngine->AddOnScreenDebugMessage(
-			2,
-			0.f,
-			FColor::Green,
-			FString::Printf(
-				TEXT("BombUp: %d | FireUp: %d | SpeedUp: %d | Invincible: %d | WallPass: %d | BombPass: %d | FlamePass: %d | RemoteControl: %d"),
-				PS->Upgrades.BombUp,
-				PS->Upgrades.FireUp,
-				PS->Upgrades.SpeedUp,
-				PS->Upgrades.bInvincible,
-				PS->Upgrades.bWallPass,
-				PS->Upgrades.bBombPass,
-				PS->Upgrades.bFlamePass,
-				PS->Upgrades.bRemoteControl
 			)
 		);
 	}
