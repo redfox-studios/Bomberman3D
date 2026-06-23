@@ -3,7 +3,7 @@ Project: Bomberman3D<br />
 Engine: Unreal Engine 5 (Hybrid C++ / Blueprints)<br />
 Team: Maximilián Repa (Game Design, 3D Art, Sound), Michal Flaška (Programming), Eduard Fabo (3D Art, 2D Art)<br />
 Target Platform: PC (Windows)<br />
-Last Updated: `2026-02-26 7:02PM`
+Last Updated: `2026-06-23`
 
 Made fully by me, grammar fixed with AI.
 
@@ -28,13 +28,29 @@ The codebase follows a hybrid approach - core systems (grid, bomb logic, AI, gam
 
 Rule of thumb: if it has logic, it's C++. If it's just connecting things visually or needs to be tweaked by a non-coder, it can be BP.
 
+**Custom trace channel:** `ECC_SoftBlock` is mapped to `ECC_GameTraceChannel1` (defined in `Bomberman3D.h`). This allows soft blocks to have their own collision channel, enabling WallPass to selectively ignore them without affecting other collision logic.
+
 <br><br>
 
 ## 3. Grid System
 
-The map is tile-based but player and enemy movement is smooth (free movement, no snapping). The grid exists purely as a data structure - it tracks what's on each tile (empty, soft block, hard block, bomb, upgrade, door).
+The map is tile-based but player and enemy movement is smooth (free movement, no snapping). The grid exists purely as a data structure - it tracks what's on each tile.
 
-Bomb placement snaps to grid. When the player presses place bomb, we take their world position and round it to the nearest tile center:
+### Tile Content Enum
+
+```cpp
+UENUM(BlueprintType)
+enum class ETileContent : uint8
+{
+    Empty, SoftBlock, HardBlock, Bomb, Upgrade, Door, TopBlock
+};
+```
+
+`TopBlock` is a decorative block variant placed on outer map for visual polish. It does not affect gameplay logic.
+
+### Bomb Snap
+
+When the player presses place bomb, we take their world position and round it to the nearest tile center:
 
 ```cpp
 FVector2D ABombermanCharacter::GetCurrentGridPosition() const
@@ -46,12 +62,18 @@ FVector2D ABombermanCharacter::GetCurrentGridPosition() const
 }
 ```
 
-Grid class responsibilities:
-- Knows the state of every tile
-- Handles spawning/destroying actors on tiles (soft blocks, bombs, upgrades, door)
-- Provides queries like `IsTileWalkable()`, `IsTileSoft()`, `GetTileWorldPosition()`
+### Grid Class Responsibilities
 
-Configurable via UPROPERTY (because I didn't forget about game designers):
+- Knows the state of every tile via `TArray<TArray<ETileContent>> Data`
+- Tracks spawned actors per tile via `TArray<TArray<AActor*>> ActorMap`
+- Tracks what upgrade is hidden under each soft block via `TArray<TArray<TSubclassOf<AActor>>> UpgradeMap`
+- Handles spawning/destroying actors on tiles
+- Provides tile queries: `IsTileWalkable()`, `IsTileSoft()`, `GetTileWorldPosition()`, `IsInBounds()`
+- Runs a flood-fill (`FloodFill()`) to guarantee door reachability before placing it
+- Manages enemy tile reservations to prevent two enemies targeting the same tile
+
+### Grid Config (all configurable in editor)
+
 ```cpp
 UPROPERTY(EditAnywhere, Category = "Grid Config")
 int32 BaseGridWidth = 13;
@@ -60,7 +82,7 @@ UPROPERTY(EditAnywhere, Category = "Grid Config")
 int32 BaseGridHeight = 11;
 
 UPROPERTY(EditAnywhere, Category = "Grid Config")
-int32 GridGrowthPerStages = 10; // every X stages, grid grows by 1 in each direction
+int32 GridGrowthPerStages = 10;
 
 UPROPERTY(EditAnywhere, Category = "Grid Config")
 int32 MaxGridWidth = 21;
@@ -70,305 +92,557 @@ int32 MaxGridHeight = 17;
 
 UPROPERTY(EditAnywhere, Category = "Grid Config")
 float TileSize = 100.f;
+
+UPROPERTY(EditAnywhere, Category = "Grid Config")
+int32 PlayerSafeZone = 2;
 ```
+
+### Grid Growth
+
+Grid size is calculated from stage number on `BeginPlay` (not saved):
+
+```cpp
+int32 Growths = (GI->CurrentStage - 1) / GridGrowthPerStages;
+BaseGridWidth  = FMath::Min(BaseGridWidth  + Growths * 2, MaxGridWidth);
+BaseGridHeight = FMath::Min(BaseGridHeight + Growths * 2, MaxGridHeight);
+```
+
+### Tile Reservation System
+
+Enemies reserve their target tile before moving to it. This prevents two enemies from simultaneously targeting the same tile. Reservation is released on death or when the enemy picks a new direction.
+
+```cpp
+void ReserveTile(int32 X, int32 Y);
+void ReleaseTile(int32 X, int32 Y);
+bool IsTileReserved(int32 X, int32 Y) const;
+```
+
+Reservation state is stored as `TSet<FIntPoint> ReservedTiles` on the grid.
 
 <br><br>
 
 ## 4. Stage Generation
 
-Stages are procedurally generated in the sense that soft blocks, enemies, upgrades, and the door are randomized each stage. Hard walls never move - their layout is fixed.
+Stages are procedurally generated per stage load. Hard walls never move, their layout is fixed.
 
-What stays the same every stage:
+### Hard Wall Layout
+
+Border tiles + checkerboard pillars at every even (X, Y) coordinate. Placed in `BeginPlay`.
+
+### What Stays the Same Every Stage
+
 - Hard wall positions
-- Map size (until growth threshold is hit)
-- Player spawn (top-left corner)
+- Player spawn (top-left interior tile: `(1, 1)`)
 
-What's randomized:
-- Soft block positions (with guaranteed safe zone around player spawn)
-- Enemy spawn positions
-- Upgrade/item positions hidden under soft blocks
-- Door position hidden under a soft block
+### What Is Randomized
 
-Stage generation flow:
-1. Place hard walls (static)
-2. Spawn soft blocks randomly (skip player spawn zone ~2x2 tiles)
-3. Pick one soft block to hide the door under
-4. Pick soft blocks to hide upgrades/items under (based on stage config)
-5. Spawn enemies at valid positions (away from player)
+- Soft block positions (skips player safe zone and existing hard walls)
+- Upgrade positions (hidden under random soft blocks based on `UpgradeDensity`)
+- Door position (hidden under a random soft block, flood-fill checked for reachability)
+- Enemy spawn positions (away from player spawn)
 
-Configurable per stage via Data Table:
-- Enemy types and counts
-- Which upgrades can appear
-- Which special items can appear
-- Timer duration
+### Stage Generation Flow
+
+1. `BeginPlay`: place hard walls, place top blocks
+2. `GenerateGrid()` (called by GameMode): generate soft blocks, place door (skipped for bonus stages), place upgrades
+3. GameMode spawns enemies via `SpawnEnemies()` (0.1s delayed to let grid settle)
+
+### Door Placement
+
+The door is hidden under a randomly selected soft block. Before committing to a position, `IsDoorReachable()` runs a BFS flood-fill from player spawn `(1,1)` and verifies that at least one tile adjacent to the door candidate is reachable. This guarantees the player can always reach the door.
+
+### Configurable Per Stage via Data Table (`DT_StageConfig`)
+
+- Enemy types and counts (`TArray<FBombermanStageEnemyEntry>`)
+- Stage timer duration
+- Soft block density (0.0 - 1.0)
+- Upgrade density (0.0 - 1.0)
+- Background music
+- Door enter sound
+- Bonus stage flag
 
 <br><br>
 
 ## 5. Bomb System
 
-Placement: snaps to nearest grid tile on player's position at time of input.
+### Placement
 
-Explosion: cross-shaped, expanding in 4 directions (up/down/left/right). Each direction expands up to `BlastRadius` tiles. Expansion stops when it hits a hard wall (blocked entirely) or soft wall (destroys it, stops there).
+Snaps to nearest grid tile. Collision with the placing player is disabled until the player moves at least 65% of a tile away (`CollisionEnableDistance = 0.65f`). If the player has `BombPass`, collision is never re-enabled for them.
 
-```cpp
-UPROPERTY(EditAnywhere, Category = "Bomb Config")
-float BombFuseTime = 2.5f;
+Special case: if the player has `WallPass` and places a bomb on a soft block, the soft block is destroyed first, then the bomb is placed.
 
-UPROPERTY(EditAnywhere, Category = "Bomb Config")
-int32 DefaultBlastRadius = 1;
+### Explosion
 
-UPROPERTY(EditAnywhere, Category = "Bomb Config")
-int32 MaxBlastRadius = 10; // Fire Up cap
+Cross-shaped, expanding in 4 directions. Each direction expands up to `BlastRadius` tiles. Rules per tile:
 
-UPROPERTY(EditAnywhere, Category = "Bomb Config")
-int32 DefaultMaxBombs = 1;
+- `HardBlock`: stop, no damage
+- `SoftBlock`: destroy it via `DestroyActorOnTile()`, damage actors on that tile, stop
+- `Bomb`: chain reaction - detonate that bomb immediately, stop
+- `Empty`: damage actors via `BoxOverlapActors` on that tile, continue
 
-UPROPERTY(EditAnywhere, Category = "Bomb Config")
-int32 MaxBombCount = 10; // Bomb Up cap
+Damage detection uses a `BoxOverlapActors` call sized at 90% of the tile to avoid edge bleed. Only `ECC_Pawn` objects are checked.
+
+### Bomb States
+
+```
+Placed -> Armed -> Detonating -> Explosion -> Cleanup
 ```
 
-Bomb states: Placed -> Armed (after player steps off) -> Detonating -> Explosion -> Cleanup
+- `Placed`: bomb spawned, collision disabled for owner
+- `Armed`: player stepped off tile, collision enabled (unless BombPass)
+- `Detonating`: fuse expired or chain-triggered
+- `Explosion`: blast logic runs
+- `Cleanup`: Niagara stopped, actor destroyed
 
-Chain reactions: if an explosion hits another bomb, that bomb detonates immediately.
+### Chain Reactions
+
+When an explosion reaches a `Bomb` tile, the grid tile is cleared immediately (prevents feedback loops) then `TriggerChainReaction()` iterates `TActorIterator<ABombermanBomb>` to find and detonate the bomb actor at that tile. Double-trigger is prevented by the state guard at the start of `Detonate()`.
+
+### Configurable
+
+```cpp
+UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+float FuseTimer = 2.5f;
+
+UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+int32 BlastRadius = 1;
+
+UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+float ExplosionSoundCooldown = 0.1f; // deduplicates sound on chain reactions
+
+UPROPERTY(EditDefaultsOnly, Category = "Bomb")
+float CollisionEnableDistance = 0.65f;
+```
 
 <br><br>
 
 ## 6. Player
 
-Inherits from `ACharacter`. Movement is handled by UE's built-in `CharacterMovementComponent` - no custom grid snapping for the player.
+Inherits from `ACharacter`. Movement is handled by UE's built-in `CharacterMovementComponent`.
 
-Input: Enhanced Input System (UE5 standard). Keybinds are configurable through the settings menu.
+### Input
 
-Player state tracked in `UBombermanPlayerState`:
-- Current lives
-- Current score
-- Active upgrades (bitmask or struct)
-- Current bomb count / max bombs
-- Current blast radius
+Enhanced Input System (UE5). Three actions:
 
-Upgrades are a struct:
+- `MoveAction` - 2D axis, moves on world forward/right vectors
+- `PlaceBombAction` - started trigger
+- `DetonateBombAction` - started trigger, only works with `RemoteControl` upgrade
+
+Mapping context is registered in `ABombermanPlayerController::BeginPlay()`. The pause action has `bTriggerWhenPaused = true` set in code to work around a known UE Enhanced Input issue.
+
+### Camera
+
+Fixed spring arm attached to the character, no collision test, rotation locked.
+
+```cpp
+UPROPERTY(EditDefaultsOnly, Category = "Camera")
+float BaseFOV = 90.f;
+
+UPROPERTY(EditDefaultsOnly, Category = "Camera")
+float FOVInterpSpeed = 4.f;
+
+UPROPERTY(EditDefaultsOnly, Category = "Camera")
+float FovUpAmount = 10.f; // degrees per FovUp stack
+```
+
+Spring arm is set at `-65` degrees pitch, 400 unit arm length. `FovUp` upgrade interpolates the FOV via `FInterpTo` in Tick.
+
+### State (tracked in `UBombermanPlayerState`)
+
+```cpp
+int32 Lives = 3;
+FBombermanPlayerUpgrades Upgrades;
+
+int32 GetBombCount()    const { return 1 + Upgrades.BombUp; }
+int32 GetBlastRadius()  const { return 1 + Upgrades.FireUp; }
+int32 GetCurrentScore() const { return FMath::RoundToInt(GetScore()); }
+```
+
+Score uses UE's built-in `APlayerState::SetScore()` / `GetScore()` (float internally).
+
+### Upgrades Struct
+
 ```cpp
 USTRUCT(BlueprintType)
-struct FPlayerUpgrades
+struct FBombermanPlayerUpgrades
 {
-    GENERATED_BODY()
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 BombUp = 0;       // 0-10
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 FireUp = 0;       // 0-10
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 SpeedUp = 0;      // 0-3
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bRemoteControl = false;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bWallPass = false;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bBombPass = false;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bFlamePass = false;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bInvincible = false;
+    int32 BombUp = 0;             // 0-10, persists between stages
+    int32 FireUp = 0;             // 0-10, persists between stages
+    int32 SpeedUp = 0;            // 0-3, reset on death
+    bool  bRemoteControl = false; // reset on death
+    bool  bWallPass = false;      // reset on death
+    bool  bBombPass = false;      // reset on death
+    bool  bFlamePass = false;     // reset on death
+    bool  bInvincible = false;    // reset on death
+    int32 FovUp = 0;              // 0-5, reset on death
 };
 ```
+
+**On death:** SpeedUp, RemoteControl, WallPass, BombPass, FlamePass, Invincible, and FovUp are all reset. BombUp and FireUp are kept.
+
+### Active Bomb Tracking
+
+`ABombermanCharacter` tracks `TArray<ABombermanBomb*> ActiveBombs` and `int32 ActiveBombCount`. When a bomb is placed, `OnDestroyed` is bound so the count decrements automatically. `DetonateBomb()` detonates `ActiveBombs[0]` (oldest placed bomb).
+
+### WallPass Collision
+
+```cpp
+void ABombermanCharacter::SetWallPass(bool bEnabled)
+{
+    ECollisionResponse Response = bEnabled ? ECR_Ignore : ECR_Block;
+    GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_SoftBlock, Response);
+    GetCapsuleComponent()->UpdateOverlaps();
+}
+```
+
+### Death Flow
+
+1. `HealthComponent->OnDeath` fires
+2. Movement stopped, input disabled
+3. `DeathAnimDuration` timer fires
+4. Lives decremented, boolean upgrades stripped
+5. If lives > 0: save state to GameInstance, reload level
+6. If lives <= 0: `GameMode->OnGameOver()`
+
+Special case: if the player dies on a bonus stage, `GI->CurrentStage` is incremented before reload so they skip to the next real stage.
 
 <br><br>
 
 ## 7. Enemy AI
 
-Each enemy type is a separate C++ class inheriting from `AEnemyBase`. Behavior complexity increases with enemy tier.
+Each enemy type is a C++ class inheriting from `AEnemyBase`. Movement is tile-to-tile (not per-frame steering). The enemy commits to a target tile, moves there, then decides the next move in `OnTileReached()`.
 
-| Enemy   | AI Approach                             | Complexity           | Status  |
-|---------|-----------------------------------------|----------------------|---------|
-| Ballom  | Random direction, change on wall hit    | Low - C++            | Done    |
-| Onil    | Random + pursue if player nearby        | Low-Medium - C++     | Done    |
-| Dahl    | Alternates axis (horizontal ↔ vertical) | Low - C++            | Pending |
-| Minvo   | Random + pursue, can get stuck          | Medium - C++         | Pending |
-| Doria   | Chase player + avoid bombs              | High - Behavior Tree | Pending |
-| Ovape   | Mostly ignores player, occasional chase | Medium - C++         | Pending |
-| Pass    | Aggressive chase                        | Medium - C++         | Pending |
-| Pontant | Always chase, fastest                   | Medium - C++         | Done    |
+### Movement Architecture
 
-All enemies share these systems from `AEnemyBase`:
-- Corner rounding - nudges enemy toward tile center on the axis they're not moving on, prevents getting stuck on corners
-- Tile occupancy - before moving to a tile, checks if another enemy is already there via `IsTileOccupiedByEnemy()`
-- Health component - reusable `UBombermanHealthComponent`, notifies GameMode on death
+- `StartMovingToNextTile()`: computes the next tile, reserves it on the grid, sets `TargetWorldPos`
+- `Tick()`: interpolates the enemy toward `TargetWorldPos` using `AddMovementInput`. Snaps to tile at <= 2 UU distance
+- `OnTileReached()`: virtual, called when arriving at a tile. Base implementation picks a new random direction if current is blocked
+- `IsDirectionBlocked()`: virtual, checks bounds, HardBlock, Bomb, SoftBlock (unless `bCanPassThroughSoftBlocks`), and tile reservation
+- `PickRandomUnblockedDirection()`: shuffles 4 directions, returns first unblocked. Returns `ZeroVector` if all blocked
+
+### Enemy Table
+
+| Enemy   | AI Approach                                          | Speed | Points | WallPass | Status  |
+|---------|------------------------------------------------------|-------|--------|----------|---------|
+| Ballom  | Pure random, changes on wall hit                     | 100   | 100    | No       | Done    |
+| Onil    | Random + pursue player within `PursuitRange` tiles   | 150   | 200    | No       | Done    |
+| Dahl    | Alternates horizontal/vertical axis, random fallback | 125   | 400    | No       | Done    |
+| Minvo   | Pursue within range, 25% stubborn retry on blocked   | 115   | 800    | No       | Done    |
+| Ovape   | 10% chase chance per tile, ignores soft blocks       | 125   | 2000   | Yes      | Done    |
+| Pass    | Always chases, random fallback when blocked          | 175   | 4000   | No       | Done    |
+| Pontant | Always chases, tries all 4 directions including back | 200   | 8000   | Yes      | Done    |
+| Doria   | Chase + bomb avoidance via Behavior Tree             | TBD   | TBD    | No       | Signed off |
+
+### Shared Base Systems (`AEnemyBase`)
+
+- `UBombermanHealthComponent` - same component as player, `OnDeath` notifies GameMode
+- On death: movement disabled, `DeathAnimDuration` timer fires before `Destroy()`
+- On capsule overlap with player: calls `TakeDamage(1.f)` on player's health component
+- `bCanPassThroughSoftBlocks`: if true, sets `ECC_SoftBlock` response to `ECR_Ignore` in `BeginPlay`
+- Debug: `UArrowComponent` showing movement direction, visible in editor, hidden in packaged builds
+
+### Ovape Override
+
+Ovape overrides `IsDirectionBlocked()` to exclude the SoftBlock check (it can pass through soft blocks). It still blocks on HardBlock and Bomb.
 
 <br><br>
 
-## 8. Camera
+## 8. Game Flow
 
-Fixed spring arm attached to player, no collision. Rotation is locked.
+### Class Responsibilities
+
+- `ABombermanGameMode`: master flow controller. Initializes grid, spawns enemies, manages stage timer, handles win/lose, coordinates UI
+- `ABombermanGameState`: shared read-only state for UI (`StageState`, `StageTimeRemaining`, `CurrentStage`, `EnemiesRemaining`)
+- `UBombermanGameInstance`: persists across level loads (`CurrentStage`, `Lives`, `Score`, `Upgrades`)
+- `ABombermanPlayerState`: per-player runtime state (`Lives`, `Upgrades`, `Score`)
+- `ABombermanPlayerController`: registers input context, creates HUD widget
+
+### Stage State Enum
 
 ```cpp
-UPROPERTY(EditAnywhere, Category = "Camera Config")
-float CameraArmLength = 1500.f;
-
-UPROPERTY(EditAnywhere, Category = "Camera Config")
-FRotator CameraRotation = FRotator(-65.f, 0.f, 0.f); // ~65 degrees down, slight isometric feel
+UENUM(BlueprintType)
+enum class EStageState : uint8
+{
+    WaitingToStart, InProgress, StageClear, GameOver
+};
 ```
 
-Camera follows player position (XY only), Z is fixed. No zoom, no rotation during gameplay.
+### Stage Flow
 
-<br><br>
+1. `BeginPlay`: find grid, get GameState, call `StartStage()`
+2. `StartStage()`: read stage config from Data Table, call `Grid->GenerateGrid()`, move player to spawn, schedule `SpawnEnemies()` (0.1s delay), start tick timer (1s) and full timer
+3. Enemy spawning: shuffled valid tile list (outside player safe zone), spawn each enemy type by count from Data Table
+4. Win condition: `EnemiesRemaining <= 0` -> door becomes active (changes material). Player enters door -> `OnPlayerEnteredDoor()` -> `StageClear()`
+5. Lose condition: player lives reach 0 -> `OnGameOver()` -> show GameOver widget
+6. Timer expire: if bonus stage, auto-complete. Otherwise spawn `EnemyRushCount` (default: 10) Pontants at random empty tiles
+7. Stage clear: show StageClearWidget, save to GameInstance + SaveGame, delay `StageClearDelay` seconds, load next stage
 
-## 9. Game State & Flow
+### Stage Config (Data Table row `FBombermanStageConfig`)
 
-`ABombermanGameMode` handles the overall flow. `ABombermanGameState` holds shared state.
-
-Stage flow:
-1. GameMode initializes grid, generates stage
-2. Spawns player, enemies
-3. Starts stage timer
-4. Waits for win condition (all enemies dead -> door appears -> player enters door)
-5. Or lose condition (player loses last life)
-6. On stage clear -> save progress -> load next stage
-7. On timer expire -> spawn 10 Pontants (Enemy Rush)
-
-Configurable:
 ```cpp
-UPROPERTY(EditAnywhere, Category = "Stage Config")
+TArray<FBombermanStageEnemyEntry> Enemies;
+float StageTimer = 200.f;
+float SoftBlockDensity = 0.65f;
+float UpgradeDensity = 0.f;  // calculated automatically
+USoundBase* BackgroundMusic;
+USoundBase* DoorEnterSound;
+bool bBonusStage = false;
+```
+
+### Configurable in GameMode
+
+```cpp
+UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 float StageTimerDuration = 200.f;
 
-UPROPERTY(EditAnywhere, Category = "Stage Config")
+UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 int32 StartingLives = 3;
 
-UPROPERTY(EditAnywhere, Category = "Stage Config")
+UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
 int32 TotalStages = 50;
+
+UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
+int32 EnemyRushCount = 10;
+
+UPROPERTY(EditDefaultsOnly, Category = "Stage Config")
+float StageClearDelay = 3.f;
 ```
+
+<br><br>
+
+## 9. Score System
+
+Score is stored in `APlayerState` (UE built-in float field) and persisted through stages via `UBombermanGameInstance`.
+
+| Event                   | Points                           |
+|-------------------------|----------------------------------|
+| Enemy kill              | Varies by enemy (100 - 8000)     |
+| Soft block destroyed    | 10 points                        |
+| Stage clear time bonus  | remaining seconds × 10           |
+
+`AddScore(int32 Points)` in GameMode finds `ABombermanPlayerState` and calls `PS->AddScore()` which wraps `SetScore(GetScore() + Points)`.
+
+Score resets to 0 on game over via `UBombermanGameInstance::ResetToDefaults()`.
 
 <br><br>
 
 ## 10. Save System
 
-Using UE5's built-in `USaveGame`. No password system.
+Two separate save slots using UE5's built-in `USaveGame`.
 
-`UBombermanSaveGame` stores:
-- Current stage number
-- Current lives
-- Current score
-- Active upgrades struct
+### `UBombermanSaveGame` (slot: `"BombermanSave"`)
 
-Grid size is NOT saved - it's calculated from stage number on load, so it's always correct without storing it.
+Stores game progress. Loaded on `GameInstance::Init()` and on "Continue" from main menu.
 
-Save happens on stage clear and on game over. Load happens via `UBombermanGameInstance::Init()` on game start, and explicitly on "Continue" from main menu.
+```cpp
+int32 CurrentStage = 1;
+int32 Lives = 3;
+int32 Score = 0;
+FBombermanPlayerUpgrades Upgrades;
+```
 
-<br>
+Grid size is NOT saved - calculated from stage number at runtime.
 
-## 10a. Score System
+### `UBombermanSaveSettings` (slot: `"BombermanSettings"`)
 
-Score is tracked in `APlayerState` (UE built-in) and persisted through stages via GameInstance and SaveGame.
+Stores user preferences. Loaded on `GameInstance::Init()`, applied immediately.
 
-Points:
-- Enemy kill: 100 points
-- Soft block destroyed: 10 points  
-- Stage clear time bonus: remaining seconds × 10
+```cpp
+float MusicVolume = 1.f;
+float SFXVolume = 1.f;
+float UIVolume = 1.f;
+float AmbienceVolume = 1.f;
+bool  bMuteOnFocusLost = false;
+int32 ResolutionWidth = 1920;
+int32 ResolutionHeight = 1080;
+int32 WindowMode = 0;    // 0=Fullscreen, 1=Borderless, 2=Windowed (EWindowMode::Type)
+int32 QualityPreset = 3; // 0=Low, 1=Medium, 2=High, 3=Epic
+```
 
-Score is added via `ABombermanGameMode::AddScore(int32 Points)` which finds the player and calls `PS->SetScore()`.
-
-Score resets to 0 on game over via `UBombermanGameInstance::ResetToDefaults()`.
-
-<br>
-
-## 10b. Debug System
-
-`ABombermanGameMode` has a `bShowDebugInfo` bool (off by default, toggle in BP details panel). When enabled, displays on-screen via `GEngine->AddOnScreenDebugMessage`:
-
-- Line 0 (yellow): Stage number, stage state, timer remaining, enemies remaining
-- Line 1 (cyan): Lives, score
-- Line 2 (green): BombUp, FireUp, SpeedUp, Invincible, WallPass levels
-
-Messages update in place (fixed key IDs 0-2) so they don't spam new lines.
+Save triggers: stage clear, game over, settings changed.
 
 <br><br>
 
-## 11. UI
+## 11. Settings System
 
-All UI is built in UMG (UE's widget system), driven from C++ where needed.
+All settings live in `UBombermanGameInstance` and are applied via `ApplySoundSettings()` / `ApplyVideoSettings()`.
 
-Screens:
-- Main Menu (New Game, Continue, Settings, Credits, Quit)
-- HUD (lives, score, timer, active upgrades)
-- Pause Menu (Resume, Restart Stage, Main Menu)
-- Game Over screen
-- Stage Clear screen
-- Loading Screen (between stages)
-- Credits Screen
-- Settings (keybind remapping via Enhanced Input)
+### Audio
 
-<br>
+Four `USoundClass` assets (`MusicSoundClass`, `SFXSoundClass`, `UISoundClass`, `AmbienceSoundClass`) set via `EditDefaultsOnly`. Volume is applied by mutating `SoundClass->Properties.Volume` directly. Mute on focus lost uses `FApp::SetUnfocusedVolumeMultiplier()`.
 
-## 11a. UI Component System
+### Video
 
-UI is built from reusable widgets to keep styling consistent across the whole game. Instead of editing individual widgets one by one, styles come from a single theme data asset.
+Applied through `UGameUserSettings`:
+```cpp
+Settings->SetScreenResolution(FIntPoint(ResolutionWidth, ResolutionHeight));
+Settings->SetFullscreenMode((EWindowMode::Type)WindowMode);
+Settings->SetOverallScalabilityLevel(QualityPreset);
+Settings->ApplySettings(false);
+Settings->SaveSettings();
+```
 
-**Reusable widgets:**
-- `WBP_Button`
+For non-fullscreen modes, the OS window is also resized directly via `GEngine->GameViewport->GetWindow()->Resize()`.
+
+<br><br>
+
+## 12. Music System
+
+Music is managed by `UBombermanGameInstance` through a persistent `UAudioComponent* MusicComponent`.
+
+- `PlayMusic()`: spawns a new 2D looping sound, kills the previous one
+- `FadeToMusic()`: fades out existing music over `MusicFadeDuration` (default: 1s), then starts new track
+- `StopMusicImmediate()`: stops and nulls the component
+- `OnWorldChanged()`: on transition to main menu level, fades out current music
+
+Background music per stage is configured in the Data Table (`FBombermanStageConfig::BackgroundMusic`). Music changes are triggered in `StartStage()`.
+
+<br><br>
+
+## 13. Upgrades
+
+All upgrades are `ABombermanUpgrade` actors placed by the grid system. They float and rotate in Tick (configurable amplitude/speed). On player overlap they apply their effect and call `Destroy()`.
+
+### Upgrade Types (`EUpgradeType`)
+
+| Type          | Effect                                              | Persists |
+|---------------|-----------------------------------------------------|----------|
+| BombUp        | Max bombs +1 (cap: 10)                              | Yes      |
+| FireUp        | Blast radius +1 (cap: 10)                           | Yes      |
+| SpeedUp       | Walk speed += SpeedUpIncrement (cap: 3 stacks)      | No       |
+| Invincible    | 30s immunity, uses timer to revert                  | No       |
+| WallPass      | Pass through soft blocks (calls `SetWallPass()`)    | No       |
+| BombPass      | Pass through own bombs (no collision re-enable)     | No       |
+| FlamePass     | Immune to own explosion damage                      | No       |
+| RemoteControl | Detonate oldest bomb with dedicated input           | No       |
+| FovUp         | Camera FOV +FovUpAmount degrees (cap: 5 stacks)     | No       |
+| TimeUp        | Adds 20s to stage timer                             | No       |
+
+Upgrades are hidden under soft blocks at stage generation. When a soft block is destroyed, `DestroyActorOnTile()` checks `UpgradeMap[X][Y]` and spawns the upgrade actor if one was assigned there.
+
+<br><br>
+
+## 14. Door System
+
+`ABombermanDoor` is hidden under a soft block at stage start. When the soft block is destroyed, the door actor becomes visible and active.
+
+The door has three material states (shown via `UMaterialBillboardComponent`):
+- `DefaultMaterial`: fallback
+- `ClosedMaterial`: enemies still alive
+- `OpenMaterial`: all enemies dead, door is enterable
+
+`ChangeDoorColor()` is called by GameMode on stage start (after 0.2s delay to let enemies register) and after every enemy death.
+
+On player overlap: if `IsStageCompletable()` is true, player gets invincibility, nearby ambient sound stops, enter VFX and sound play, then `GameMode->OnPlayerEnteredDoor()` is called.
+
+<br><br>
+
+## 15. Anti-Cheat
+
+`FBombermanAntiCheat` is a static-only class called from `ABombermanGameMode::Tick()`. Only runs in packaged builds (`#if !WITH_EDITOR`). Checks run on a randomized interval (3-5 seconds) to reduce fingerprinting.
+
+### Checks
+
+1. `IsDebuggerAttached()` - `IsDebuggerPresent()` WinAPI
+2. `IsRemoteDebuggerAttached()` - `CheckRemoteDebuggerPresent()` WinAPI
+3. `IsKernelDebuggerAttached()` - `NtQueryInformationProcess` with `ProcessDebugPort (7)` via `ntdll.dll`
+4. `DetectAnalysis()` - scans visible window titles for known tool names (Cheat Engine, x64dbg, IDA, Ghidra, OllyDbg), scans window class names for Delphi form patterns (`TMainForm`), scans currently running kernel drivers for suspicious names
+
+### Response
+
+On detection: logs which check fired, shows a `MessageBoxA` identifying the detection reason, calls `FPlatformMisc::RequestExit(true)`.
+
+### XOR Value Template
+
+`TXorValue<T>` in `BombermanXorValue.h` provides XOR obfuscation for sensitive values. Encrypts/decrypts with a random per-instance key using a byte-level XOR over the value's memory. Intended for health, score, and lives fields. Currently not wired up to gameplay yet.
+
+### Planned (not yet implemented)
+
+- Timing-based detection
+- `skCrypt`-style compile-time string encryption
+- Save file encryption
+
+<br><br>
+
+## 16. Discord Rich Presence
+
+`FBombermanDiscordManager` wraps the Discord Game SDK. Initialized in `GameInstance::OnStart()` with the hardcoded app ID. Callbacks are pumped every frame in `GameMode::Tick()`.
+
+`UpdatePresence()` sets:
+- `details`: "Stage X - Score: Y" or "In Main Menu" or "Bonus Stage - Score: Y" (stage -1 triggers bonus display)
+- `state`: "N Lives Remaining"
+- `largeImageKey`: `"game_logo"`
+
+Called with a 0.2s delay after stage start to let `PlayerState` initialize.
+
+<br><br>
+
+## 17. UI
+
+All UI is built in UMG, created from C++ where needed.
+
+### Screens
+
+| Screen              | Trigger                                    |
+|---------------------|--------------------------------------------|
+| Main Menu           | Level load                                 |
+| HUD                 | Created by `ABombermanPlayerController`    |
+| Pause Menu          | Pause input action (`bTriggerWhenPaused`)  |
+| Game Over           | `ABombermanGameMode::OnGameOver()`         |
+| Stage Clear         | `ABombermanGameMode::StageClear()`         |
+| Loading Screen      | Stage transition                           |
+| Credits             | Main menu button                           |
+| Settings            | Main menu / pause menu                     |
+
+### Component System
+
+Reusable widgets for consistent styling:
+
+- `WBP_Button` - has a `Variant` property: `Primary`, `Secondary`, `Destructive`. Reads styles from `DA_UIColors` data asset automatically. Do NOT hardcode colors inside widgets
 - `WBP_BlurryBackground`
-- `WBP_GameTip`
+- `WBP_GameTip` - shown in main menu and pause menu with random tips
 - `WBP_RandomImage`
 - `WBP_TransparentBackground`
 
-**Where styles live:**
-
-All styles are stored in `DA_UIColors`. Editing it updates every widget that uses it automatically. Do NOT change colors directly inside widgets or BPs.
-
-**Button variants:**
-
-Each component has a `Variant` property. Inside `WBP_Button` the logic is:
-
-```
-Variant (Switch) -> Apply Style
-
-Primary    -> PrimaryButtonStyle
-Secondary  -> SecondaryButtonStyle
-Destructive -> DestructiveButtonStyle
-```
-
-The button reads the style from `DA_UIColors` and applies it automatically.
-
-**Adding a button:**
-1. Drop `WBP_Button` into your widget
-2. Set the `Variant` and any other properties
+**Rule:** all colors come from `DA_UIColors`. Editing it updates every widget automatically.
 
 <br><br>
 
-## 12. Multiplayer (Future)
+## 18. Debug System
 
-Core systems (grid, bomb, player state) will be designed with multiplayer in mind - no hardcoded "one player" assumptions. `PlayerState` already handles per-player data.
+`ABombermanGameMode` has `bShowDebugInfo` (on by default in non-shipping builds via compile-time default).
 
-- Phase 1 (current): Singleplayer only
-- Phase 2 (future): Local co-op/versus
-- Phase 3 (if time allows): Online via UE5 replication (no dedicated server, peer-to-peer)
+When enabled, three persistent on-screen messages update every frame:
 
-To keep this door open: avoid using global singletons for player data, always route through `PlayerState` / `GameState`.
+| Key | Color  | Content                                         |
+|-----|--------|-------------------------------------------------|
+| 0   | Yellow | Stage number, stage state (int), timer, enemies |
+| 1   | Cyan   | Lives, score                                    |
+| 2   | Green  | BombUp, FireUp, SpeedUp, Invincible, WallPass   |
 
-<br><br>
+Grid has `bDrawDebug` bool that draws color-coded boxes over each tile (Red=Hard, Green=Soft, Yellow=Bomb, Blue=Door, White=Empty).
 
-## 13. Project Structure
-
-```
-Content/
-├── Blueprints/
-│   ├── Characters/
-│   ├── Enemies/
-│   ├── UI/
-│   └── GameMode/
-├── Maps/
-├── Meshes/          (SM_ prefix)
-├── Materials/       (M_, MI_ prefix)
-├── Textures/        (T_ prefix)
-├── Animations/      (AN_ prefix)
-├── Sounds/
-├── VFX/
-└── Data/            (Data Tables, configs)
-
-Source/
-├── Bomberman3D/
-│   ├── Characters/
-│   ├── Enemies/
-│   ├── Grid/
-│   ├── Bombs/
-│   ├── GameMode/
-│   ├── SaveGame/
-│   └── UI/
-└── ...
-```
+Console command: `SetStage <N>` (via `UFUNCTION(Exec)` on GameInstance) lets you jump to any stage number during play.
 
 <br><br>
 
-## 14. Development Schedule
+## 19. Multiplayer Considerations
 
-check TODO
+Currently singleplayer only. Architecture is deliberately multiplayer-friendly:
+
+- Player data routes through `PlayerState` / `GameState`, no global singletons
+- `GameInstance` persists between levels but player-specific data is synced to `PlayerState` on BeginPlay
+- Enemy tile reservation system works per-enemy, not per-player index
+- Hardcoded player index `0` exists in enemy AI (`UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)`) - needs replacement for multiplayer
+- `ABombermanBomb::LastExplosionSoundTime` is a static, will need to become per-player
+
+Phase roadmap:
+- **Phase 1 (current):** Singleplayer
+- **Phase 2 (future):** Local co-op/versus (local multiplayer confirmed added per TODO)
+- **Phase 3 (if time):** Online via UE5 replication (no dedicated server, P2P)
+
+<br><br>
+
+## 20. Development Schedule
+
+See `TODO.md` for detailed task breakdown and current status.
